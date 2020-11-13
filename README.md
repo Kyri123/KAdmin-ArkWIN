@@ -20,6 +20,10 @@ Webbasiertes Admin Panel für Ark-Gameserver
 
 - Starte `start_master.cmd` dies Aktiviert auch den Automatischen Updater, ist das nicht gewünscht starte mit `start_noUpdater`
 
+# Standart Login
+
+- Benutzername UND Password: `admin`
+
 # app.json
 
 | Eigenschaften | Wert | 
