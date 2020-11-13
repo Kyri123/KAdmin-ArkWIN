@@ -1,0 +1,11 @@
+package-lock.json
+.idea/
+Panel/app/json/serverinfo
+Panel/public/json/steamAPI/mods.json
+Panel/public/json/server
+Panel/public/json/steamAPI/mods.json
+Panel/public/json/steamAPI/version.json
+Panel/node_modules/
+Panel/public/json/serveraction/action_5c68f48w.json
+Panel/public/json/serveraction/action_5g28f48x.json
+Panel/start_dev.cmd

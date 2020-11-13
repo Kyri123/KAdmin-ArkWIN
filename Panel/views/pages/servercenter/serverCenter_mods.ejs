@@ -1,0 +1,71 @@
+<%- include('../../includes/head'); -%>
+<%- include('../../includes/top_nav'); -%>
+<%- include('../../includes/side_nav'); -%>
+<%- include('../../includes/start'); -%>
+<%- include('./head'); -%>
+<table class="table table-striped mb-3">
+    <tbody>
+        <tr class="bg-dark">
+            <th colspan="2" class="p-0" style="border: 0!important;">
+                <div class="list-group-item bg-dark">
+                    <h4 class="m-0"><%- PANEL_LANG.serverCenterMods.pagename %></h4>
+                    <div class="right">
+                        <!--<button class="btn btn-sm btn-outline-secondary" onclick="get()"><i class="fas fa-undo" aria-hidden="true"></i></button>-->
+                        <button data-toggle="modal" data-target="#addmod" class="btn btn-sm btn-outline-success"><%- PANEL_LANG.serverCenterMods.addmod %></button>
+                    </div>
+                </div>
+            </th>
+        </tr>
+    </tbody>
+</table>
+
+<div class="row" id="modlist">
+    <a class="col-12" href="#">
+        <div class="border border-info text-info align-content-center justify-content-center align-items-center d-flex card" style="font-size: 75px; width:100%; height:278px; border: 2px solid!important; cursor: pointer">
+            <i class="fas fa-sync fa-spin" aria-hidden="true"></i>
+        </div>
+    </a>
+</div>
+
+<form class="modal" id="addmod" tabindex="-1" method="post" action="#" style="display: none; padding-right: 15px;">
+    <div class="modal-dialog modal-xl" role="document" style="max-width: 700px">
+        <div class="modal-content border-0">
+            <div class="modal-header bg-dark border-dark">
+                <h5 class="modal-title"><%- PANEL_LANG.serverCenterMods.modal.title %></h5>
+            </div>
+
+            <div class="modal-body p-0">
+                <div id="modal_resp"></div>
+                <table class="table table-striped mb-0">
+                    <tbody>
+                        <tr id="addmodinput">
+                            <td class="p-2">
+                                <div class="input-group mb-0">
+                                    <input type="text" id="modadd" class="form-control form-control-sm" placeholder="<%- PANEL_LANG.serverCenterMods.modal.placeholder %>">
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><%- PANEL_LANG.serverCenterMods.modal.close %></button>
+                <button type="button" class="btn btn-success" onclick="addmod()"><%- PANEL_LANG.serverCenterMods.modal.addmod %></button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    // Vars die zur JS übergeben werden
+    // Allgemeine Vars
+    var vars = {};
+    vars.lang_arr = <%- JSON.stringify(PANEL_LANG) %>;
+    vars.cfg = '<%- serverName %>';
+</script>
+
+<script src="/js/arkadmin2/pages/servercenter_mods.js" type="application/javascript"></script>
+
+<%- include('../../includes/end'); -%>
+<%- include('../../includes/foother'); -%>
