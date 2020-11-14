@@ -232,14 +232,14 @@ module.exports = {
                     if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")}] Auto-Updater: \x1b[91m${PANEL_LANG.updaterLOG.conErr}`);
                 } else if (res.statusCode === 200) {
                     // Prüfe SHA mit API
-                    fs.readFile("app/data/sha.txt", 'utf8', (err, data) => {
-                        if (err === undefined) {
+                    fs.readFile("./app/data/sha.txt", 'utf8', (err, data) => {
+                        if (err === null) {
                             if (data === api.commit.sha) {
                                 // kein Update
                                 if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")}] Auto-Updater: \x1b[32m${PANEL_LANG.updaterLOG.isUpToDate}`);
                             } else {
                                 // Update verfügbar
-                                if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")}] Auto-Updater: \x1b[36m${PANEL_LANG.updaterLOG.isUpToDate}`);
+                                if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")}] Auto-Updater: \x1b[36m${PANEL_LANG.updaterLOG.isUpdate}`);
                                 global.isUpdate = true;
                                 let args = process.argv.slice(2);
                                 if(args[0] !== undefined && checkIsRunning === undefined) {
@@ -256,8 +256,11 @@ module.exports = {
                                         }
 
                                         // Wenn alles Frei ist beende den Server (startet durch die CMD sofort neu mit dem Updater
-                                        if(isFree) process.exit(2);
-                                    }, 5000)
+                                        if(isFree) {
+                                            process.exit(2);
+                                        }
+                                    }, 5000);
+                                    fs.writeFileSync("./app/data/sha.txt", api.commit.sha);
                                 }
                             }
                         } else {
@@ -272,6 +275,7 @@ module.exports = {
         }
 
 
+        backgroundUpdater();
         setInterval(() => {
             backgroundUpdater();
         }, PANEL_MAIN.interval.backgroundUpdater);

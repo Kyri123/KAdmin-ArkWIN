@@ -71,10 +71,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(PANEL_CONFIG.port);
-console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m http://${ip.address()}:${PANEL_CONFIG.port}/`)
-module.exports = app;
-
 // Starte Intverall aufgaben
 backgroundRunner.startAll();
 
