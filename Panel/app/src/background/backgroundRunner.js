@@ -108,8 +108,10 @@ module.exports = {
             if(serverInfos.servers_arr.length > 0) {
                 serverInfos.servers_arr.forEach((val) => {
                     if(val[1].mods !== undefined) if(val[1].mods.length > 0) {
+                        if(!modArray.includes(val[1].MapModID) && val[1].MapModID !== 0) modArray.push(val[1].MapModID);
+                        if(val[1].MapModID !== 0 && !modArray.includes(modid)) modArray.push(val[1].MapModID);
                         val[1].mods.forEach((modid) => {
-                            modArray.push(modid);
+                            if(!modArray.includes(modid)) modArray.push(modid);
                         })
                     }
                 })

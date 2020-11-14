@@ -260,55 +260,76 @@
                                     <div class="input-group mb-0">
                                         <input type="text" name="serverMap" class="form-control form-control-sm" value="<%- sconfig.serverMap %>" id="input_serverMap">
                                         <div class="input-group-append">
-                                            <select class="form-control form-control-sm" onchange="$('#input_serverMap').val($('#' + this.id).val())" id="mapsel">
+                                            <select class="form-control form-control-sm" onchange="
+                                                $('#input_serverMap').val($('#' + this.id).val());
+                                                $('#MapModID').val($('#' + $('#' + this.id).val()).data('modid'));
+                                            " id="mapsel">
                                                 <option value="">Bitte Wählen</option>
-                                                <option id="TheIsland" value="TheIsland" <%- sconfig.serverMap === "TheIsland" ? "selected" : "" %>>
+                                                <option id="TheIsland" value="TheIsland" data-modid="0" <%- sconfig.serverMap === "TheIsland" ? "selected" : "" %>>
                                                     The Island
                                                 </option>
-                                                <option id="TheCenter" value="TheCenter" <%- sconfig.serverMap === "TheCenter" ? "selected" : "" %>>
+                                                <option id="TheCenter" value="TheCenter" data-modid="0" <%- sconfig.serverMap === "TheCenter" ? "selected" : "" %>>
                                                     The Center
                                                 </option>
-                                                <option id="ScorchedEarth_P" value="ScorchedEarth_P" <%- sconfig.serverMap === "ScorchedEarth_P" ? "selected" : "" %>>
+                                                <option id="ScorchedEarth_P" value="ScorchedEarth_P" data-modid="0" <%- sconfig.serverMap === "ScorchedEarth_P" ? "selected" : "" %>>
                                                     Scorched Earth
                                                 </option>
-                                                <option id="Ragnarok" value="Ragnarok" <%- sconfig.serverMap === "Ragnarok" ? "selected" : "" %>>
+                                                <option id="Ragnarok" value="Ragnarok" data-modid="0" <%- sconfig.serverMap === "Ragnarok" ? "selected" : "" %>>
                                                     Ragnarok
                                                 </option>
-                                                <option id="Genesis" value="Genesis" <%- sconfig.serverMap === "Genesis" ? "selected" : "" %>>
+                                                <option id="Genesis" value="Genesis" data-modid="0" <%- sconfig.serverMap === "Genesis" ? "selected" : "" %>>
                                                     Genesis
                                                 </option><
-                                                <option id="Extinction" value="Extinction" <%- sconfig.serverMap === "Extinction" ? "selected" : "" %>>
+                                                <option id="Extinction" value="Extinction" data-modid="0" <%- sconfig.serverMap === "Extinction" ? "selected" : "" %>>
                                                     Extinction
                                                 </option>
-                                                <option id="Valguero_P" value="Valguero_P" <%- sconfig.serverMap === "Valguero_P" ? "selected" : "" %>>
+                                                <option id="Valguero_P" value="Valguero_P" data-modid="0" <%- sconfig.serverMap === "Valguero_P" ? "selected" : "" %>>
                                                     Valguero
                                                 </option>
-                                                <option id="CrystalIsles" value="CrystalIsles" <%- sconfig.serverMap === "CrystalIsles" ? "selected" : "" %>>
+                                                <option id="CrystalIsles" value="CrystalIsles" data-modid="0" <%- sconfig.serverMap === "CrystalIsles" ? "selected" : "" %>>
                                                     ISO: Crystal Isles
                                                 </option>
-                                                <option id="Aberration_P" value="Aberration_P" <%- sconfig.serverMap === "Aberration_P" ? "selected" : "" %>>
+                                                <option id="Aberration_P" value="Aberration_P" data-modid="0" <%- sconfig.serverMap === "Aberration_P" ? "selected" : "" %>>
                                                     Aberration
-                                                </option><!--<option id="TheVolcano" value="TheVolcano" data-mod="1" data-modid="715028562">
+                                                </option>
+                                                <option id="TheVolcano" value="TheVolcano"data-modid="715028562" <%- sconfig.serverMap === "TheVolcano" ? "selected" : "" %>>
                                                     [MOD] TheVolcano
-                                                </option><option id="Olympus" value="Olympus" data-mod="1" data-modid="970855993">
+                                                </option>
+                                                <option id="Olympus" value="Olympus" data-modid="970855993" <%- sconfig.serverMap === "Olympus" ? "selected" : "" %>>
                                                     [MOD] Olympus
-                                                </option><option id="Hope" value="Hope" data-mod="1" data-modid="869946022">
+                                                </option>
+                                                <option id="Hope" value="Hope" data-modid="869946022" <%- sconfig.serverMap === "Hope" ? "selected" : "" %>>
                                                     [MOD] Hope
-                                                </option><option id="Shigoislands" value="Shigoislands" data-mod="1" data-modid="661564024">
+                                                </option>
+                                                <option id="Shigoislands" value="Shigoislands" data-modid="661564024" <%- sconfig.serverMap === "Shigoislands" ? "selected" : "" %>>
                                                     [MOD] Shigoislands
-                                                </option><option id="SkiesofNazca" value="SkiesofNazca" data-mod="1" data-modid="720200839">
+                                                </option>
+                                                <option id="SkiesofNazca" value="SkiesofNazca" data-modid="720200839" <%- sconfig.serverMap === "SkiesofNazca" ? "selected" : "" %>>
                                                     [MOD] Skies of Nazca
-                                                </option><option id="Zelos" value="Zelos" data-mod="1" data-modid="1693852365">
+                                                </option>
+                                                <option id="Zelos" value="Zelos" data-modid="1693852365" <%- sconfig.serverMap === "Zelos" ? "selected" : "" %>>
                                                     [MOD] Zelos: The Everything Map
-                                                </option><option id="TiamatPrime" value="TiamatPrime" data-mod="1" data-modid="1946280554">
+                                                </option>
+                                                <option id="TiamatPrime" value="TiamatPrime" data-modid="1946280554" <%- sconfig.serverMap === "TiamatPrime" ? "selected" : "" %>>
                                                     [MOD] Tiamat
-                                                </option><option id="TheOldestWorld" value="TheOldestWorld" data-mod="1" data-modid="747162211">
+                                                </option>
+                                                <option id="TheOldestWorld" value="TheOldestWorld" data-modid="747162211" <%- sconfig.serverMap === "TheOldestWorld" ? "selected" : "" %>>
                                                     [MOD] The Oldest World
-                                                </option><option id="Viking_P" value="Viking_P" data-mod="1" data-modid="1838617463">
+                                                </option>
+                                                <option id="Viking_P" value="Viking_P" data-modid="1838617463" <%- sconfig.serverMap === "Viking_P" ? "selected" : "" %>>
                                                     [MOD] Fjördur - A Nordic Adventure
-                                                </option>-->
+                                                </option>
                                             </select>
                                         </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="p-2"><%- PANEL_LANG.serverCenterConfig.cfg.MapModID %></td>
+                                <td class="p-2">
+                                    <div class="input-group mb-0">
+                                        <input min="0" type="number" name="MapModID" id="MapModID" class="form-control form-control-sm" value="<%- sconfig.MapModID %>">
                                     </div>
                                 </td>
                             </tr>

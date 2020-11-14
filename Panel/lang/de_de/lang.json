@@ -205,7 +205,8 @@
       "autoBackup"            : "Automatisches Backup",
       "autoBackupInterval"    : "Automatisches Backup Intervall (in ms)",
       "maxPlayers"            : "Maximale Spieler",
-      "serverMap"             : "Karte"
+      "serverMap"             : "Karte",
+      "MapModID"              : "Karte ModID (0 = Keine)"
     }
   },
 

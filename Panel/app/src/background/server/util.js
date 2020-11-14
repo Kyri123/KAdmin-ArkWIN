@@ -86,6 +86,8 @@ module.exports = {
                 if(debug) console.log(e);
             }
 
+            if(servConfig.MapModID !== 0) servConfig.mods.push(MapModID);
+
             if(API !== false && servConfig.mods.length > 0) {
                 servConfig.mods.forEach((modid) => {
                     let KEY = false;
@@ -93,7 +95,7 @@ module.exports = {
                         if(parseInt(val.publishedfileid) === parseInt(modid)) KEY = key;
                     })
 
-                    if(KEY !== false) {
+                    if(KEY !== false || !fs.existsSync(`${servConfig.path}\\ShooterGame\\Content\\Mods\\${modid}`)) {
                         let API_UPDATE  = API[KEY].time_updated;
                         let ACF_UPDATE  = WorkshopACF[modid] !== undefined ? WorkshopACF[modid].timeupdated : 0;
                         if(API_UPDATE > ACF_UPDATE) modsNeedUpdate.push(modid);

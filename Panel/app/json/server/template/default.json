@@ -16,6 +16,7 @@
   "autoBackupInterval"      : 1800000,
   "autoBackupNext"          : 0,
   "TotalConversionMod"      : 0,
+  "MapModID"                : 0,
   "sessionName"             : "[ArkAdminWIN]",
   "maxPlayers"              : 70,
   "shouldRun"               : false,
