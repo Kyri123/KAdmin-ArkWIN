@@ -16,7 +16,7 @@ del %CD%\cache\ArkAdminWIN-master\Panel\app\json\server\5g28f48x.json
 del %CD%\cache\ArkAdminWIN-master\Panel\public\json\serverInfos\auslastung.json
 
 echo Installing...
-Xcopy %CD%\cache\ArkAdminWIN-master\Panel %CD% /C /y
+copy /b/v/y %CD%\cache\ArkAdminWIN-master\Panel %CD%
 
 echo remove cache files
 rmdir %CD%\cache\ArkAdminWIN-master /s /q
@@ -27,4 +27,4 @@ echo Done!
 echo -----------------------------------------
 echo        Update Module + Start
 echo -----------------------------------------
-npm i & npm update & npm fund & start "ArkAdminWIN 0.0.1" cmd /k "node app.js startedWithUpdater & start "ArkAdminWIN Starter" start_master.cmd & exit"
+npm i & npm update & npm fund & start "ArkAdminWIN 0.0.1" cmd /k "node app.js startedWithUpdater & start "ArkAdminWIN Starter" start_master.cmd & exit" & exit
