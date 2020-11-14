@@ -16,7 +16,7 @@ del %CD%\cache\ArkAdminWIN-master\Panel\app\json\server\5g28f48x.json
 del %CD%\cache\ArkAdminWIN-master\Panel\public\json\serverInfos\auslastung.json
 
 echo Installing...
-copy /b/v/y %CD%\cache\ArkAdminWIN-master\Panel %CD%
+xcopy /K /D /H /Y %CD%\cache\ArkAdminWIN-master\Panel %CD%
 
 echo remove cache files
 rmdir %CD%\cache\ArkAdminWIN-master /s /q

@@ -53,9 +53,14 @@ router.route('/')
                 // Alle mods Installieren
                 if(POST.action === "installallmods") {
                     if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m sendCommand > ${POST.cfg} > installallmods`);
+
+                    let serverInfos     = serverUtilInfos.getConfig(POST.cfg);
+                    let modlist         = serverInfos.mods;
+                    if(serverInfos.MapModID !== 0) modlist.push(serverInfos.MapModID);
+
                     serverCommands.doInstallMods(
                         POST.cfg,
-                        serverUtilInfos.getConfig(POST.cfg).mods,
+                        modlist,
                         POST.para === undefined ? false : POST.para.includes("--validate")
                     );
                     stop = true;
