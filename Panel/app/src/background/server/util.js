@@ -86,7 +86,7 @@ module.exports = {
                 if(debug) console.log(e);
             }
 
-            if(servConfig.MapModID !== 0) servConfig.mods.push(MapModID);
+            if(servConfig.MapModID !== 0) servConfig.mods.push(servConfig.MapModID);
 
             if(API !== false && servConfig.mods.length > 0) {
                 servConfig.mods.forEach((modid) => {
