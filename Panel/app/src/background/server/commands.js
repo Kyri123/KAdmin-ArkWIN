@@ -137,9 +137,10 @@ module.exports = {
      * @param {string} server Server Name
      * @param {boolean} validate soll der server Validate ausführen?
      * @param {boolean} warn soll über RCON gewarnt werden?
+     * @param {boolean} isBackground Wird es vom Server ausgeführt
      * @returns {boolean}
      */
-    doUpdateServer: (server, validate = false, warn = false) => {
+    doUpdateServer: (server, validate = false, warn = false, isBackground = false) => {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
         if(servConfig.server === undefined && servInfos.is_free) {
@@ -148,7 +149,7 @@ module.exports = {
             let updateNeed  = serverUtil.checkSeverUpdate(server);
 
             // CMD Line
-            let cmdFile             = `${servConfig.pathLogs}.cmd`
+            let cmdFile             = `${servConfig.pathLogs}${isBackground ? "_doBGBackup" : ""}.cmd`
             let cmdCommand          = `@echo off\n`
 
             // Countdown
@@ -203,9 +204,9 @@ module.exports = {
             try {
                 if (updateNeed || validate) {
                     fs.writeFileSync(cmdFile, cmdCommand);
-                    serverCmd.runCMD(`start "[ArkAdminWIN] doUpdateServer ${server}" ${cmdFile}`)
+                    serverCmd.runCMD(`start "[ArkAdminWIN] doUpdateServer  ${isBackground ? "Server" : server}" ${cmdFile}`)
                 }
-                fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
+                if(!isBackground) fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
             }
             catch (e) {
                 if(debug) console.log(e);
@@ -419,9 +420,10 @@ module.exports = {
     /**
      * Erstellt ein Backup von Konfig & Spielständen
      * @param {string} server Server Name
+     * @param {boolean} isBackground Wird es vom Server ausgeführt
      * @return {boolean}
      */
-    doBackup: (server) => {
+    doBackup: (server, isBackground = false) => {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
 
@@ -429,10 +431,11 @@ module.exports = {
             // vars
             let pathToZip               = `${servConfig.path}\\ShooterGame\\Saved`;
             let backupPath              = servConfig.pathBackup;
-            let canZIP                  = fs.existsSync(pathToZip);
+            let ZIP_name                = `${server}_${Date.now()}.zip`;
+            let canZIP                  = fs.existsSync(pathToZip) && !fs.existsSync(`${backupPath}\\${ZIP_name}`);
 
             // CMD Line
-            let cmdFile             = `${servConfig.pathLogs}.cmd`
+            let cmdFile             = `${servConfig.pathLogs}${isBackground ? "_doBGBackup" : ""}.cmd`
             let cmdCommand          = `@echo off\n`
 
             // Logmeldungen
@@ -444,7 +447,7 @@ module.exports = {
             if(canZIP) {
                 actionResponse          += `${PANEL_LANG.logger.doBackupThis}: ${Date.now()}.zip\n`;
                 if(!fs.existsSync(backupPath)) fs.mkdirSync(backupPath);
-                cmdCommand  += `powershell -command "Add-Type -Assembly \\"System.IO.Compression.FileSystem\\" ;[System.IO.Compression.ZipFile]::CreateFromDirectory(\\"${pathToZip}\\", \\"${backupPath}\\${server}_${Date.now()}.zip\\") ;"\n`;
+                cmdCommand  += `powershell -command "Add-Type -Assembly \\"System.IO.Compression.FileSystem\\" ;[System.IO.Compression.ZipFile]::CreateFromDirectory(\\"${pathToZip}\\", \\"${backupPath}\\${ZIP_name}\\") ;"\n`;
             }
             else {
                 actionResponse          += `${PANEL_LANG.logger.doNotBackup}\n`;
@@ -455,10 +458,10 @@ module.exports = {
 
             // Speichern und ausführen
             try {
-                fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
+                if(!isBackground) fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
                 if(canZIP) {
                     fs.writeFileSync(cmdFile, cmdCommand);
-                    serverCmd.runCMD(`start "[ArkAdminWIN] doBackup ${server}" ${cmdFile}`);
+                    serverCmd.runCMD(`start "[ArkAdminWIN] doBackup ${isBackground ? "Server" : server}" ${cmdFile}`);
                 }
             }
             catch (e) {

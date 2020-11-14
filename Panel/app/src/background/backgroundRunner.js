@@ -141,7 +141,7 @@ module.exports = {
                         // Auto Update system
                         if(val[1].autoUpdate) {
                             if(Date.now() > val[1].autoUpdateNext && val[1].is_free) {
-                                serverCommands.doUpdateServer(val[0], false, true);
+                                serverCommands.doUpdateServer(val[0], false, true, true);
                                 serverUtil.writeConfig(val[0], "autoUpdateNext", (Date.now() + val[1].autoUpdateInterval));
                                 if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m run > doServerBackgrounder > autoUpdate > ${val[0]}`);
                             }
@@ -150,7 +150,7 @@ module.exports = {
                         // Auto Backup system
                         if(val[1].autoBackup) {
                             if(Date.now() > val[1].autoBackupNext && val[1].is_free) {
-                                serverCommands.doBackup(val[0]);
+                                serverCommands.doBackup(val[0], true);
                                 serverUtil.writeConfig(val[0], "autoBackupNext", (Date.now() + val[1].autoBackupInterval));
                                 if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m run > doServerBackgrounder > autoBackup > ${val[0]}`);
                             }
@@ -159,7 +159,7 @@ module.exports = {
                         // soll der Server laufen?
                         if(val[1].shouldRun && val[1].is_free && val[1].pid === 0 && !val[1].run) {
                             if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m run > doServerBackgrounder > Start > ${val[0]}`);
-                            serverCommands.doStart(val[0]);
+                            if(val[1].is_free) serverCommands.doStart(val[0]);
                         }
                     }
                 })
