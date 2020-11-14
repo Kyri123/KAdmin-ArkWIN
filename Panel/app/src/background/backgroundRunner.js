@@ -232,6 +232,7 @@ module.exports = {
                     if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")}] Auto-Updater: \x1b[91m${PANEL_LANG.updaterLOG.conErr}`);
                 } else if (res.statusCode === 200) {
                     // Prüfe SHA mit API
+                    global.checkIsRunning = undefined;
                     fs.readFile("./app/data/sha.txt", 'utf8', (err, data) => {
                         if (err === null) {
                             if (data === api.commit.sha) {
@@ -244,7 +245,7 @@ module.exports = {
                                 let args = process.argv.slice(2);
                                 if(args[0] !== undefined && checkIsRunning === undefined) {
                                     // Prüfe ob alle Aufgaben abgeschlossen sind && ob der Server mit startedWithUpdater gestartet wurde
-                                    if(args[0] === "startedWithUpdater") global.checkIsRunning = setInterval(() => {
+                                    if(args[0] === "startedWithUpdater") checkIsRunning = setInterval(() => {
                                         let ServerInfos = globalInfos.get();
                                         let isFree      = true;
 
