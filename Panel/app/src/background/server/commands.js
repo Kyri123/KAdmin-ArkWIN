@@ -246,8 +246,8 @@ module.exports = {
                 modID.forEach((val) => {
                     actionResponse              += `${val}\n`;
                     workshop_download_item  +=  ` +workshop_download_item ${PANEL_CONFIG.appID} ${val}`;
-                    copys  += `@RD /S /Q "${serverPath}\\ShooterGame\\Content\\Mods\\${val}\\"\n`;
-                    copys  += `xcopy /K /D /H /Y "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${val}" "${serverPath}\\ShooterGame\\Content\\Mods\\${val}\\"\n`;
+                    copys  += `${mainDir}\\tools\\ArkModCopy\\ArkModCopy.exe "${serverPath}" "${serverPath}" "${val}"\n`;
+                    copys  += `echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${val}".modtime\n`;
                     copys  += `@RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${val}"\n`;
                 })
             }
@@ -255,8 +255,8 @@ module.exports = {
             else {
                 actionResponse              += `${modID}\n`;
                 workshop_download_item  +=  `+workshop_download_item ${PANEL_CONFIG.appID} ${modID}`;
-                copys  += `@RD /S /Q "${serverPath}\\ShooterGame\\Content\\Mods\\${modID}\\"\n`;
-                copys  += `xcopy /K /D /H /Y "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${modID}" "${serverPath}\\ShooterGame\\Content\\Mods\\${modID}\\"\n`;
+                copys  += `${mainDir}\\tools\\ArkModCopy\\ArkModCopy.exe "${serverPath}" "${serverPath}" "${modID}"\n`;
+                copys  += `echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${modID}".modtime\n`;
                 copys  += `@RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${modID}"\n`;
             }
             cmdCommand      += `${steamCMDPath} +login anonymous +force_install_dir "${serverPath}"${workshop_download_item}${validate ? " validate" : ""} +quit\n`;

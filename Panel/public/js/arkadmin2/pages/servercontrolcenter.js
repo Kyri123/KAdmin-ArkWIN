@@ -83,7 +83,7 @@ setInterval(() => {
 
                 if($(`#remove${val[0]}`).html() === undefined) $('#modallist').append(`<form class="modal fade" method="post" action="#" id="remove${val[0]}" tabindex="-1" style="display: none;" aria-hidden="true">
                                     <div class="modal-dialog modal-xl" role="document" style="max-width: 700px">
-                                        <div class="mnpde odal-content">
+                                        <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title">${vars.lang_arr.servercontrolcenter.modalDelete.title}</h5>
                                             </div>

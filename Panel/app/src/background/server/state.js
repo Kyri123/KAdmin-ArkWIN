@@ -60,6 +60,17 @@ module.exports = {
                 let serverPath      = servCFG.path;
                 let serverPathLogs  = servCFG.pathLogs;
 
+                // Lese installierte Mods
+                data.installedMods  = [];
+                let modPath         = `${servCFG.path}\\ShooterGame\\Content\\Mods`;
+                let dirRead         = fs.existsSync(modPath) ? fs.readdirSync(modPath, { withFileTypes: true }) : [];
+
+                if(dirRead.length > 0) {
+                    dirRead.forEach((val) => {
+                        if(val.isFile() && val.name !== "111111111.mod" && !isNaN(val.name.replace(".mod", ""))) data.installedMods.push(parseInt(val.name));
+                    })
+                }
+
                 // Default werte
                 data.aplayers       = 0;
                 data.players        = 0;

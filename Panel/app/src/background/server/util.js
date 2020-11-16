@@ -75,9 +75,6 @@ module.exports = {
 
         if(servConfig.server === undefined) {
             let modsNeedUpdate      = [];
-            let workshopPath        = `${servConfig.path}\\steamapps\\workshop\\appworkshop_${PANEL_CONFIG.appID}.acf`;
-            let WorkshopACF         = util.toAcfToArraySync(workshopPath);
-            WorkshopACF             = WorkshopACF === false ? false : (WorkshopACF.AppWorkshop !== undefined ? (WorkshopACF.AppWorkshop.WorkshopItemsInstalled !== undefined ? WorkshopACF.AppWorkshop.WorkshopItemsInstalled : true) : true);
             let API                 = false;
             try {
                 API                 = fs.existsSync('./public/json/steamAPI/mods.json') ? JSON.parse(fs.readFileSync('./public/json/steamAPI/mods.json')).response.publishedfiledetails : false;
@@ -88,17 +85,27 @@ module.exports = {
 
             if(servConfig.MapModID !== 0) servConfig.mods.push(servConfig.MapModID);
 
-            if(API !== false && servConfig.mods.length > 0) {
+            if(servConfig.mods.length > 0) {
                 servConfig.mods.forEach((modid) => {
                     let KEY = false;
-                    API.forEach((val, key) => {
+                    if(API !== false) API.forEach((val, key) => {
                         if(parseInt(val.publishedfileid) === parseInt(modid)) KEY = key;
-                    })
+                    });
 
-                    if(KEY !== false || !fs.existsSync(`${servConfig.path}\\ShooterGame\\Content\\Mods\\${modid}`)) {
+                    if(
+                        KEY !== false &&
+                        fs.existsSync(`${servConfig.path}\\ShooterGame\\Content\\Mods\\${modid}.modtime`)
+                    ) {
+                        let modtime     = parseInt(fs.readFileSync(`${servConfig.path}\\ShooterGame\\Content\\Mods\\${modid}.modtime`));
                         let API_UPDATE  = API[KEY].time_updated;
-                        let ACF_UPDATE  = WorkshopACF[modid] !== undefined ? WorkshopACF[modid].timeupdated : 0;
-                        if(API_UPDATE > ACF_UPDATE) modsNeedUpdate.push(modid);
+                        if(API_UPDATE > modtime) modsNeedUpdate.push(modid);
+                    }
+                    else if(
+                        !fs.existsSync(`${servConfig.path}\\ShooterGame\\Content\\Mods\\${modid}.mod`)      ||
+                        !fs.existsSync(`${servConfig.path}\\ShooterGame\\Content\\Mods\\${modid}.modtime`)  ||
+                        !fs.existsSync(`${servConfig.path}\\ShooterGame\\Content\\Mods\\${modid}`)
+                    ) {
+                        modsNeedUpdate.push(modid);
                     }
                 });
 

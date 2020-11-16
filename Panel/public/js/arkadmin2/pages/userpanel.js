@@ -190,7 +190,6 @@ function toggleUser(id, btnID) {
     }, (data) => {
         try {
             data    = JSON.parse(data);
-            console.log(btnID)
             if(data.alert !== undefined) $('#global_resp').append(data.alert);
             if (data.toggled !== undefined) {
                 $('#' + btnID).html(data.ban === 0 ? vars.lang_arr.userPanel.banned: vars.lang_arr.userPanel.free).toggleClass('btn-danger', data.ban === 1).toggleClass('btn-success', data.ban === 0);

@@ -1,12 +1,9 @@
-[ 14.11.2020 18:31:26 ]
+[ 16.11.2020 09:56:37 ]
 Nach einer ausführung einer Aktion kann es eine kurze weile Dauern bis diese vollständig ausgeführt wurde oder der Server Aktiv ist (jenachdem ob ein Update nötig ist)
 Alle Mods werden Installiert/Geupdated: 5c68f48w
 Folgende Mods werden Installiert/Geupdated: 
 Benutzte <b>Validate</b> für SteamCMD
 1428596566
-731604991
-942185438
-2196816343
 2275336562
-715028562
-D:\servers\SteamCMD\steamcmd.exe +login anonymous +force_install_dir "D:\servers\Servers\5c68f48w" +workshop_download_item 346110 1428596566 +workshop_download_item 346110 731604991 +workshop_download_item 346110 942185438 +workshop_download_item 346110 2196816343 +workshop_download_item 346110 2275336562 +workshop_download_item 346110 715028562 validate +quit
+942185438
+D:\servers\SteamCMD\steamcmd.exe +login anonymous +force_install_dir "D:\servers\Servers\5c68f48w" +workshop_download_item 346110 1428596566 +workshop_download_item 346110 2275336562 +workshop_download_item 346110 942185438 validate +quit
