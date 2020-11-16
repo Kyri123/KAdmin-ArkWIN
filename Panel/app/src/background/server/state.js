@@ -151,7 +151,7 @@ module.exports = {
                             if(i1 !== undefined) {
                                 data.run            = true;
                                 data.pid            = i1.pid;
-                                data.pid            = i1.ppid;
+                                data.ppid           = i1.ppid;
                                 data.bin            = i1.bin;
 
                                 Gamedig.query({
@@ -182,7 +182,7 @@ module.exports = {
                                         save(data, name, state);
                                     }).catch((error) => {
                                         // Speichern
-                                        save(data, name, {});
+                                        save(data, name, state);
                                     });
                             }
                             else {

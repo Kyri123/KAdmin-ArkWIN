@@ -24,12 +24,13 @@ function getSCState() {
         let state_id = $('#state');
         let player_id = $('#player');
         let inhalt;
-        let stateColor = serverInfos.is_installed ? (
-            serverInfos.is_free ? (
-                serverInfos.pid !== 0 && serverInfos.online ? "success"
-                    : (serverInfos.pid !== 0 ? "info" : "danger")
-            ) : "info"
-        ) : (serverInfos.is_free ? "warning" : "info");
+
+        let stateColor                                                 = "danger";
+        if(!serverInfos.is_installed)                       stateColor = "warning";
+        if(serverInfos.pid !== 0 && !serverInfos.online)    stateColor = "primary";
+        if(serverInfos.pid !== 0 && serverInfos.online)     stateColor = "success";
+        if(serverInfos.cmd || serverInfos.steamcmd)         stateColor = "info";
+
         let stateText = varser.lang_arr.state[stateColor];
 
         //server IMG

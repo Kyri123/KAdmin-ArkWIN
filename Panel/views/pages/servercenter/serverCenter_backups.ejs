@@ -1,0 +1,189 @@
+<%- include('../../includes/head'); -%>
+<%- include('../../includes/top_nav'); -%>
+<%- include('../../includes/side_nav'); -%>
+<%- include('../../includes/start'); -%>
+<%- include('./head'); -%>
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card shadow" style="border: 0!important;">
+            <div class="tab-content" id="pills-tabContent" style="border: 0!important;">
+                <table class="table table-striped mb-0">
+                    <tbody><tr class="bg-dark">
+                        <th colspan="2" class="p-0" style="border: 0!important;">
+                            <div class="list-group-item bg-dark">
+                                <h4 class="m-0">Backups</h4>
+                            </div>
+                        </th>
+                    </tr>
+                    </tbody></table>
+                <div class="tab-pane fade show active" id="pills-GameUserStetting" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <li class="list-group-item rounded-0">
+
+                        <i class="fa fa-folder pr-2" aria-hidden="true"></i> 2020-11-14
+                        <div class="right">
+                            <button class="btn btn-sm btn-primary" data-toggle="collapse" data-target="#lc0" aria-expanded="true"><i class="fa fa-arrow-down pr-1" aria-hidden="true"></i> 1</button>
+                            <a href="javascript:void();" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delmain1b7c3419f00da90781981b466ec79a6010e3a5a6b853890ee287bc8682fae454ff9f084bc00990446ada13a1cefa0782c8b1">
+            <span class="icon text-white">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </span>
+                            </a>
+                        </div>
+
+                    </li>
+
+                    <ul style="margin-bottom: -1px; background: rgba(0, 0, 0, 0.125);" class="collapse show" id="lc0">
+                        <li class="list-group-item rounded-0">
+                            <table>
+                                <tbody><tr>
+                                    <td rowspan="2" class="pr-3"><i class="fas fa-file-archive text-lg" aria-hidden="true"></i></td>
+                                    <td class="pl-2">21b7ebcb94.2020-11-14_16.03.47.tar.bz2</td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-2 text-sm">Dateigröße: 128 bit</td>
+                                </tr>
+                                </tbody></table>
+                            <div class="right">
+
+                                <a href="javascript:void();" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal00">
+            <span class="icon text-white">
+                        <i class="fas fa-play" aria-hidden="true"></i>
+                    </span>
+                                </a>
+
+                                <a href="javascript:void();" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delmodal00">
+            <span class="icon text-white">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </span>
+                                </a>
+
+                                <a href="/remote/serv/server_ID_21b7ebcb94_backups/2020-11-14/21b7ebcb94.2020-11-14_16.03.47.tar.bz2" class="btn btn-dark btn-sm" download="">
+            <span class="icon text-white">
+                        <i class="fas fa-download" aria-hidden="true"></i>
+                    </span>
+                                </a>
+                            </div>
+                        </li>
+                        <!-- Modal -->
+
+                        <form class="modal fade" id="delmodal00" tabindex="-1" method="post" action="#" style="display: none;" aria-hidden="true">
+                            <div class="modal-dialog modal-xl" role="document" style="max-width: 700px">
+                                <div class="modal-content">
+                                    <div class="modal-header ">
+                                        <h5 class="modal-title text-danger">Löschen Bestätigen!</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <p>Bist du dir sicher dass du dieses Backup entfernen möchtest?</p>
+                                        <p><b>21b7ebcb94.2020-11-14_16.03.47.tar.bz2</b></p>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+                                        <a onclick="trigger_post('/servercenter/21b7ebcb94/backup/', {'remove':'true', 'file':'2020-11-14', 'i':'0'})" href="#" class="btn btn-danger" name="del">Löschen</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <form class="modal fade" id="modal00" tabindex="-1" method="post" action="/servercenter/21b7ebcb94/backup">
+                            <div class="modal-dialog modal-xl" role="document" style="max-width: 700px">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Einspielen: 21b7ebcb94.2020-11-14_16.03.47.tar.bz2 (128 bit)</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <p>
+                                            <b><span class="text-danger">Bitte Sicherstellen dass der Server offline ist! (Sonst wird der Eingespielte Spielstand überschreiben)</span></b><br>
+                                            Bitte Wähle Optionen
+                                        </p>
+                                        <input name="key" value="2020-11-14" type="hidden">
+                                        <input name="i" value="0" type="hidden">
+
+
+                                        <div class="icheck-primary mb-3">
+                                            <input type="checkbox" name="opt[]" value="world" id="worldmodal00">
+                                            <label for="worldmodal00">
+                                                Karten Dateien
+                                            </label>
+                                        </div>
+
+                                        <div class="icheck-primary mb-3">
+                                            <input type="checkbox" name="opt[]" value="ini" id="inimodal00">
+                                            <label for="inimodal00">
+                                                Konfigurationen (Game.ini usw)
+                                            </label>
+                                        </div>
+
+                                        <div class="icheck-primary mb-3">
+                                            <input type="checkbox" name="opt[]" value="playerandtribes" id="playerandtribesmodal00">
+                                            <label for="playerandtribesmodal00">
+                                                Spieler und Stämme
+                                            </label>
+                                        </div>
+
+                                        <div class="icheck-primary mb-3">
+                                            <input type="checkbox" name="opt[]" value="remall" id="remallmodal00">
+                                            <label for="remallmodal00">
+                                                Alle vorhandenen Dateien entfernen - <span class="text-danger">ACHTUNG: Alle Karten und Spieler Dateien werden hier unabhängig von der vorher gewählten Optionen gelöscht!</span> (Nicht gewählt werden alle Überschreiben)
+                                            </label>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+                                        <button type="submit" class="btn btn-primary" name="playthisin">Einspielen</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </ul>
+                    <!-- Modal -->
+
+                    <form class="modal fade" id="delmain1b7c3419f00da90781981b466ec79a6010e3a5a6b853890ee287bc8682fae454ff9f084bc00990446ada13a1cefa0782c8b1" tabindex="-1" method="post" action="#" style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog modal-xl" role="document" style="max-width: 700px">
+                            <div class="modal-content">
+                                <div class="modal-header ">
+                                    <h5 class="modal-title text-danger">Löschen Bestätigen!</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>Bist du dir sicher dass du dieses Backup entfernen möchtest?</p>
+                                    <p><b>2020-11-14</b></p>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+                                    <a onclick="trigger_post('/servercenter/21b7ebcb94/backup/', {'removemain':'true', 'file':'2020-11-14'})" href="#" type="submit" class="btn btn-danger" name="del">Löschen</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // Vars die zur JS übergeben werden
+    // Allgemeine Vars
+    var vars = {};
+    vars.lang_arr = <%- JSON.stringify(PANEL_LANG) %>;
+    vars.cfg = '<%- serverName %>';
+</script>
+
+<script src="/js/arkadmin2/pages/servercenter_backups.js" type="application/javascript"></script>
+
+<%- include('../../includes/end'); -%>
+<%- include('../../includes/foother'); -%>

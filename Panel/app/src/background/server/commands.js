@@ -26,7 +26,7 @@ module.exports = {
     doStart: (server, noAutoUpdate = false, validate = false, alwaysStart = false) => {
         let servConfig  = serverUtilInfos.getConfig(server);
         let servInfos   = serverUtilInfos.getServerInfos(server);
-        if(servConfig.server === undefined && servInfos.is_free) {
+        if(servConfig.server === undefined && !servInfos.cmd) {
             let steamCMDPath        = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
             let serverPath          = servConfig.path;
 
@@ -73,7 +73,7 @@ module.exports = {
             // Speichern und ausführen
             try {
                 if (alwaysStart) serverUtilInfos.writeConfig(server, "shouldRun", true);
-                if(servInfos.is_free && !servInfos.run) {
+                if(!servInfos.cmd && !servInfos.run) {
                     fs.writeFileSync(cmdFile, cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doStart ${server}" ${cmdFile}`);
                 }
@@ -94,7 +94,7 @@ module.exports = {
     doInstallServer: (server) => {
         let servConfig  = serverUtilInfos.getConfig(server);
         let servInfos   = serverUtilInfos.getServerInfos(server);
-        if(servConfig.server === undefined && servInfos.is_free) {
+        if(servConfig.server === undefined && !servInfos.cmd) {
             let steamCMDPath        = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
             let serverPath          = servConfig.path;
 
@@ -119,7 +119,7 @@ module.exports = {
 
             // Speichern und ausführen
             try {
-                if(!servInfos.is_installed && servInfos.is_free) {
+                if(!servInfos.is_installed && !servInfos.cmd) {
                     fs.writeFileSync(cmdFile, cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doInstallServer ${server}" ${cmdFile}`)
                 }
@@ -143,7 +143,7 @@ module.exports = {
     doUpdateServer: (server, validate = false, warn = false, isBackground = false) => {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
-        if(servConfig.server === undefined && servInfos.is_free) {
+        if(servConfig.server === undefined && !servInfos.cmd) {
             let steamCMDPath        = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
             let serverPath          = servConfig.path;
             let updateNeed  = serverUtil.checkSeverUpdate(server);
@@ -157,9 +157,9 @@ module.exports = {
                 cmdCommand      += CommandUtil.stopCountDown(server);
             }
             else if(servInfos.online || servInfos.run) {
-                if(servInfos.online) cmdCommand      += `node ${__dirname}\\rcon.js rcon 127.0.0.1 ${servConfig.rcon} ${servConfig.ServerAdminPassword} "broadcast [ArkAdminWIN] ${PANEL_LANG.timers.stopCountDown['now']}"\n`;
-                if(servInfos.online) cmdCommand      += `node ${__dirname}\\rcon.js rcon 127.0.0.1 ${servConfig.rcon} ${servConfig.ServerAdminPassword} "saveworld"\n`;
-                if(servInfos.online) cmdCommand      += `node ${__dirname}\\rcon.js rcon 127.0.0.1 ${servConfig.rcon} ${servConfig.ServerAdminPassword} "doexit"\n`;
+                if(servInfos.online) cmdCommand      += `node ${__dirname}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "broadcast [ArkAdminWIN] ${PANEL_LANG.timers.stopCountDown['now']}"\n`;
+                if(servInfos.online) cmdCommand      += `node ${__dirname}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "saveworld"\n`;
+                if(servInfos.online) cmdCommand      += `node ${__dirname}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "doexit"\n`;
                 cmdCommand += `timeout /T 10 /nobreak\n`;
                 cmdCommand += `Taskkill /PID ${servInfos.pid} /F\n`;
             }
@@ -291,7 +291,7 @@ module.exports = {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
 
-        if(servConfig.server === undefined && servInfos.is_free) {
+        if(servConfig.server === undefined && !servInfos.cmd) {
             // CMD Line
             let cmdFile             = `${servConfig.pathLogs}.cmd`
             let cmdCommand          = `@echo off\n`
@@ -306,8 +306,8 @@ module.exports = {
                 cmdCommand                      += CommandUtil.stopCountDown(server, saveworld);
             }
             else if(servInfos.online || servInfos.run || servInfos.pid !== 0) {
-                if(saveworld && servInfos.online) cmdCommand        += `node ${mainDir}\\rcon.js rcon 127.0.0.1 ${servConfig.rcon} ${servConfig.ServerAdminPassword} "saveworld"\n`;
-                if(servInfos.online) cmdCommand                     += `node ${mainDir}\\rcon.js rcon 127.0.0.1 ${servConfig.rcon} ${servConfig.ServerAdminPassword} "doexit"\n`;
+                if(saveworld && servInfos.online) cmdCommand        += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "saveworld"\n`;
+                if(servInfos.online) cmdCommand                     += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "doexit"\n`;
                 cmdCommand += `timeout /T 10 /nobreak\n`;
                 cmdCommand += `Taskkill /PID ${servInfos.pid} /F\n`;
             }
@@ -347,7 +347,7 @@ module.exports = {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
 
-        if(servConfig.server === undefined && servInfos.is_free) {
+        if(servConfig.server === undefined && !servInfos.cmd) {
             let steamCMDPath            = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
             let serverPath              = servConfig.path;
 
@@ -365,8 +365,8 @@ module.exports = {
                 cmdCommand                      += CommandUtil.stopCountDown(server, saveworld);
             }
             else if(servInfos.online || servInfos.run) {
-                if(saveworld && servInfos.online) cmdCommand        += `node ${mainDir}\\rcon.js rcon 127.0.0.1 ${servConfig.rcon} ${servConfig.ServerAdminPassword} "saveworld"\n`;
-                if(servInfos.online)cmdCommand                      += `node ${mainDir}\\rcon.js rcon 127.0.0.1 ${servConfig.rcon} ${servConfig.ServerAdminPassword} "doexit"\n`;
+                if(saveworld && servInfos.online) cmdCommand        += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "saveworld"\n`;
+                if(servInfos.online)cmdCommand                      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "doexit"\n`;
                 cmdCommand += `timeout /T 10 /nobreak\n`;
                 cmdCommand += `Taskkill /PID ${servInfos.pid} /F\n`;
             }
@@ -427,11 +427,11 @@ module.exports = {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
 
-        if(servConfig.server === undefined && servInfos.is_free) {
+        if(servConfig.server === undefined && !servInfos.cmd) {
             // vars
             let pathToZip               = `${servConfig.path}\\ShooterGame\\Saved`;
             let backupPath              = servConfig.pathBackup;
-            let ZIP_name                = `${server}_${Date.now()}.zip`;
+            let ZIP_name                = `${Date.now()}.zip`;
             let canZIP                  = fs.existsSync(pathToZip) && !fs.existsSync(`${backupPath}\\${ZIP_name}`);
 
             // CMD Line

@@ -73,6 +73,12 @@
                             </li>
 
 
+                            <li class="nav-item">
+                                <a href="/servercenter/<%- serverName %>/backups" class="nav-link <%- subpage === "backups" ? "active" : "" %> btn-dark p-3" <%- subpage === "backups" ? "" : `onmouseenter="$('#backups').toggleClass('d-lg-none', false)" onmouseleave="$('#backups').toggleClass('d-lg-none', true)"` %>>
+                                    <i class="nav-icon fas fa-hdd pr-1" aria-hidden="true"></i> <span id="backups" class="<%- subpage === "backups" ? "" : "d-lg-none" %>"><%- PANEL_LANG.serverCenterAny.nav.backups %></span>
+                                </a>
+                            </li>
+
                         </ul>
 
                         <!-- RIGHT -->
