@@ -211,15 +211,19 @@
   },
 
   "serverCenterMods": {
-    "time"          : "Letzte Update",
-    "modid"         : "Mod-ID",
-    "pagename"      : "Modifikationen",
-    "addmod"        : "Mod Hinzufügen",
+    "time"            : "Letzte Update",
+    "modid"           : "Mod-ID",
+    "pagename"        : "Modifikationen",
+    "addmod"          : "Mod Hinzufügen",
+    "noModFoundTitle" : "Es wurden keine Mods gefunden",
+    "noModFoundText"  : "Du Musst erst Mods hinzufügen um diese Liste zu sehen",
+    "active"          : "Aktive Mod",
+    "notActive"       : "Inaktive Mod",
     "modal": {
-      "title"       : "Mods Hinzufügen",
-      "placeholder" : "Workshop URL oder Mod-ID",
-      "close"       : "Schließen",
-      "addmod"      : "Mod Hinzufügen"
+      "title"         : "Mods Hinzufügen",
+      "placeholder"   : "Workshop URL oder Mod-ID",
+      "close"         : "Schließen",
+      "addmod"        : "Mod Hinzufügen"
     }
   },
 

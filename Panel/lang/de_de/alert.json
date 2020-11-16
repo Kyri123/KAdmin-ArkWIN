@@ -101,7 +101,7 @@
   },
   "1010": {
     "title" : "Mod Entfernt",
-    "text"  : "Modifikation wurde entfernt"
+    "text"  : "Modifikation <b>{modid}</b> wurde entfernt"
   },
   "1011": {
     "title" : "Mod Hinzugefügt",

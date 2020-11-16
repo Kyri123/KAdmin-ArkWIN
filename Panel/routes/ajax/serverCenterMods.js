@@ -17,14 +17,38 @@ router.route('/')
     .post((req,res)=>{
         let POST        = req.body;
 
+        // Installierte Mod entfernen
+        if(POST.removeIstalled !== undefined) {
+            let modID       = POST.modID;
+            let serverCfg   = serverUtilInfos.getConfig(POST.cfg);
+            if(serverCfg.server === undefined) {
+                let success = false;
+                try {
+                    if(fs.existsSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}.mod`))       fs.rmSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}.mod`, {recursive: true})
+                    if(fs.existsSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}.modtime`))   fs.rmSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}.modtime`, {recursive: true})
+                    if(fs.existsSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}`))           fs.rmSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}`, {recursive: true})
+                    success = true;
+                }
+                catch (e) {
+                    if(debug) console.log(e);console.log(e);
+                }
+                res.render('ajax/json', {
+                    data: JSON.stringify({
+                        alert: alerter.rd(success ? 1010 : 3).replace("{modid}", modID)
+                    })
+                });
+            }
+        }
+
         // Mod entfernen
         if(POST.remove !== undefined) {
             let serverCfg   = serverUtilInfos.getConfig(POST.cfg);
             if(serverCfg.server === undefined) {
+                let modID   = serverCfg.mods[POST.key];
                 serverCfg.mods.splice(POST.key, 1);
                 res.render('ajax/json', {
                     data: JSON.stringify({
-                        alert: alerter.rd(serverUtilInfos.saveConfig(POST.cfg ,serverCfg) ? 1010 : 3).replace("{ini}", POST.iniSend + ".ini")
+                        alert: alerter.rd(serverUtilInfos.saveConfig(POST.cfg ,serverCfg) ? 1010 : 3).replace("{modid}", modID)
                     })
                 });
             }
@@ -92,11 +116,12 @@ router.route('/')
         let GET         = req.query;
 
         // GET serverInfos
-        if(GET.getmodlist !== undefined) {
-            let serverInfos = serverUtilInfos.getConfig(GET.cfg);
+        if(GET.serverInfos !== undefined) {
+            let serverCFG = serverUtilInfos.getConfig(GET.cfg);
+            let serverInfos = serverUtilInfos.getServerInfos(GET.cfg);
 
             res.render('ajax/json', {
-                data: JSON.stringify(serverInfos)
+                data: JSON.stringify({serverInfos:serverInfos, serverCFG:serverCFG})
             });
         }
     })

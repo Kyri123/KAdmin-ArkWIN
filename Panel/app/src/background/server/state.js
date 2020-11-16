@@ -67,8 +67,18 @@ module.exports = {
 
                 if(dirRead.length > 0) {
                     dirRead.forEach((val) => {
-                        if(val.isFile() && val.name !== "111111111.mod" && !isNaN(val.name.replace(".mod", ""))) data.installedMods.push(parseInt(val.name));
+                        if(
+                            (val.isFile()       && val.name !== "111111111.mod" && !isNaN(val.name.replace(".mod", ""))) ||
+                            (val.isDirectory()  && val.name !== "111111111"     && !isNaN(val.name))
+                        ) if(!data.installedMods.includes(parseInt(val.name))) data.installedMods.push(parseInt(val.name));
                     })
+                }
+
+                data.notInstalledMods  = [];
+                if(servCFG.mods.length > 0) {
+                    servCFG.mods.forEach((val) => {
+                        if(!data.notInstalledMods.includes(val)) data.notInstalledMods.push(val);
+                    });
                 }
 
                 // Default werte
@@ -81,7 +91,7 @@ module.exports = {
                 data.ServerName     = servCFG.sessionName;
                 data.ARKServers     = `https://arkservers.net/server/${ip.address()}:${servCFG.query}`;
                 data.connect        = `steam://connect/${ip.address()}:${servCFG.query}`;
-                data.is_installing  = fs.existsSync(`${serverPath}\\steamapps\\appmanifest_${PANEL_CONFIG.appID_server}.acf`);
+                data.is_installing  = fs.existsSync(`${serverPath}\\steamapps\\appmanifest_${PANEL_CONFIG.appID_server}.acf`) && !fs.existsSync(`${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe`);
                 let exePath         = `${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe`;
                 data.is_installed   = fs.existsSync(`${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe`);
                 data.is_free        = !fs.existsSync(`${serverPathLogs}.cmd`);
