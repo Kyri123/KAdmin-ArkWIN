@@ -149,7 +149,7 @@ module.exports = {
             let updateNeed  = serverUtil.checkSeverUpdate(server);
 
             // CMD Line
-            let cmdFile             = `${servConfig.pathLogs}${isBackground ? "_doBGBackup" : ""}.cmd`
+            let cmdFile             = `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : servConfig.pathLogs}.cmd`
             let cmdCommand          = `@echo off\n`
 
             // Countdown
@@ -435,7 +435,7 @@ module.exports = {
             let canZIP                  = fs.existsSync(pathToZip) && !fs.existsSync(`${backupPath}\\${ZIP_name}`);
 
             // CMD Line
-            let cmdFile             = `${servConfig.pathLogs}${isBackground ? "_doBGBackup" : ""}.cmd`
+            let cmdFile             = `${isBackground ? md5(servConfig.pathLogs + "doBackup") : servConfig.pathLogs}.cmd`
             let cmdCommand          = `@echo off\n`
 
             // Logmeldungen

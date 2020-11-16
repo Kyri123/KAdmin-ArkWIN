@@ -53,7 +53,9 @@ router.route('/')
                 sconfig                 : serverUtilInfos.getConfig(serverName),
                 serverName              : serverName,
                 sercerCenterAny         : JSON.parse(fs.readFileSync('./public/json/sites/serverCenterAny.cfg.json')),
-                sercerCenterActions     : JSON.parse(fs.readFileSync('./public/json/sites/serverCenterActions.cfg.json'))
+                sercerCenterActions     : JSON.parse(fs.readFileSync('./public/json/sites/serverCenterActions.cfg.json')),
+                flags                   : JSON.parse(fs.readFileSync('./app/json/panel/flags.json')),
+                maps                    : JSON.parse(fs.readFileSync('./app/json/panel/maps.json'))
             });
         }
     })

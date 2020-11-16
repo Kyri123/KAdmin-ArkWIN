@@ -206,7 +206,10 @@
       "autoBackupInterval"    : "Automatisches Backup Intervall (in ms)",
       "maxPlayers"            : "Maximale Spieler",
       "serverMap"             : "Karte",
-      "MapModID"              : "Karte ModID (0 = Keine)"
+      "MapModID"              : "Karte ModID (0 = Keine)",
+      "cflags"                : "Eigene Ark Flaggen (-xxx)",
+      "opt"                   : "Eigene Optionen (?xxx=xxx)",
+      "pick"                  : "Bitte Wählen"
     }
   },
 
