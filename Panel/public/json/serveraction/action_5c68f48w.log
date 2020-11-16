@@ -1,3 +1,4 @@
-[ 16.11.2020 19:51:11 ]
-Nach einer ausführung einer Aktion kann es eine kurze weile Dauern bis diese vollständig ausgeführt wurde oder der Server Aktiv ist (jenachdem ob ein Update nötig ist)
-Server wird Runtergefahen: 5c68f48w
+[ 16.11.2020 20:39:01 ]
+Dieser vorgang wird jenach Server eine weile dauern
+Aktion <b>Starten</b> für den Server: 5c68f48w
+start D:\servers\Servers\5c68f48w\ShooterGame\Binaries\Win64\ShooterGameServer.exe Viking_P?listen?SessionName=[ArkAdmin2]?AltSaveDirectoryName=SavedArks?ServerAdminPassword=12345679?Port=7777?QueryPort=27015?MaxPlayers=70?RCONEnabled=True?RCONPort27020?GameModIds=1428596566,2275336562,942185438 -allcores -UseDynamicConfig -allowansel -automanagedmods -ClearOldItems -noantispeedhack -NotifyAdminCommandsInChat -logs
