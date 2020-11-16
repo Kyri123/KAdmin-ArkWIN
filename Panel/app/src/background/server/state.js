@@ -182,7 +182,7 @@ module.exports = {
                                         save(data, name, state);
                                     }).catch((error) => {
                                         // Speichern
-                                        save(data, name, state);
+                                        save(data, name, {});
                                     });
                             }
                             else {
