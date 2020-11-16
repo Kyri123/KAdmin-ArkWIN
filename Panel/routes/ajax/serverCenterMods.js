@@ -30,7 +30,7 @@ router.route('/')
                     success = true;
                 }
                 catch (e) {
-                    if(debug) console.log(e);console.log(e);
+                    if(debug) console.log(e);
                 }
                 res.render('ajax/json', {
                     data: JSON.stringify({
