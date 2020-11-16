@@ -13,6 +13,7 @@ const Gamedig       = require('gamedig');
 const ip            = require("ip");
 const serverInfos   = require('./../../util_server/infos');
 const findProcess   = require('find-process');
+const serverUtil    = require('./util');
 
 
 /**
@@ -94,11 +95,17 @@ module.exports = {
                 data.is_installing  = fs.existsSync(`${serverPath}\\steamapps\\appmanifest_${PANEL_CONFIG.appID_server}.acf`) && !fs.existsSync(`${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe`);
                 let exePath         = `${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe`;
                 data.is_installed   = fs.existsSync(`${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe`);
-                data.is_free        = !fs.existsSync(`${serverPathLogs}.cmd`);
+                data.is_free        = true;
                 // Runing infos
                 data.run            = false;
+                data.steamcmd       = false;
+                data.cmd            = false;
                 data.pid            = 0;
                 data.ppid           = 0;
+                data.steamcmdpid    = 0;
+                data.steamcmdppid   = 0;
+                data.cmdpid         = 0;
+                data.cmdppid        = 0;
                 data.cmd            = "";
                 data.bin            = "";
                 // More data
@@ -107,45 +114,80 @@ module.exports = {
                 data.ping           = 0;
                 data.version        = data.version === undefined ? "" : data.version;
 
+
+                // Alerts
+                data.alerts = [];
+                if(data.is_installed) {
+                    // Prüfe Server Update
+                    if(serverUtil.checkSeverUpdate(name)) data.alerts.push("3998");
+
+                    // Prüfe Mod Updates
+                    if(serverUtil.checkModUpdates(name) !== false) data.alerts.push("3997");
+
+                    // Prüfe Mod Installiert
+                    if(data.notInstalledMods.length > 0) data.alerts.push("3996");
+
+                    // Prüfe Mod Installiert
+                    if(servCFG.shouldRun) data.alerts.push("3995");
+                }
+                else {
+                    data.alerts.push("3999");
+                }
+
                 findProcess('name', `${name}`)
                     .then(function (list) {
                         if (list.length) {
-                            data.run    = true;
-                            data.pid    = list[0].pid;
-                            data.ppid   = list[0].ppid;
-                            data.cmd    = list[0].cmd;
-                            data.bin    = list[0].bin;
+                            let i1 = list.find(p => p.name === "ShooterGameServer.exe");
+                            let i2 = list.find(p => p.name === "cmd.exe");
+                            let i3 = list.find(p => p.name === "steamcmd.exe");
+                            data.steamcmd       = i3 !== undefined;
+                            data.cmd            = i2 !== undefined;
+                            data.is_free        = i2 !== undefined;
+                            data.steamcmdpid    = i3 !== undefined ? i3.pid : 0;
+                            data.steamcmdppid   = i3 !== undefined ? i3.ppid : 0;
+                            data.cmdpid         = i2 !== undefined ? i2.pid : 0;
+                            data.cmdppid        = i2 !== undefined ? i2.ppid : 0;
 
-                            Gamedig.query({
-                                type: 'arkse',
-                                host: ip.address(),
-                                port: servCFG.query
-                            })
-                                .then((state) => {
-                                    data.players = state.maxplayers;
-                                    data.aplayers = state.players.length;
-                                    data.aplayersarr = state.players;
-                                    data.listening = 'Yes';
-                                    data.online = 'Yes';
-                                    data.cfg = name;
-                                    data.ServerMap = state.map;
-                                    data.ServerName = state.name;
-                                    data.ping = state.ping;
+                            if(i1 !== undefined) {
+                                data.run            = true;
+                                data.pid            = i1.pid;
+                                data.pid            = i1.ppid;
+                                data.bin            = i1.bin;
 
-                                    // Hole Version
-                                    var version_split = state.name.split("-")[1];
-                                    version_split = version_split.replace(")", "");
-                                    version_split = version_split.replace("(", "");
-                                    version_split = version_split.replace(" ", "");
-                                    version_split = version_split.replace("v", "");
-                                    data.version = version_split;
+                                Gamedig.query({
+                                    type: 'arkse',
+                                    host: ip.address(),
+                                    port: servCFG.query
+                                })
+                                    .then((state) => {
+                                        data.players = state.maxplayers;
+                                        data.aplayers = state.players.length;
+                                        data.aplayersarr = state.players;
+                                        data.listening = 'Yes';
+                                        data.online = 'Yes';
+                                        data.cfg = name;
+                                        data.ServerMap = state.map;
+                                        data.ServerName = state.name;
+                                        data.ping = state.ping;
 
-                                    // Speichern
-                                    save(data, name, state);
-                                }).catch((error) => {
-                                // Speichern
-                                    if(error) save(data, name, {});
-                                });
+                                        // Hole Version
+                                        var version_split = state.name.split("-")[1];
+                                        version_split = version_split.replace(")", "");
+                                        version_split = version_split.replace("(", "");
+                                        version_split = version_split.replace(" ", "");
+                                        version_split = version_split.replace("v", "");
+                                        data.version = version_split;
+
+                                        // Speichern
+                                        save(data, name, state);
+                                    }).catch((error) => {
+                                        // Speichern
+                                        save(data, name, {});
+                                    });
+                            }
+                            else {
+                                save(data, name, {});
+                            }
                         }
                         else {
                             // Speichern

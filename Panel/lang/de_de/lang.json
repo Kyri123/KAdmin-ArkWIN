@@ -172,6 +172,7 @@
     "actionsTitle"  : "Befehl an den Server senden",
     "actionsClose"  : "Abbrechen",
     "actionsSend"   : "Aktion ausführen",
+    "alertClose"    : "Schließen",
     "nav" : {
       "home"        : "Startseite",
       "config"      : "Konfiguration",

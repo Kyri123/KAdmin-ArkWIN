@@ -37,6 +37,9 @@ router.route('/')
                 }
             });
 
+            if(POST.opt === undefined)      POST.opt    = [];
+            if(POST.flags === undefined)    POST.flags  = [];
+
             res.render('ajax/json', {
                 data: JSON.stringify({
                     alert: alerter.rd(serverUtilInfos.saveConfig(cfg ,POST) ? 1009 : 3).replace("{ini}", "ArkAdminWIN")

@@ -302,9 +302,6 @@
                             <input type="hidden" value="<%- sconfig.shouldRun %>" name="shouldRun">
                             <input type="hidden" value="<%- sconfig.autoUpdateNext %>" name="autoUpdateNext">
                             <input type="hidden" value="<%- sconfig.autoBackupNext %>" name="autoBackupNext">
-                            <% if(sconfig.opt) sconfig.opt.forEach((val) => { %>
-                                <input type="hidden" value="<%- val %>" name="opt[]">
-                            <% }) %>
                             <% if(sconfig.mods) sconfig.mods.forEach((val) => { %>
                                 <input type="hidden" value="<%- val %>" name="mods[]">
                             <% }) %>

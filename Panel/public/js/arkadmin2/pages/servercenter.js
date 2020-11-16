@@ -52,7 +52,7 @@ function getSCState() {
 
         // Action Card
         let css;
-        if(!serverInfos.is_free) {
+        if(serverInfos.cmd) {
             inhalt = varser.lang_arr.serverCenterAny.actionClose
         }
         else {
@@ -61,6 +61,15 @@ function getSCState() {
         css = 'success';
         if($('#actions').html() !== inhalt) $('#actions').html(inhalt).attr('class',`description-header text-${css}`);// Action Card -> Select
 
+        // Alerts
+        if(serverInfos.alerts !== undefined) {
+            $(`#infoCounter`).html(serverInfos.alerts.length);
+            let list = ``;
+            if(serverInfos.alerts.length > 0) {} serverInfos.alerts.forEach((val) => {
+                list += alerter(val, "", 0);
+            });
+            if(list !== ``) $(`#AlertBody`).html(list);
+        }
     });
 }
 

@@ -72,6 +72,22 @@
                                 </a>
                             </li>
 
+
+                        </ul>
+
+                        <!-- RIGHT -->
+                        <ul class="nav navbar-nav aa-nav ml-auto float-right" id="logbar">
+
+                            <li class="nav-item" style="cursor: pointer">
+                                <a data-toggle="modal" data-target="#alert" href="#" class="nav-link btn-info p-3" style="padding-right: 50px!important;">
+                                    <i class="fa fa-info" aria-hidden="true"></i><div class="ribbon-wrapper">
+                                        <div class="ribbon" style="background: #116b79" id="infoCounter">
+                                            0
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+
                         </ul>
                     </div>
                 </nav>
@@ -89,9 +105,6 @@
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h5 class="modal-title"><%- PANEL_LANG.serverCenterAny.actionsTitle %></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span class="text-white" aria-hidden="true">×</span>
-                </button>
             </div>
             <div class="modal-body">
                 <p id="action_resp"></p>
@@ -118,6 +131,23 @@
             </div>
         </div>
     </form>
+</div>
+<!-- MODAL ALERTS -->
+<div class="modal fade" id="alert" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-xl" style="max-width: 700px">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title"><%- PANEL_LANG.serverCenterAny.actionsTitle %></h5>
+            </div>
+            <div class="modal-body p-0" id="AlertBody">
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="actions" value="sendcommand">
+                <input type="hidden" name="cfg" value="<%- serverName %>">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><%- PANEL_LANG.serverCenterAny.alertClose %></button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
