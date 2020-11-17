@@ -21,8 +21,10 @@ router.use('/home',                         isLoggedIn    ,                     
 router.use('/usersettings',                 isLoggedIn    ,                     require('./pages/usersettings'));                   // Benutzereinstellugen              | Muss eingeloggt sein
 router.use('/servercontrolcenter',          isLoggedIn    ,                     require('./pages/serverControlCenter'));            // ServerControlCenter               | Muss eingeloggt sein
 router.use('/userpanel',                    isLoggedIn    ,                     require('./pages/userPanel'));                      // Benutzer                          | Muss eingeloggt sein
+router.use('/changelog',                    isLoggedIn    ,                     require('./pages/changelog'));                      // Changelogs                        | Muss eingeloggt sein
 
 // Server Center
+router.use('/servercenter/:name/backups',   isLoggedIn    , isServerExsits    , require('./pages/serverCenter_backups'));           // ServerCenter - Backups            | Muss eingeloggt sein
 router.use('/servercenter/:name/mods',      isLoggedIn    , isServerExsits    , require('./pages/serverCenter_mods'));              // ServerCenter - Modifikation       | Muss eingeloggt sein
 router.use('/servercenter/:name/config',    isLoggedIn    , isServerExsits    , require('./pages/serverCenter_config'));            // ServerCenter - Konfiguration      | Muss eingeloggt sein
 router.use('/servercenter/:name/home',      isLoggedIn    , isServerExsits    , require('./pages/serverCenter_home'));              // ServerCenter - Startseite         | Muss eingeloggt sein
@@ -30,6 +32,7 @@ router.use('/servercenter/:name',           isLoggedIn    , isServerExsits    , 
 
 // ajax
 router.use('/ajax/serverCenterAny',         isLoggedIn    ,                     require('./ajax/serverCenterAny'));                 // ServerCenterAny                   | Muss eingeloggt sein
+router.use('/ajax/serverCenterBackups',     isLoggedIn    ,                     require('./ajax/serverCenterBackups'));             // ServerCenter - Backups            | Muss eingeloggt sein
 router.use('/ajax/serverCenterConfig',      isLoggedIn    ,                     require('./ajax/serverCenterConfig'));              // ServerCenter - Konfiguration      | Muss eingeloggt sein
 router.use('/ajax/serverCenterMods',        isLoggedIn    ,                     require('./ajax/serverCenterMods'));                // ServerCenter - Modifikation       | Muss eingeloggt sein
 router.use('/ajax/usersettings',            isLoggedIn    ,                     require('./ajax/usersettings'));                    // Benutzereinstellugen              | Muss eingeloggt sein

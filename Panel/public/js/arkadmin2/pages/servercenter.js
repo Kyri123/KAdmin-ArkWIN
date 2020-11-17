@@ -24,12 +24,13 @@ function getSCState() {
         let state_id = $('#state');
         let player_id = $('#player');
         let inhalt;
-        let stateColor = serverInfos.is_installed ? (
-            serverInfos.is_free ? (
-                serverInfos.pid !== 0 && serverInfos.online ? "success"
-                    : (serverInfos.pid !== 0 ? "info" : "danger")
-            ) : "info"
-        ) : (serverInfos.is_free ? "warning" : "info");
+
+        let stateColor                                                 = "danger";
+        if(!serverInfos.is_installed)                       stateColor = "warning";
+        if(serverInfos.pid !== 0 && !serverInfos.online)    stateColor = "primary";
+        if(serverInfos.pid !== 0 && serverInfos.online)     stateColor = "success";
+        if(serverInfos.cmd || serverInfos.steamcmd)         stateColor = "info";
+
         let stateText = varser.lang_arr.state[stateColor];
 
         //server IMG
@@ -52,7 +53,7 @@ function getSCState() {
 
         // Action Card
         let css;
-        if(!serverInfos.is_free) {
+        if(serverInfos.cmd) {
             inhalt = varser.lang_arr.serverCenterAny.actionClose
         }
         else {
@@ -61,6 +62,15 @@ function getSCState() {
         css = 'success';
         if($('#actions').html() !== inhalt) $('#actions').html(inhalt).attr('class',`description-header text-${css}`);// Action Card -> Select
 
+        // Alerts
+        if(serverInfos.alerts !== undefined) {
+            $(`#infoCounter`).html(serverInfos.alerts.length);
+            let list = ``;
+            if(serverInfos.alerts.length > 0) {} serverInfos.alerts.forEach((val) => {
+                list += alerter(val, "", 0);
+            });
+            if(list !== ``) $(`#AlertBody`).html(list);
+        }
     });
 }
 

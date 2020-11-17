@@ -18,7 +18,14 @@ module.exports = {
      * @returns {array}
      */
     getConfig: (server) => {
-        return fs.existsSync(`./app/json/server/${server}.json`) ? JSON.parse(fs.readFileSync(`./app/json/server/${server}.json`, 'utf8')) : {"server": false};
+        let cfg = fs.existsSync(`./app/json/server/${server}.json`) ? JSON.parse(fs.readFileSync(`./app/json/server/${server}.json`, 'utf8')) : {"server": false};
+
+        // Erzeuge Standarts (für ergänzte vars)
+        if(cfg.server === undefined) {
+            if(cfg.MapModID === undefined) cfg.MapModID = 0;
+        }
+
+        return cfg;
     },
 
     /**

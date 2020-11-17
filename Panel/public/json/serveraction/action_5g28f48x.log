@@ -1,3 +1,4 @@
-[ 09.11.2020 18:53:12 ]
-Nach einer ausführung einer Aktion kann es eine kurze weile Dauern bis diese vollständig ausgeführt wurde oder der Server Aktiv ist (jenachdem ob ein Update nötig ist)
-Server wird Runtergefahen: 5g28f48x
+[ 16.11.2020 18:20:47 ]
+Dieser vorgang wird jenach Server eine weile dauern
+undefined: 5g28f48x
+D:\servers\SteamCMD\steamcmd.exe +login anonymous +force_install_dir "D:\servers\Servers\5g28f48x" +app_update 376030 validate +quit

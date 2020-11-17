@@ -37,6 +37,9 @@ router.route('/')
                 }
             });
 
+            if(POST.opt === undefined)      POST.opt    = [];
+            if(POST.flags === undefined)    POST.flags  = [];
+
             res.render('ajax/json', {
                 data: JSON.stringify({
                     alert: alerter.rd(serverUtilInfos.saveConfig(cfg ,POST) ? 1009 : 3).replace("{ini}", "ArkAdminWIN")
@@ -65,7 +68,7 @@ router.route('/')
             let serverInfos = serverUtilInfos.getConfig(GET.server);
 
             res.render('ajax/json', {
-                data: fs.existsSync(`${serverInfos.path}\\ShooterGame\\Saved\\Config\\WindowsServer\\${GET.ini}.ini`)     ? fs.readFileSync(`${serverInfos.path}\\ShooterGame\\Saved\\Config\\WindowsServer\\${GET.ini}.ini`, 'utf-8')   : fs.readFileSync('./app/data/ini/${GET.ini}.ini', 'utf-8')
+                data: fs.existsSync(`${serverInfos.path}\\ShooterGame\\Saved\\Config\\WindowsServer\\${GET.ini}.ini`)     ? fs.readFileSync(`${serverInfos.path}\\ShooterGame\\Saved\\Config\\WindowsServer\\${GET.ini}.ini`, 'utf-8')   : fs.readFileSync(`./app/data/ini/${GET.ini}.ini`, 'utf-8')
             });
         }
     })

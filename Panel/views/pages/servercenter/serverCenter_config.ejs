@@ -260,55 +260,29 @@
                                     <div class="input-group mb-0">
                                         <input type="text" name="serverMap" class="form-control form-control-sm" value="<%- sconfig.serverMap %>" id="input_serverMap">
                                         <div class="input-group-append">
-                                            <select class="form-control form-control-sm" onchange="$('#input_serverMap').val($('#' + this.id).val())" id="mapsel">
-                                                <option value="">Bitte Wählen</option>
-                                                <option id="TheIsland" value="TheIsland" <%- sconfig.serverMap === "TheIsland" ? "selected" : "" %>>
-                                                    The Island
-                                                </option>
-                                                <option id="TheCenter" value="TheCenter" <%- sconfig.serverMap === "TheCenter" ? "selected" : "" %>>
-                                                    The Center
-                                                </option>
-                                                <option id="ScorchedEarth_P" value="ScorchedEarth_P" <%- sconfig.serverMap === "ScorchedEarth_P" ? "selected" : "" %>>
-                                                    Scorched Earth
-                                                </option>
-                                                <option id="Ragnarok" value="Ragnarok" <%- sconfig.serverMap === "Ragnarok" ? "selected" : "" %>>
-                                                    Ragnarok
-                                                </option>
-                                                <option id="Genesis" value="Genesis" <%- sconfig.serverMap === "Genesis" ? "selected" : "" %>>
-                                                    Genesis
-                                                </option><
-                                                <option id="Extinction" value="Extinction" <%- sconfig.serverMap === "Extinction" ? "selected" : "" %>>
-                                                    Extinction
-                                                </option>
-                                                <option id="Valguero_P" value="Valguero_P" <%- sconfig.serverMap === "Valguero_P" ? "selected" : "" %>>
-                                                    Valguero
-                                                </option>
-                                                <option id="CrystalIsles" value="CrystalIsles" <%- sconfig.serverMap === "CrystalIsles" ? "selected" : "" %>>
-                                                    ISO: Crystal Isles
-                                                </option>
-                                                <option id="Aberration_P" value="Aberration_P" <%- sconfig.serverMap === "Aberration_P" ? "selected" : "" %>>
-                                                    Aberration
-                                                </option><!--<option id="TheVolcano" value="TheVolcano" data-mod="1" data-modid="715028562">
-                                                    [MOD] TheVolcano
-                                                </option><option id="Olympus" value="Olympus" data-mod="1" data-modid="970855993">
-                                                    [MOD] Olympus
-                                                </option><option id="Hope" value="Hope" data-mod="1" data-modid="869946022">
-                                                    [MOD] Hope
-                                                </option><option id="Shigoislands" value="Shigoislands" data-mod="1" data-modid="661564024">
-                                                    [MOD] Shigoislands
-                                                </option><option id="SkiesofNazca" value="SkiesofNazca" data-mod="1" data-modid="720200839">
-                                                    [MOD] Skies of Nazca
-                                                </option><option id="Zelos" value="Zelos" data-mod="1" data-modid="1693852365">
-                                                    [MOD] Zelos: The Everything Map
-                                                </option><option id="TiamatPrime" value="TiamatPrime" data-mod="1" data-modid="1946280554">
-                                                    [MOD] Tiamat
-                                                </option><option id="TheOldestWorld" value="TheOldestWorld" data-mod="1" data-modid="747162211">
-                                                    [MOD] The Oldest World
-                                                </option><option id="Viking_P" value="Viking_P" data-mod="1" data-modid="1838617463">
-                                                    [MOD] Fjördur - A Nordic Adventure
-                                                </option>-->
+                                            <select class="form-control form-control-sm" onchange="
+                                                $('#input_serverMap').val($('#' + this.id).val());
+                                                $('#MapModID').val($('#' + $('#' + this.id).val()).data('modid'));
+                                            " id="mapsel">
+                                                <option value=""><%- PANEL_LANG.serverCenterConfig.cfg.pick %></option>
+
+                                                <% for (const [key, val] of Object.entries(maps)) { %>
+                                                    <option id="<%- key %>" value="<%- key %>" data-modid="<%- val.mod === 0 ? 0 : val.modid %>" <%- sconfig.serverMap === key ? "selected" : "" %>>
+                                                        <%- val.name %>
+                                                    </option>
+                                                <% } %>
+
                                             </select>
                                         </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="p-2"><%- PANEL_LANG.serverCenterConfig.cfg.MapModID %></td>
+                                <td class="p-2">
+                                    <div class="input-group mb-0">
+                                        <input min="0" type="number" name="MapModID" id="MapModID" class="form-control form-control-sm" value="<%- sconfig.MapModID %>">
                                     </div>
                                 </td>
                             </tr>
@@ -328,208 +302,84 @@
                             <input type="hidden" value="<%- sconfig.shouldRun %>" name="shouldRun">
                             <input type="hidden" value="<%- sconfig.autoUpdateNext %>" name="autoUpdateNext">
                             <input type="hidden" value="<%- sconfig.autoBackupNext %>" name="autoBackupNext">
-                            <% if(sconfig.opt) sconfig.opt.forEach((val) => { %>
-                                <input type="hidden" value="<%- val %>" name="opt[]">
-                            <% }) %>
                             <% if(sconfig.mods) sconfig.mods.forEach((val) => { %>
                                 <input type="hidden" value="<%- val %>" name="mods[]">
                             <% }) %>
 
+                            <!-- OPT -->
+
+                            <tr class="bg-dark" id="opt">
+                                <th colspan="2" class="p-0" style="border: 0!important;">
+                                    <div class="list-group-item bg-dark">
+                                        <h4 class="m-0"><%- PANEL_LANG.serverCenterConfig.cfg.opt %></h4>
+                                        <div class="right">
+                                            <button type="button" onclick="addToForm('opt')" class="btn btn-sm btn-outline-success"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+
+                            <% if(sconfig.opt) sconfig.opt.forEach((val) => { %>
+                                <tr id="<%- md5(val + "opt") %>">
+                                    <td class="p-2" colspan="2">
+                                        <div class="input-group mb-0">
+                                            <input type="text" name="opt[]" class="form-control form-control-sm" value="<%- val %>">
+                                            <div class="input-group-append">
+                                                <span onclick="$('#<%- md5(val + "opt") %>').remove()" style="cursor:pointer" class="input-group-btn btn-danger pr-2 pl-2 pt-1 " id="basic-addon2"><i class="fa fa-times" aria-hidden="true"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+
+                            <!-- CustomFlags -->
+
+                            <tr class="bg-dark" id="flags">
+                                <th colspan="2" class="p-0" style="border: 0!important;">
+                                    <div class="list-group-item bg-dark">
+                                        <h4 class="m-0"><%- PANEL_LANG.serverCenterConfig.cfg.cflags %></h4>
+                                        <div class="right">
+                                            <button type="button" onclick="addToForm('flags')" class="btn btn-sm btn-outline-success"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+
+                            <% sconfig.flags.forEach((val) => { %>
+                                <% if(!flags.includes(val)) { %>
+                                <tr id="<%- md5(val + "flags") %>">
+                                    <td class="p-2" colspan="2">
+                                        <div class="input-group mb-0">
+                                            <input type="text" name="flags[]" class="form-control form-control-sm" value="<%- val %>">
+                                            <div class="input-group-append">
+                                                <span onclick="$('#<%- md5(val + "flags") %>').remove()" style="cursor:pointer" class="input-group-btn btn-danger pr-2 pl-2 pt-1 " id="basic-addon2"><i class="fa fa-times" aria-hidden="true"></i></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% } %>
+                            <% }) %>
+
                             <!-- flags -->
+                            <tr class="bg-dark">
+                                <th colspan="2" class="p-0" style="border: 0!important;">
+                                    <div class="list-group-item bg-dark">
+                                        <h4 class="m-0"><%- PANEL_LANG.serverCenterConfig.cfg.flags %></h4>
+                                    </div>
+                                </th>
+                            </tr>
                             <tr>
-                                <td class="p-2">Ark flags</td>
-                                <td class="p-2">
-                                    <div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="allcores" id="caea98bc1487e1e3aa2b4a6f23a23654" <%- sconfig.flags.includes("allcores") ? `checked="true"` : '' %>>
-                                            <label for="caea98bc1487e1e3aa2b4a6f23a23654">
-                                                allcores
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="UseDynamicConfig" id="557053f8852a669a292684cfe0035202" <%- sconfig.flags.includes("UseDynamicConfig") ? `checked="true"` : '' %>>
-                                            <label for="557053f8852a669a292684cfe0035202">
-                                                UseDynamicConfig
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="allowansel" id="10542800972196e8a3e62641d9537e31" <%- sconfig.flags.includes("allowansel") ? `checked="true"` : '' %>>
-                                            <label for="10542800972196e8a3e62641d9537e31">
-                                                allowansel
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="automanagedmods" id="e674062983be05014aa538af6f72b5bd" <%- sconfig.flags.includes("automanagedmods") ? `checked="true"` : '' %>>
-                                            <label for="e674062983be05014aa538af6f72b5bd">
-                                                automanagedmods
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="ClearOldItems" id="073c784fa8e0da68143d819a159dbb78" <%- sconfig.flags.includes("ClearOldItems") ? `checked="true"` : '' %>>
-                                            <label for="073c784fa8e0da68143d819a159dbb78">
-                                                ClearOldItems
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="EnableIdlePlayerKick" id="cdc7d7407c76e846617bd5b15921b4c1" <%- sconfig.flags.includes("EnableIdlePlayerKick") ? `checked="true"` : '' %>>
-                                            <label for="cdc7d7407c76e846617bd5b15921b4c1">
-                                                EnableIdlePlayerKick
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="ForceAllowCaveFlyers" id="6967aa6e192af873e84932f734367941" <%- sconfig.flags.includes("ForceAllowCaveFlyers") ? `checked="true"` : '' %>>
-                                            <label for="6967aa6e192af873e84932f734367941">
-                                                ForceAllowCaveFlyers
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="ForceRespawnDinos" id="1ce2ee31605e6aefe8d8fb34432999c3" <%- sconfig.flags.includes("ForceRespawnDinos") ? `checked="true"` : '' %>>
-                                            <label for="1ce2ee31605e6aefe8d8fb34432999c3">
-                                                ForceRespawnDinos
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="lowmemory" id="1a41d3f7056f2bb0a285315b695692b3" <%- sconfig.flags.includes("lowmemory") ? `checked="true"` : '' %>>
-                                            <label for="1a41d3f7056f2bb0a285315b695692b3">
-                                                lowmemory
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="noantispeedhack" id="567ce4a3f791e424934c3aacdc7d1ec6" <%- sconfig.flags.includes("noantispeedhack") ? `checked="true"` : '' %>>
-                                            <label for="567ce4a3f791e424934c3aacdc7d1ec6">
-                                                noantispeedhack
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="NoBattleEye" id="ada043dfcdb9a3c0c12f9f95a331f755" <%- sconfig.flags.includes("NoBattleEye") ? `checked="true"` : '' %>>
-                                            <label for="ada043dfcdb9a3c0c12f9f95a331f755">
-                                                NoBattleEye
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="nocombineclientmoves" id="77eed998f19fb5f80158f97dd1dd9c32" <%- sconfig.flags.includes("nocombineclientmoves") ? `checked="true"` : '' %>>
-                                            <label for="77eed998f19fb5f80158f97dd1dd9c32">
-                                                nocombineclientmoves
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="nofishloot" id="6327cd8855992c12a84f25c653f2cc23" <%- sconfig.flags.includes("nofishloot") ? `checked="true"` : '' %>>
-                                            <label for="6327cd8855992c12a84f25c653f2cc23">
-                                                nofishloot
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="noninlinesaveload" id="c3c8607458f4bcd7c0788176756f54cb" <%- sconfig.flags.includes("noninlinesaveload") ? `checked="true"` : '' %>>
-                                            <label for="c3c8607458f4bcd7c0788176756f54cb">
-                                                noninlinesaveload
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="nomansky" id="91281dd43efbb867f97ea7c32986f81c" <%- sconfig.flags.includes("nomansky") ? `checked="true"` : '' %>>
-                                            <label for="91281dd43efbb867f97ea7c32986f81c">
-                                                nomansky
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="nomemorybias" id="7524856bb594f7747824cf72205d2548" <%- sconfig.flags.includes("nomemorybias") ? `checked="true"` : '' %>>
-                                            <label for="7524856bb594f7747824cf72205d2548">
-                                                nomemorybias
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="NotifyAdminCommandsInChat" id="00d8e673bb693b1261e63b6153992d3f" <%- sconfig.flags.includes("NotifyAdminCommandsInChat") ? `checked="true"` : '' %>>
-                                            <label for="00d8e673bb693b1261e63b6153992d3f">
-                                                NotifyAdminCommandsInChat
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="oldsaveformat" id="d4b10205bcfdff30af1ddc394ebbae84" <%- sconfig.flags.includes("oldsaveformat") ? `checked="true"` : '' %>>
-                                            <label for="d4b10205bcfdff30af1ddc394ebbae84">
-                                                oldsaveformat
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="server" id="cf1e8c14e54505f60aa10ceb8d5d8ab3" <%- sconfig.flags.includes("server") ? `checked="true"` : '' %>>
-                                            <label for="cf1e8c14e54505f60aa10ceb8d5d8ab3">
-                                                server
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="servergamelog" id="859a5dd5f23841f2a9a67ca88e69a334" <%- sconfig.flags.includes("servergamelog") ? `checked="true"` : '' %>>
-                                            <label for="859a5dd5f23841f2a9a67ca88e69a334">
-                                                servergamelog
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="servergamelogincludetribelogs" id="5f556d6659ccd4c29ef4aef83bc041c7" <%- sconfig.flags.includes("servergamelogincludetribelogs") ? `checked="true"` : '' %>>
-                                            <label for="5f556d6659ccd4c29ef4aef83bc041c7">
-                                                servergamelogincludetribelogs
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="ServerRCONOutputTribeLogs" id="dd195ab426023574687efbd91aa7b441" <%- sconfig.flags.includes("ServerRCONOutputTribeLogs") ? `checked="true"` : '' %>>
-                                            <label for="dd195ab426023574687efbd91aa7b441">
-                                                ServerRCONOutputTribeLogs
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="StasisKeepControllers" id="7a732b4f12d350afec60e8928145cc81" <%- sconfig.flags.includes("StasisKeepControllers") ? `checked="true"` : '' %>>
-                                            <label for="7a732b4f12d350afec60e8928145cc81">
-                                                StasisKeepControllers
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="USEALLAVAILABLECORES" id="6ee3d0f2503f53c8f5d94406728f0689" <%- sconfig.flags.includes("USEALLAVAILABLECORES") ? `checked="true"` : '' %>>
-                                            <label for="6ee3d0f2503f53c8f5d94406728f0689">
-                                                USEALLAVAILABLECORES
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="usecache" id="46c6fd5e79d0989aff1a6228ee7132a6" <%- sconfig.flags.includes("usecache") ? `checked="true"` : '' %>>
-                                            <label for="46c6fd5e79d0989aff1a6228ee7132a6">
-                                                usecache
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="nonetthreading" id="869fb7827af40d8c81fdfb17c6535a87" <%- sconfig.flags.includes("nonetthreading") ? `checked="true"` : '' %>>
-                                            <label for="869fb7827af40d8c81fdfb17c6535a87">
-                                                nonetthreading
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="forcenetthreading" id="28b5a813ffb34fc8637c5f684f567751" <%- sconfig.flags.includes("forcenetthreading") ? `checked="true"` : '' %>>
-                                            <label for="28b5a813ffb34fc8637c5f684f567751">
-                                                forcenetthreading
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="webalarm" id="c63fa6e9918c1b797ae4c464b4bf068b" <%- sconfig.flags.includes("webalarm") ? `checked="true"` : '' %>>
-                                            <label for="c63fa6e9918c1b797ae4c464b4bf068b">
-                                                webalarm
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="exclusivejoin" id="dc3a0875026d425eb74f8e47784bbfdf" <%- sconfig.flags.includes("exclusivejoin") ? `checked="true"` : '' %>>
-                                            <label for="dc3a0875026d425eb74f8e47784bbfdf">
-                                                exclusivejoin
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="structurememopts" id="ff1ee8ae6cde1fed4de5afde0c016d2c" <%- sconfig.flags.includes("structurememopts") ? `checked="true"` : '' %>>
-                                            <label for="ff1ee8ae6cde1fed4de5afde0c016d2c">
-                                                structurememopts
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="nodinos" id="3d080433b244da0647c8585895a9f5f0" <%- sconfig.flags.includes("nodinos") ? `checked="true"` : '' %>>
-                                            <label for="3d080433b244da0647c8585895a9f5f0">
-                                                nodinos
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="noundermeshchecking" id="1f652b15fdfcf76e8da591254c33363a" <%- sconfig.flags.includes("noundermeshchecking") ? `checked="true"` : '' %>>
-                                            <label for="1f652b15fdfcf76e8da591254c33363a">
-                                                noundermeshchecking
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="noundermeshkilling" id="82b4c30a9137589d7f64b2a649d9eee3" <%- sconfig.flags.includes("noundermeshkilling") ? `checked="true"` : '' %>>
-                                            <label for="82b4c30a9137589d7f64b2a649d9eee3">
-                                                noundermeshkilling
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="AutoDestroyStructures" id="3e813d50ceb5852c281500ff53255778" <%- sconfig.flags.includes("AutoDestroyStructures") ? `checked="true"` : '' %>>
-                                            <label for="3e813d50ceb5852c281500ff53255778">
-                                                AutoDestroyStructures
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="crossplay" id="32da5c7a7224e8d9ce011210a34155fb" <%- sconfig.flags.includes("crossplay") ? `checked="true"` : '' %>>
-                                            <label for="32da5c7a7224e8d9ce011210a34155fb">
-                                                crossplay
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="epiconly" id="eedda0af4f2c7bf39a2bf598d90ee467" <%- sconfig.flags.includes("epiconly") ? `checked="true"` : '' %>>
-                                            <label for="eedda0af4f2c7bf39a2bf598d90ee467">
-                                                epiconly
-                                            </label>
-                                        </div></div><div class="row">  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="UseVivoc" id="c6d509fbde076ee8af56301340a4932e" <%- sconfig.flags.includes("UseVivoc") ? `checked="true"` : '' %>>
-                                            <label for="c6d509fbde076ee8af56301340a4932e">
-                                                UseVivoc
-                                            </label>
-                                        </div>  <div class="icheck-primary mb-3 col-lg-6 col-12">
-                                            <input type="checkbox" name="flags[]" value="logs" id="2165e4fa5bddb65a31f6a0c495c2fa37" <%- sconfig.flags.includes("logs") ? `checked="true"` : '' %>>
-                                            <label for="2165e4fa5bddb65a31f6a0c495c2fa37">
-                                                logs
-                                            </label>
-                                        </div></div>
+                                <td class="p-2 pl-4" colspan="2">
+                                    <div class="row">
+                                        <% flags.forEach((val) => { %>
+                                            <div class="icheck-primary mb-3 col-lg-6 col-12">
+                                                <input type="checkbox" name="flags[]" value="<%- val %>" id="<%- md5(val) %>" <%- sconfig.flags.includes(val) ? `checked="true"` : '' %>>
+                                                <label for="<%- md5(val) %>">
+                                                    <%- val %>
+                                                </label>
+                                            </div>
+                                        <% }) %>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

@@ -22,7 +22,7 @@ router.route('/')
 
         let sess = req.session;
         let serverName  = req.baseUrl;
-        serverName      = serverName.replace('/servercenter/', '').replace('/config', '');
+        serverName      = serverName.replace('/servercenter/', '').replace('/backups', '');
         let userPerm    = helper_user.permissions(sess.uid);
 
         // Leite zu 401 wenn Rechte nicht gesetzt sind
@@ -40,11 +40,11 @@ router.route('/')
             let servCfg = serverUtilInfos.getConfig(serverName);
 
             // Render Seite
-            res.render('pages/servercenter/serverCenter_config', {
+            res.render('pages/servercenter/serverCenter_backups', {
                 icon                    : "fas fa-server",
                 pagename                : servCfg.sessionName,
                 page                    : "servercenter",
-                subpage                 : "config",
+                subpage                 : "backups",
                 resp                    : resp,
                 perm                    : userPerm,
                 scfg                    : servCfg,
@@ -53,9 +53,7 @@ router.route('/')
                 sconfig                 : serverUtilInfos.getConfig(serverName),
                 serverName              : serverName,
                 sercerCenterAny         : JSON.parse(fs.readFileSync('./public/json/sites/serverCenterAny.cfg.json')),
-                sercerCenterActions     : JSON.parse(fs.readFileSync('./public/json/sites/serverCenterActions.cfg.json')),
-                flags                   : JSON.parse(fs.readFileSync('./app/json/panel/flags.json')),
-                maps                    : JSON.parse(fs.readFileSync('./app/json/panel/maps.json'))
+                sercerCenterActions     : JSON.parse(fs.readFileSync('./public/json/sites/serverCenterActions.cfg.json'))
             });
         }
     })

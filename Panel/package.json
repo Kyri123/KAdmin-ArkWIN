@@ -36,6 +36,8 @@
     "request": "^2.88.2",
     "sync-mysql": "^3.0.1",
     "systeminformation": "^4.27.11",
+    "tar": "^6.0.5",
+    "uncompress": "^1.0.2",
     "uuid": "^8.3.1"
   }
 }

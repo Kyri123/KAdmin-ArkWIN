@@ -40,17 +40,17 @@ function getServerList() {
         $('#ram_perc').css('width', `${data.server_data.ram}%`);
 
         data.servers_arr.forEach((val, key) => {
-            let stateColor = val[1].is_installed ? (
-                val[1].is_free ? (
-                    val[1].pid !== 0 && val[1].online ? "success"
-                        : (val[1].pid !== 0 ? "info" : "danger")
-                ) : "info"
-            ) : (val[1].is_free ? "warning" : "info");
+
+            let stateColor                                       = "danger";
+            if(!val[1].is_installed)                  stateColor = "warning";
+            if(val[1].pid !== 0 && !val[1].online)    stateColor = "primary";
+            if(val[1].pid !== 0 && val[1].online)     stateColor = "success";
+            if(val[1].cmd || val[1].steamcmd)         stateColor = "info";
 
             newServerList += `
         <a href="/servercenter/${val[0]}/home" class="dropdown-item bg-light">
             <div class="media">
-                <div class="mr-2"><img src="/img/igmap/${val[1].ServerMap}.jpg" style="border-width: 3px!important;background-color: #001f3f" class="img-size-50 border border-${stateColor}"></div>
+                <div class="mr-2"><img src="/img/igmap/${val[1].serverMap}.jpg" style="border-width: 3px!important;background-color: #001f3f" class="img-size-50 border border-${stateColor}"></div>
                 <div class="media-body">
                     <h3 class="dropdown-item-title">
                         ${val[1].sessionName}
@@ -65,5 +65,19 @@ function getServerList() {
         })
 
         if(globalServerList.html() !== newServerList) globalServerList.html(newServerList);
+    })
+}
+
+
+
+function setInModal() {
+    Object.values(arguments).forEach((arg) => {
+        let id      = arg.split('~')[0];
+        let type    = arg.split('~')[1];
+        let val     = arg.split('~')[2];
+
+        if(type === "txt") $(id).text(val);
+        if(type === "val") $(id).val(val);
+        if(type === "htm") $(id).html(val);
     })
 }

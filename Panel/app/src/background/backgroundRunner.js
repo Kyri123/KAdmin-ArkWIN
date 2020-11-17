@@ -108,8 +108,10 @@ module.exports = {
             if(serverInfos.servers_arr.length > 0) {
                 serverInfos.servers_arr.forEach((val) => {
                     if(val[1].mods !== undefined) if(val[1].mods.length > 0) {
+                        if(!modArray.includes(val[1].MapModID) && val[1].MapModID !== 0) modArray.push(val[1].MapModID);
+                        if(val[1].MapModID !== 0 && !modArray.includes(val[1].MapModID)) modArray.push(val[1].MapModID);
                         val[1].mods.forEach((modid) => {
-                            modArray.push(modid);
+                            if(!modArray.includes(modid)) modArray.push(modid);
                         })
                     }
                 })
@@ -141,7 +143,7 @@ module.exports = {
                         // Auto Update system
                         if(val[1].autoUpdate) {
                             if(Date.now() > val[1].autoUpdateNext && val[1].is_free) {
-                                serverCommands.doUpdateServer(val[0], false, true);
+                                serverCommands.doUpdateServer(val[0], false, true, true);
                                 serverUtil.writeConfig(val[0], "autoUpdateNext", (Date.now() + val[1].autoUpdateInterval));
                                 if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m run > doServerBackgrounder > autoUpdate > ${val[0]}`);
                             }
@@ -150,7 +152,7 @@ module.exports = {
                         // Auto Backup system
                         if(val[1].autoBackup) {
                             if(Date.now() > val[1].autoBackupNext && val[1].is_free) {
-                                serverCommands.doBackup(val[0]);
+                                serverCommands.doBackup(val[0], true);
                                 serverUtil.writeConfig(val[0], "autoBackupNext", (Date.now() + val[1].autoBackupInterval));
                                 if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m run > doServerBackgrounder > autoBackup > ${val[0]}`);
                             }
@@ -159,7 +161,7 @@ module.exports = {
                         // soll der Server laufen?
                         if(val[1].shouldRun && val[1].is_free && val[1].pid === 0 && !val[1].run) {
                             if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m run > doServerBackgrounder > Start > ${val[0]}`);
-                            serverCommands.doStart(val[0]);
+                            if(val[1].is_free) serverCommands.doStart(val[0]);
                         }
                     }
                 })
@@ -218,6 +220,7 @@ module.exports = {
      * Prüft nach neuer Panel Version
      */
     backgroundUpdater: async () => {
+        global.checkIsRunning = undefined;
         async function backgroundUpdater() {
             var options = {
                 url: `https://api.github.com/repos/Kyri123/ArkAdminWin/branches/${PANEL_MAIN.panelBranch}`,
@@ -232,19 +235,19 @@ module.exports = {
                     if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")}] Auto-Updater: \x1b[91m${PANEL_LANG.updaterLOG.conErr}`);
                 } else if (res.statusCode === 200) {
                     // Prüfe SHA mit API
-                    fs.readFile("app/data/sha.txt", 'utf8', (err, data) => {
-                        if (err === undefined) {
+                    fs.readFile("./app/data/sha.txt", 'utf8', (err, data) => {
+                        if (err === null) {
                             if (data === api.commit.sha) {
                                 // kein Update
                                 if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")}] Auto-Updater: \x1b[32m${PANEL_LANG.updaterLOG.isUpToDate}`);
                             } else {
                                 // Update verfügbar
-                                if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")}] Auto-Updater: \x1b[36m${PANEL_LANG.updaterLOG.isUpToDate}`);
+                                if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")}] Auto-Updater: \x1b[36m${PANEL_LANG.updaterLOG.isUpdate}`);
                                 global.isUpdate = true;
                                 let args = process.argv.slice(2);
                                 if(args[0] !== undefined && checkIsRunning === undefined) {
                                     // Prüfe ob alle Aufgaben abgeschlossen sind && ob der Server mit startedWithUpdater gestartet wurde
-                                    if(args[0] === "startedWithUpdater") global.checkIsRunning = setInterval(() => {
+                                    if(args[0] === "startedWithUpdater") checkIsRunning = setInterval(() => {
                                         let ServerInfos = globalInfos.get();
                                         let isFree      = true;
 
@@ -256,8 +259,11 @@ module.exports = {
                                         }
 
                                         // Wenn alles Frei ist beende den Server (startet durch die CMD sofort neu mit dem Updater
-                                        if(isFree) process.exit(2);
-                                    }, 5000)
+                                        if(isFree) {
+                                            process.exit(2);
+                                        }
+                                    }, 5000);
+                                    fs.writeFileSync("./app/data/sha.txt", api.commit.sha);
                                 }
                             }
                         } else {
@@ -272,6 +278,7 @@ module.exports = {
         }
 
 
+        backgroundUpdater();
         setInterval(() => {
             backgroundUpdater();
         }, PANEL_MAIN.interval.backgroundUpdater);

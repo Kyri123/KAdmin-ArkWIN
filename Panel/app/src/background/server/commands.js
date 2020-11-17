@@ -26,7 +26,7 @@ module.exports = {
     doStart: (server, noAutoUpdate = false, validate = false, alwaysStart = false) => {
         let servConfig  = serverUtilInfos.getConfig(server);
         let servInfos   = serverUtilInfos.getServerInfos(server);
-        if(servConfig.server === undefined && servInfos.is_free) {
+        if(servConfig.server === undefined && !servInfos.cmd) {
             let steamCMDPath        = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
             let serverPath          = servConfig.path;
 
@@ -73,7 +73,7 @@ module.exports = {
             // Speichern und ausführen
             try {
                 if (alwaysStart) serverUtilInfos.writeConfig(server, "shouldRun", true);
-                if(servInfos.is_free && !servInfos.run) {
+                if(!servInfos.cmd && !servInfos.run) {
                     fs.writeFileSync(cmdFile, cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doStart ${server}" ${cmdFile}`);
                 }
@@ -94,7 +94,7 @@ module.exports = {
     doInstallServer: (server) => {
         let servConfig  = serverUtilInfos.getConfig(server);
         let servInfos   = serverUtilInfos.getServerInfos(server);
-        if(servConfig.server === undefined && servInfos.is_free) {
+        if(servConfig.server === undefined && !servInfos.cmd) {
             let steamCMDPath        = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
             let serverPath          = servConfig.path;
 
@@ -119,7 +119,7 @@ module.exports = {
 
             // Speichern und ausführen
             try {
-                if(!servInfos.is_installed && servInfos.is_free) {
+                if(!servInfos.is_installed && !servInfos.cmd) {
                     fs.writeFileSync(cmdFile, cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doInstallServer ${server}" ${cmdFile}`)
                 }
@@ -137,18 +137,19 @@ module.exports = {
      * @param {string} server Server Name
      * @param {boolean} validate soll der server Validate ausführen?
      * @param {boolean} warn soll über RCON gewarnt werden?
+     * @param {boolean} isBackground Wird es vom Server ausgeführt
      * @returns {boolean}
      */
-    doUpdateServer: (server, validate = false, warn = false) => {
+    doUpdateServer: (server, validate = false, warn = false, isBackground = false) => {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
-        if(servConfig.server === undefined && servInfos.is_free) {
+        if(servConfig.server === undefined && !servInfos.cmd) {
             let steamCMDPath        = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
             let serverPath          = servConfig.path;
             let updateNeed  = serverUtil.checkSeverUpdate(server);
 
             // CMD Line
-            let cmdFile             = `${servConfig.pathLogs}.cmd`
+            let cmdFile             = `${isBackground ? mainDir + '\\app\\cmd\\' + md5(servConfig.pathLogs + "doUpdate") : servConfig.pathLogs}.cmd`
             let cmdCommand          = `@echo off\n`
 
             // Countdown
@@ -156,9 +157,9 @@ module.exports = {
                 cmdCommand      += CommandUtil.stopCountDown(server);
             }
             else if(servInfos.online || servInfos.run) {
-                if(servInfos.online) cmdCommand      += `node ${__dirname}\\rcon.js rcon 127.0.0.1 ${servConfig.rcon} ${servConfig.ServerAdminPassword} "broadcast [ArkAdminWIN] ${PANEL_LANG.timers.stopCountDown['now']}"\n`;
-                if(servInfos.online) cmdCommand      += `node ${__dirname}\\rcon.js rcon 127.0.0.1 ${servConfig.rcon} ${servConfig.ServerAdminPassword} "saveworld"\n`;
-                if(servInfos.online) cmdCommand      += `node ${__dirname}\\rcon.js rcon 127.0.0.1 ${servConfig.rcon} ${servConfig.ServerAdminPassword} "doexit"\n`;
+                if(servInfos.online) cmdCommand      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "broadcast [ArkAdminWIN] ${PANEL_LANG.timers.stopCountDown['now']}"\n`;
+                if(servInfos.online) cmdCommand      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "saveworld"\n`;
+                if(servInfos.online) cmdCommand      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "doexit"\n`;
                 cmdCommand += `timeout /T 10 /nobreak\n`;
                 cmdCommand += `Taskkill /PID ${servInfos.pid} /F\n`;
             }
@@ -203,9 +204,9 @@ module.exports = {
             try {
                 if (updateNeed || validate) {
                     fs.writeFileSync(cmdFile, cmdCommand);
-                    serverCmd.runCMD(`start "[ArkAdminWIN] doUpdateServer ${server}" ${cmdFile}`)
+                    serverCmd.runCMD(`start "[ArkAdminWIN] doUpdateServer  ${isBackground ? "Server" : server}" ${cmdFile}`)
                 }
-                fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
+                if(!isBackground) fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
             }
             catch (e) {
                 if(debug) console.log(e);
@@ -245,8 +246,8 @@ module.exports = {
                 modID.forEach((val) => {
                     actionResponse              += `${val}\n`;
                     workshop_download_item  +=  ` +workshop_download_item ${PANEL_CONFIG.appID} ${val}`;
-                    copys  += `@RD /S /Q "${serverPath}\\ShooterGame\\Content\\Mods\\${val}\\"\n`;
-                    copys  += `xcopy /S "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${val}" "${serverPath}\\ShooterGame\\Content\\Mods\\${val}\\"\n`;
+                    copys  += `${mainDir}\\tools\\ArkModCopy\\ArkModCopy.exe "${serverPath}" "${serverPath}" "${val}"\n`;
+                    copys  += `echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${val}".modtime\n`;
                     copys  += `@RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${val}"\n`;
                 })
             }
@@ -254,8 +255,8 @@ module.exports = {
             else {
                 actionResponse              += `${modID}\n`;
                 workshop_download_item  +=  `+workshop_download_item ${PANEL_CONFIG.appID} ${modID}`;
-                copys  += `@RD /S /Q "${serverPath}\\ShooterGame\\Content\\Mods\\${modID}\\"\n`;
-                copys  += `xcopy /S "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${modID}" "${serverPath}\\ShooterGame\\Content\\Mods\\${modID}\\"\n`;
+                copys  += `${mainDir}\\tools\\ArkModCopy\\ArkModCopy.exe "${serverPath}" "${serverPath}" "${modID}"\n`;
+                copys  += `echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${modID}".modtime\n`;
                 copys  += `@RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${modID}"\n`;
             }
             cmdCommand      += `${steamCMDPath} +login anonymous +force_install_dir "${serverPath}"${workshop_download_item}${validate ? " validate" : ""} +quit\n`;
@@ -290,7 +291,7 @@ module.exports = {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
 
-        if(servConfig.server === undefined && servInfos.is_free) {
+        if(servConfig.server === undefined && !servInfos.cmd) {
             // CMD Line
             let cmdFile             = `${servConfig.pathLogs}.cmd`
             let cmdCommand          = `@echo off\n`
@@ -305,8 +306,8 @@ module.exports = {
                 cmdCommand                      += CommandUtil.stopCountDown(server, saveworld);
             }
             else if(servInfos.online || servInfos.run || servInfos.pid !== 0) {
-                if(saveworld && servInfos.online) cmdCommand        += `node ${mainDir}\\rcon.js rcon 127.0.0.1 ${servConfig.rcon} ${servConfig.ServerAdminPassword} "saveworld"\n`;
-                if(servInfos.online) cmdCommand                     += `node ${mainDir}\\rcon.js rcon 127.0.0.1 ${servConfig.rcon} ${servConfig.ServerAdminPassword} "doexit"\n`;
+                if(saveworld && servInfos.online) cmdCommand        += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "saveworld"\n`;
+                if(servInfos.online) cmdCommand                     += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "doexit"\n`;
                 cmdCommand += `timeout /T 10 /nobreak\n`;
                 cmdCommand += `Taskkill /PID ${servInfos.pid} /F\n`;
             }
@@ -346,7 +347,7 @@ module.exports = {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
 
-        if(servConfig.server === undefined && servInfos.is_free) {
+        if(servConfig.server === undefined && !servInfos.cmd) {
             let steamCMDPath            = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
             let serverPath              = servConfig.path;
 
@@ -364,8 +365,8 @@ module.exports = {
                 cmdCommand                      += CommandUtil.stopCountDown(server, saveworld);
             }
             else if(servInfos.online || servInfos.run) {
-                if(saveworld && servInfos.online) cmdCommand        += `node ${mainDir}\\rcon.js rcon 127.0.0.1 ${servConfig.rcon} ${servConfig.ServerAdminPassword} "saveworld"\n`;
-                if(servInfos.online)cmdCommand                      += `node ${mainDir}\\rcon.js rcon 127.0.0.1 ${servConfig.rcon} ${servConfig.ServerAdminPassword} "doexit"\n`;
+                if(saveworld && servInfos.online) cmdCommand        += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "saveworld"\n`;
+                if(servInfos.online)cmdCommand                      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "doexit"\n`;
                 cmdCommand += `timeout /T 10 /nobreak\n`;
                 cmdCommand += `Taskkill /PID ${servInfos.pid} /F\n`;
             }
@@ -419,20 +420,22 @@ module.exports = {
     /**
      * Erstellt ein Backup von Konfig & Spielständen
      * @param {string} server Server Name
+     * @param {boolean} isBackground Wird es vom Server ausgeführt
      * @return {boolean}
      */
-    doBackup: (server) => {
+    doBackup: (server, isBackground = false) => {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
 
-        if(servConfig.server === undefined && servInfos.is_free) {
+        if(servConfig.server === undefined && !servInfos.cmd) {
             // vars
             let pathToZip               = `${servConfig.path}\\ShooterGame\\Saved`;
             let backupPath              = servConfig.pathBackup;
-            let canZIP                  = fs.existsSync(pathToZip);
+            let ZIP_name                = `${Date.now()}.zip`;
+            let canZIP                  = fs.existsSync(pathToZip) && !fs.existsSync(`${backupPath}\\${ZIP_name}`);
 
             // CMD Line
-            let cmdFile             = `${servConfig.pathLogs}.cmd`
+            let cmdFile             = `${isBackground ? mainDir + '\\app\\cmd\\' + md5(servConfig.pathLogs + "doBackup") : servConfig.pathLogs}.cmd`
             let cmdCommand          = `@echo off\n`
 
             // Logmeldungen
@@ -444,7 +447,7 @@ module.exports = {
             if(canZIP) {
                 actionResponse          += `${PANEL_LANG.logger.doBackupThis}: ${Date.now()}.zip\n`;
                 if(!fs.existsSync(backupPath)) fs.mkdirSync(backupPath);
-                cmdCommand  += `powershell -command "Add-Type -Assembly \\"System.IO.Compression.FileSystem\\" ;[System.IO.Compression.ZipFile]::CreateFromDirectory(\\"${pathToZip}\\", \\"${backupPath}\\${server}_${Date.now()}.zip\\") ;"\n`;
+                cmdCommand  += `powershell -command "Add-Type -Assembly \\"System.IO.Compression.FileSystem\\" ;[System.IO.Compression.ZipFile]::CreateFromDirectory(\\"${pathToZip}\\", \\"${backupPath}\\${ZIP_name}\\") ;"\n`;
             }
             else {
                 actionResponse          += `${PANEL_LANG.logger.doNotBackup}\n`;
@@ -455,10 +458,10 @@ module.exports = {
 
             // Speichern und ausführen
             try {
-                fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
+                if(!isBackground) fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
                 if(canZIP) {
                     fs.writeFileSync(cmdFile, cmdCommand);
-                    serverCmd.runCMD(`start "[ArkAdminWIN] doBackup ${server}" ${cmdFile}`);
+                    serverCmd.runCMD(`start "[ArkAdminWIN] doBackup ${isBackground ? "Server" : server}" ${cmdFile}`);
                 }
             }
             catch (e) {

@@ -101,11 +101,19 @@
   },
   "1010": {
     "title" : "Mod Entfernt",
-    "text"  : "Modifikation wurde entfernt"
+    "text"  : "Modifikation <b>{modid}</b> wurde entfernt"
   },
   "1011": {
     "title" : "Mod Hinzugefügt",
     "text"  : "Modifikation <b>{modid}</b> wurde hinzugefügt"
+  },
+  "1012": {
+    "title" : "Backup Entfernt",
+    "text"  : "Backup <b>{file}</b> wurde gelöscht"
+  },
+  "1013": {
+    "title" : "Backup Eingespielt",
+    "text"  : "Backup <b>{file}</b> wurde eingespielt"
   },
 
 
@@ -118,5 +126,30 @@
   "3001": {
     "title" : "Update verfügbar",
     "text"  : "Es ist ein neues Update verfügbar Bitte beende den Server und starte <b>start_<branch>.cmd</b>"
+  },
+
+  "3995": {
+    "title" : "Allwaysstart",
+    "text"  : "Server startet bei einem Crash neu"
+  },
+
+  "3996": {
+    "title" : "Mods nicht Installiert",
+    "text"  : "Eine Mod oder mehrere sind nicht Installiert"
+  },
+
+  "3997": {
+    "title" : "Mods benötigen Update",
+    "text"  : "Eine Mod oder mehrere sind nicht auf dem neusten Stand"
+  },
+
+  "3998": {
+    "title" : "Server benötigt Update",
+    "text"  : "Es ist ein neues Server update verfügbar"
+  },
+
+  "3999": {
+    "title" : "Server nicht Installiert",
+    "text"  : "Der Server ist noch nicht Installiert"
   }
 }

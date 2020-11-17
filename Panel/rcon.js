@@ -24,9 +24,11 @@ switch (args[0]) {
             conn.send(args[4]);
         }).on('response', function(str) {
             console.log("Got response: " + str);
+            conn.connect();
             process.exit(1);
         }).on('end', function() {
             console.log("Socket closed!");
+            conn.connect();
             process.exit();
         });
 

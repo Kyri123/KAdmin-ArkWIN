@@ -28,7 +28,7 @@ if(fs.existsSync('./app/config/app.json')) {
     global.PANEL_CONFIG = JSON.parse(fs.readFileSync('./app/config/app.json'));
 }
 else {
-    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m ./app/config/app.json not found`);
+    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ./app/config/app.json not found`);
     process.exit(1)
 }
 
@@ -37,7 +37,7 @@ if(fs.existsSync('./app/config/main.json')) {
     global.PANEL_MAIN = JSON.parse(fs.readFileSync('./app/config/main.json'));
 }
 else {
-    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m ./app/config/main.json not found`);
+    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ./app/config/main.json not found`);
     process.exit(1)
 }
 
@@ -47,7 +47,7 @@ if(fs.existsSync(`./lang/${PANEL_CONFIG.lang}/lang.json`)) {
     global.PANEL_LANG = JSON.parse(fs.readFileSync(`./lang/${PANEL_CONFIG.lang}/lang.json`));
 }
 else {
-    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m ./lang/${PANEL_CONFIG.lang}/lang.json not found`);
+    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ./lang/${PANEL_CONFIG.lang}/lang.json not found`);
     process.exit(1)
 }
 
@@ -56,7 +56,7 @@ if(fs.existsSync(`./lang/${PANEL_CONFIG.lang}/alert.json`)) {
     global.PANEL_LANG_ALERT = JSON.parse(fs.readFileSync(`./lang/${PANEL_CONFIG.lang}/alert.json`));
 }
 else {
-    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m ./lang/${PANEL_CONFIG.lang}/alert.json not found`);
+    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ./lang/${PANEL_CONFIG.lang}/alert.json not found`);
     process.exit(1)
 }
 
@@ -75,6 +75,8 @@ if(fs.existsSync('./app/config/mysql.json')) {
     console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m MySQL connecting...`);
     con.connect((err) => {
         if (err) {
+            if(debug) console.log(err);
+            console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m cannot connect to MariaDB`);
             process.exit(1)
         }
     });
@@ -87,6 +89,6 @@ if(fs.existsSync('./app/config/mysql.json')) {
     });
 }
 else {
-    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m ./app/config/mysql.json not found`);
+    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ./app/config/mysql.json not found`);
     process.exit(1)
 }
