@@ -27,7 +27,7 @@ router.route('/')
                 success = true;
             }
             catch (e) {
-                if(debug) console.log(e);console.log(e);
+                if(debug) console.log(e);
             }
 
             res.render('ajax/json', {
@@ -36,8 +36,6 @@ router.route('/')
                 })
             });
         }
-
-        console.log(POST)
     })
 
     .get((req,res)=>{
