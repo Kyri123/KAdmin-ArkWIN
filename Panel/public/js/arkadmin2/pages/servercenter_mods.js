@@ -122,8 +122,8 @@ function getTnstalled() {
                                     <div class="card bg-dark card-widget widget-user mb-0">
                                         <div class="row p-2">
                                             <div class="col-6">
-                                                <h5 class="text-center left d-inline pt-3 pl-0 m-0 ${server.mods.includes(val) ? "text-success" : "text-danger"}">
-                                                    ${server.mods.includes(val) ? vars.lang_arr.serverCenterMods.active : vars.lang_arr.serverCenterMods.notActive}
+                                                <h5 class="text-center left d-inline pt-3 pl-0 m-0 ${server.mods.includes(parseInt(val).toString()) ? "text-success" : "text-danger"}">
+                                                    ${server.mods.includes(parseInt(val).toString()) ? vars.lang_arr.serverCenterMods.active : vars.lang_arr.serverCenterMods.notActive}
                                                 </h5>
                                             </div>
                                         </div>
@@ -165,7 +165,7 @@ function getTnstalled() {
                 });
             }
 
-            // Keie Mods gefunden
+            // Keine Mods gefunden
             if(list === ``) {
                 list = `<ul class="list-group ml-2 mr-2 mb-4" style="border:0; width: 100%">
                             <div class="list-group-item bg-warning">

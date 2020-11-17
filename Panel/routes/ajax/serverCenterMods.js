@@ -87,20 +87,25 @@ router.route('/')
         // Mod schieben
         if(POST.push !== undefined) {
             let mods        = serverUtilInfos.getConfig(POST.cfg).mods;
-            let modS        = mods[POST.key];
+            let k           = parseInt(POST.key);
+            let k1          = k + 1;
+            let k_1         = k - 1;
+            let modS        = mods[k];
             let modB        = 0;
 
-            if(Boolean(POST.up)) {
+            POST.up         = POST.up === "true";
+
+            if(POST.up) {
                 // up
-                modB                = mods[(POST.key-1)];
-                mods[(POST.key-1)]  = modS;
-                mods[POST.key]      = modB;
+                modB        = mods[k_1];
+                mods[k_1]   = modS;
+                mods[k]     = modB;
             }
             else {
                 // down
-                modB                = mods[(POST.key+1)];
-                mods[(POST.key+1)]  = modS;
-                mods[POST.key]      = modB;
+                modB        = mods[k1];
+                mods[k1]    = modS;
+                mods[k]     = modB;
             }
 
             res.render('ajax/json', {

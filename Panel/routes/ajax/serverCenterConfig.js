@@ -68,7 +68,7 @@ router.route('/')
             let serverInfos = serverUtilInfos.getConfig(GET.server);
 
             res.render('ajax/json', {
-                data: fs.existsSync(`${serverInfos.path}\\ShooterGame\\Saved\\Config\\WindowsServer\\${GET.ini}.ini`)     ? fs.readFileSync(`${serverInfos.path}\\ShooterGame\\Saved\\Config\\WindowsServer\\${GET.ini}.ini`, 'utf-8')   : fs.readFileSync('./app/data/ini/${GET.ini}.ini', 'utf-8')
+                data: fs.existsSync(`${serverInfos.path}\\ShooterGame\\Saved\\Config\\WindowsServer\\${GET.ini}.ini`)     ? fs.readFileSync(`${serverInfos.path}\\ShooterGame\\Saved\\Config\\WindowsServer\\${GET.ini}.ini`, 'utf-8')   : fs.readFileSync(`./app/data/ini/${GET.ini}.ini`, 'utf-8')
             });
         }
     })
