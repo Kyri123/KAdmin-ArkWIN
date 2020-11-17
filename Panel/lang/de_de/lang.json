@@ -6,9 +6,10 @@
     "usersettings"          : "Benutzereinstellungen",
     "gorup_user"            : "Benutzer und Gruppen",
     "userpanel"             : "Benutzer",
-    "servercontrolcenter"  : "ServerControlCenter",
+    "servercontrolcenter"   : "ServerControlCenter",
     "err404"                : "Seite konnte nicht gefunden werden",
-    "err401"                : "Keine Berechtigung"
+    "err401"                : "Keine Berechtigung",
+    "changelog"             : "Changelogs"
   },
 
   "updaterLOG": {
@@ -42,6 +43,15 @@
     "title"           : "Ohnein! Seite nicht gefunden...",
     "txt"             : "Die Seite du du Aufrufen wolltest wurde nicht gefunden! Vielleicht wurde sie von einem Dino gefressen!?",
     "backToDashboard" : " Zurück zum Dashboard"
+  },
+
+  "home": {
+    "t_version"       : "Versionsnummer",
+    "t_date"          : "Datum",
+    "t_state"         : "Status",
+    "curr"            : "Aktuell / Neustes",
+    "old"             : "Veraltet",
+    "readall"         : "Alle Lesen"
   },
 
   "timers": {

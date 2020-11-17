@@ -21,6 +21,7 @@ router.use('/home',                         isLoggedIn    ,                     
 router.use('/usersettings',                 isLoggedIn    ,                     require('./pages/usersettings'));                   // Benutzereinstellugen              | Muss eingeloggt sein
 router.use('/servercontrolcenter',          isLoggedIn    ,                     require('./pages/serverControlCenter'));            // ServerControlCenter               | Muss eingeloggt sein
 router.use('/userpanel',                    isLoggedIn    ,                     require('./pages/userPanel'));                      // Benutzer                          | Muss eingeloggt sein
+router.use('/changelog',                    isLoggedIn    ,                     require('./pages/changelog'));                      // Changelogs                        | Muss eingeloggt sein
 
 // Server Center
 router.use('/servercenter/:name/backups',   isLoggedIn    , isServerExsits    , require('./pages/serverCenter_backups'));           // ServerCenter - Backups            | Muss eingeloggt sein

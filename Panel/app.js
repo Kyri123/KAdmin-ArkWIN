@@ -17,7 +17,7 @@ const cookieParser                    = require('cookie-parser');
 const logger                          = require('morgan');
 const uuid                            = require('uuid');
 const backgroundRunner                = require('./app/src/background/backgroundRunner');
-const onStart                         = require('./app/src/background/onStart');
+const fs                              = require('fs');
 global.ip                             = require('ip');
 global.alerter                        = require('./app/src/alert.js');
 global.md5                            = require('md5');
@@ -26,13 +26,25 @@ global.availableVersion_public        = 0;
 global.availableVersion_activeevent   = 0;
 global.mode                           = "dev";
 global.dateFormat                     = require('dateformat');
-global.panelVersion                   = "0.0.1";
+global.panelVersion                   = "0.0.2";
 global.mainDir                        = __dirname;
 global.mysql                          = require('mysql');
 global.isUpdate                       = false;
 
 require('./app/main/main_loader.js');
 global.debug                          = PANEL_MAIN.useDebug;
+
+// lese Changelog
+try {
+  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m Load: ./app/json/changelog.json`)
+  global.changelog                    = JSON.parse(fs.readFileSync(`./app/json/changelog.json`));
+  changelog.reverse();
+}
+catch (e) {
+  if(debug) console.log(e);
+  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ./app/json/changelog.json not found`);
+  process.exit(1);
+}
 
 let app           = express();
 

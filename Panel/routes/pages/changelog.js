@@ -17,10 +17,10 @@ router.route('/')
     .all((req,res)=>{
         global.user         = helper_user.getinfos(req.session.uid);
         let resp = "";
-        res.render('pages/home', {
-            icon        : "fas fa-tachometer-alt",
-            pagename    : PANEL_LANG.pagename.home,
-            page        : "home",
+        res.render('pages/changelog', {
+            icon        : "fas fa-book",
+            pagename    : PANEL_LANG.pagename.changelog,
+            page        : "changelog",
             resp        : resp,
             perm        : helper_user.permissions(req.session.uid),
             sinfos      : globalinfos.get()
