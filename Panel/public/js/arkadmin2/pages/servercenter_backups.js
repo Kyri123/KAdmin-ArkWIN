@@ -64,7 +64,7 @@ function get() {
                                 </table>
                                 <div class="right">
     
-                                    ${serverInfos.pid === 0 ? `<a href="javascript:void();" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal00">
+                                    ${serverInfos.pid === 0 ? `<a href="javascript:void();" onclick="setInModal('#filepi~val~${val}', '#filepititle~htm~${time}')" class="btn btn-info btn-sm" data-toggle="modal" data-target="#playinBackup">
                                         <span class="icon text-white">
                                             <i class="fas fa-play" aria-hidden="true"></i>
                                         </span>
@@ -104,6 +104,21 @@ function removeFile() {
                 $(`#lcc${id}`).html($(`#lc${id} li`).length);
             }
             get();
+        }
+        catch (e) {
+            console.log(e);
+        }
+    });
+    return false;
+}
+
+
+function playthisin() {
+    $.post('/ajax/serverCenterBackups' , $('#playinBackup').serialize(), (data) => {
+        try {
+            data    = JSON.parse(data);
+            if(data.alert !== undefined) $('#all_resp').append(data.alert);
+            $('#playinBackup').modal('hide');
         }
         catch (e) {
             console.log(e);

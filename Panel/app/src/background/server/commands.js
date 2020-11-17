@@ -149,7 +149,7 @@ module.exports = {
             let updateNeed  = serverUtil.checkSeverUpdate(server);
 
             // CMD Line
-            let cmdFile             = `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : servConfig.pathLogs}.cmd`
+            let cmdFile             = `${isBackground ? mainDir + '\\app\\cmd\\' + md5(servConfig.pathLogs + "doUpdate") : servConfig.pathLogs}.cmd`
             let cmdCommand          = `@echo off\n`
 
             // Countdown
@@ -157,9 +157,9 @@ module.exports = {
                 cmdCommand      += CommandUtil.stopCountDown(server);
             }
             else if(servInfos.online || servInfos.run) {
-                if(servInfos.online) cmdCommand      += `node ${__dirname}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "broadcast [ArkAdminWIN] ${PANEL_LANG.timers.stopCountDown['now']}"\n`;
-                if(servInfos.online) cmdCommand      += `node ${__dirname}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "saveworld"\n`;
-                if(servInfos.online) cmdCommand      += `node ${__dirname}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "doexit"\n`;
+                if(servInfos.online) cmdCommand      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "broadcast [ArkAdminWIN] ${PANEL_LANG.timers.stopCountDown['now']}"\n`;
+                if(servInfos.online) cmdCommand      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "saveworld"\n`;
+                if(servInfos.online) cmdCommand      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "doexit"\n`;
                 cmdCommand += `timeout /T 10 /nobreak\n`;
                 cmdCommand += `Taskkill /PID ${servInfos.pid} /F\n`;
             }
@@ -435,7 +435,7 @@ module.exports = {
             let canZIP                  = fs.existsSync(pathToZip) && !fs.existsSync(`${backupPath}\\${ZIP_name}`);
 
             // CMD Line
-            let cmdFile             = `${isBackground ? md5(servConfig.pathLogs + "doBackup") : servConfig.pathLogs}.cmd`
+            let cmdFile             = `${isBackground ? mainDir + '\\app\\cmd\\' + md5(servConfig.pathLogs + "doBackup") : servConfig.pathLogs}.cmd`
             let cmdCommand          = `@echo off\n`
 
             // Logmeldungen

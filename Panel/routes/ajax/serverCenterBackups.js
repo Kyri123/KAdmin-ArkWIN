@@ -7,6 +7,7 @@
  * *******************************************************************************************
  */
 
+const serverCmd         = require('./../../app/src/background/server/cmd');
 const express           = require('express')
 const router            = express.Router()
 const globalinfos       = require('./../../app/src/global_infos');
@@ -36,6 +37,29 @@ router.route('/')
                 })
             });
         }
+
+        if(POST.playin !== undefined) {
+            let success     = false;
+            let serverCFG   = serverUtilInfos.getConfig(POST.server);
+            let serverINFO  = serverUtilInfos.getServerInfos(POST.server);
+
+            if(serverCFG.server === undefined) {
+                if(fs.existsSync(`${serverCFG.path}\\ShooterGame\\Saved`))  fs.rmSync(`${serverCFG.path}\\ShooterGame\\Saved`, {recursive: true});
+                if(!fs.existsSync(`${serverCFG.path}\\ShooterGame\\Saved`)) fs.mkdirSync(`${serverCFG.path}\\ShooterGame\\Saved`, {recursive: true});
+                if(fs.existsSync(`${serverCFG.pathBackup}\\${POST.file}`) && serverINFO.pid === 0) {
+                    serverCmd.runCMD(`powershell -command "Expand-Archive -Force -LiteralPath '${serverCFG.pathBackup}\\${POST.file}' -DestinationPath '${serverCFG.path}\\ShooterGame\\Saved'"`)
+                    success = true;
+                }
+            }
+
+            res.render('ajax/json', {
+                data: JSON.stringify({
+                    alert: alerter.rd(success ? 1013 : 3).replace("{file}", POST.file)
+                })
+            });
+        }
+
+
     })
 
     .get((req,res)=>{

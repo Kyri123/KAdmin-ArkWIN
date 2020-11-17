@@ -111,6 +111,10 @@
     "title" : "Backup Entfernt",
     "text"  : "Backup <b>{file}</b> wurde gelöscht"
   },
+  "1013": {
+    "title" : "Backup Eingespielt",
+    "text"  : "Backup <b>{file}</b> wurde eingespielt"
+  },
 
 
 
