@@ -107,6 +107,10 @@
     "title" : "Mod Hinzugefügt",
     "text"  : "Modifikation <b>{modid}</b> wurde hinzugefügt"
   },
+  "1012": {
+    "title" : "Backup Entfernt",
+    "text"  : "Backup <b>{file}</b> wurde gelöscht"
+  },
 
 
 

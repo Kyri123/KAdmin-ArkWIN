@@ -67,3 +67,17 @@ function getServerList() {
         if(globalServerList.html() !== newServerList) globalServerList.html(newServerList);
     })
 }
+
+
+
+function setInModal() {
+    Object.values(arguments).forEach((arg) => {
+        let id      = arg.split('~')[0];
+        let type    = arg.split('~')[1];
+        let val     = arg.split('~')[2];
+
+        if(type === "txt") $(id).text(val);
+        if(type === "val") $(id).val(val);
+        if(type === "htm") $(id).html(val);
+    })
+}

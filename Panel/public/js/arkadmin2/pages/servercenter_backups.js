@@ -36,7 +36,7 @@ function get() {
                         ktime   = cktime;
                         ktimes  = timeStamp;
                         if($(`#lc${ktimes}`).html() === undefined) $(`#backupList`).append(`
-                        <li class="list-group-item rounded-0">
+                        <li class="list-group-item rounded-0 main" id="lcm${ktimes}">
                             <i class="fa fa-folder pr-2" aria-hidden="true"></i> ${ktime}
                             <div class="right">
                                 <button class="btn btn-sm btn-primary" data-toggle="collapse" data-target="#lc${ktimes}" aria-expanded="true"><i class="fa fa-arrow-down pr-1" aria-hidden="true"></i> <span id="lcc${ktimes}">0</span></button>
@@ -70,7 +70,7 @@ function get() {
                                         </span>
                                     </a>` : ""}
     
-                                    <a href="javascript:void();" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delmodal00">
+                                    <a href="javascript:void();" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#removeBackup" onclick="setInModal('#fileNameRemove~val~${val}', '#removeTitle~htm~${time}')">
                                         <span class="icon text-white">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </span>
@@ -78,11 +78,36 @@ function get() {
                                 </div>
                             </li>`);
                     $(`#lcc${ktimes}`).html($(`#lc${ktimes} li`).length);
+                    if($(`#lc${ktimes} li`).length === 0) $(`#lcm${ktimes}`).remove();
                 }
             });
-
 
             if($('#modlist').html() !== list) $('#modlist').html(list);
         });
     });
+}
+
+function removeFile() {
+    $.post('/ajax/serverCenterBackups' , $('#removeBackup').serialize(), (data) => {
+        try {
+            data    = JSON.parse(data);
+            if(data.alert !== undefined) $('#all_resp').append(data.alert);
+            $('#removeBackup').modal('hide');
+
+            let id = $('#fileNameRemove').val().replace('.zip', '');
+            $(`#${id}`).remove();
+            if($(`#lc${id} li`).length === 0) {
+                $(`#lcm${id}`).remove();
+                $(`#lc${id}`).remove();
+            }
+            else {
+                $(`#lcc${id}`).html($(`#lc${id} li`).length);
+            }
+            get();
+        }
+        catch (e) {
+            console.log(e);
+        }
+    });
+    return false;
 }

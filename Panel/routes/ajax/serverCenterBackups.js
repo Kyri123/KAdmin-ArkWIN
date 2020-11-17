@@ -17,8 +17,27 @@ const fs                = require('fs');
 router.route('/')
 
     .post((req,res)=>{
-        let POST        = req.body;
+        let POST            = req.body;
 
+        if(POST.remove !== undefined) {
+            let serverCFG   = serverUtilInfos.getConfig(POST.server);
+            let success     = false;
+            try {
+                fs.rmSync(`${serverCFG.pathBackup}\\${POST.file}`);
+                success = true;
+            }
+            catch (e) {
+                if(debug) console.log(e);console.log(e);
+            }
+
+            res.render('ajax/json', {
+                data: JSON.stringify({
+                    alert: alerter.rd(success ? 1012 : 3).replace("{file}", POST.file)
+                })
+            });
+        }
+
+        console.log(POST)
     })
 
     .get((req,res)=>{

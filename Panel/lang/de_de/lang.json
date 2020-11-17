@@ -233,6 +233,14 @@
     }
   },
 
+  "serverCenterBackups": {
+    "modal": {
+      "removeText"    : "Möchtest du wirklich dieses Backup löschen?",
+      "remove"        : "Backup Löschen",
+      "cancel"        : "Abbrechen"
+    }
+  },
+
   "servercontrolcenter": {
     "ip"            : "IP-Adresse",
     "state"         : "Status",

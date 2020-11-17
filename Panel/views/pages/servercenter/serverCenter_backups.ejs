@@ -24,6 +24,29 @@
     </div>
 </div>
 
+<!-- removeModal -->
+<form class="modal" id="removeBackup" tabindex="-1" method="post" action="#" style="display: none; padding-right: 15px;">
+    <div class="modal-dialog modal-xl" role="document" style="max-width: 700px">
+        <div class="modal-content border-0">
+            <div class="modal-header bg-danger border-dark">
+                <h5 class="modal-title" id="removeTitle"></h5>
+            </div>
+
+            <div class="modal-body">
+                <%- PANEL_LANG.serverCenterBackups.modal.removeText %>
+            </div>
+
+            <div class="modal-footer">
+                <input type="hidden" name="file" value="" id="fileNameRemove">
+                <input type="hidden" name="remove" value="true">
+                <input type="hidden" name="server" value="<%- serverName %>">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><%- PANEL_LANG.serverCenterBackups.modal.cancel %></button>
+                <button type="button" class="btn btn-danger" onclick="removeFile()"><%- PANEL_LANG.serverCenterBackups.modal.remove %></button>
+            </div>
+        </div>
+    </div>
+</form>
+
 
 <script>
     // Vars die zur JS übergeben werden
