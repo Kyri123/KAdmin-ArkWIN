@@ -18,7 +18,7 @@ module.exports = {
      * @returns {boolean}
      */
     user_exsists: (uid) => {
-        let result = synccon.query(`SELECT * FROM ArkAdmin_users WHERE \`id\`='${uid}'`);
+        let result = synccon.query(mysql.format('SELECT * FROM ArkAdmin_users WHERE `id`=?', [uid]));
         if(result.length > 0) {
             return true;
         }

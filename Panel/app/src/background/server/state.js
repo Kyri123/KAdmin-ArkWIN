@@ -26,7 +26,7 @@ const serverUtil    = require('./util');
  */
 function save(data, name, state, use_state = true) {
     // Schreibe in die Datenbank zu weiterverarbeitung
-    let query_lf = `SELECT * FROM \`ArkAdmin_statistiken\` WHERE \`server\` = '${name}' ORDER BY \`time\``;
+    /*let query_lf = `SELECT * FROM \`ArkAdmin_statistiken\` WHERE \`server\` = '${name}' ORDER BY \`time\``;
     con.query(query_lf, (error, results) => {
         if(use_state) data.state = state;
         if(!error) {
@@ -41,7 +41,7 @@ function save(data, name, state, use_state = true) {
                 con.query(create);
             }
         }
-    });
+    });*/
     fs.writeFileSync(`./public/json/server/${name}.json`, JSON.stringify(data));
 }
 
@@ -63,23 +63,25 @@ module.exports = {
 
                 // Lese installierte Mods
                 data.installedMods  = [];
-                let modPath         = `${servCFG.path}\\ShooterGame\\Content\\Mods`;
-                let dirRead         = fs.existsSync(modPath) ? fs.readdirSync(modPath, { withFileTypes: true }) : [];
-
-                if(dirRead.length > 0) {
-                    dirRead.forEach((val) => {
-                        if(
-                            (val.isFile()       && val.name !== "111111111.mod" && !isNaN(val.name.replace(".mod", ""))) ||
-                            (val.isDirectory()  && val.name !== "111111111"     && !isNaN(val.name))
-                        ) if(!data.installedMods.includes(parseInt(val.name))) data.installedMods.push(parseInt(val.name));
-                    })
-                }
-
                 data.notInstalledMods  = [];
-                if(servCFG.mods.length > 0) {
-                    servCFG.mods.forEach((val) => {
-                        if(!data.notInstalledMods.includes(val)) data.notInstalledMods.push(val);
-                    });
+                if(servCFG.server === undefined) {
+                    let modPath         = `${servCFG.path}\\ShooterGame\\Content\\Mods`;
+                    let dirRead         = fs.existsSync(modPath) ? fs.readdirSync(modPath, { withFileTypes: true }) : [];
+
+                    if(dirRead.length > 0) {
+                        dirRead.forEach((val) => {
+                            if(
+                                (val.isFile()       && val.name !== "111111111.mod" && !isNaN(val.name.replace(".mod", ""))) ||
+                                (val.isDirectory()  && val.name !== "111111111"     && !isNaN(val.name))
+                            ) if(!data.installedMods.includes(parseInt(val.name))) data.installedMods.push(parseInt(val.name));
+                        })
+                    }
+
+                    if(servCFG.mods.length > 0) {
+                        servCFG.mods.forEach((val) => {
+                            if(!data.notInstalledMods.includes(val)) data.notInstalledMods.push(val);
+                        });
+                    }
                 }
 
                 // Default werte

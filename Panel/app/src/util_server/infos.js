@@ -23,6 +23,12 @@ module.exports = {
         // Erzeuge Standarts (für ergänzte vars)
         if(cfg.server === undefined) {
             if(cfg.MapModID === undefined) cfg.MapModID = 0;
+
+            if(
+                cfg.path.indexOf(PANEL_CONFIG.servRoot) !== 0 ||
+                cfg.pathLogs.indexOf(PANEL_CONFIG.logRoot) !== 0 ||
+                cfg.pathBackup.indexOf(PANEL_CONFIG.pathBackup) !== 0
+            ) cfg = {"server": false};
         }
 
         return cfg;
