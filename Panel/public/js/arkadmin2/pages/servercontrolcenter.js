@@ -27,7 +27,7 @@ setInterval(() => {
                     ) : "info"
                 ) : (val[1].is_free ? "warning" : "info");
 
-                list +=    `    <div class="col-lg-6 col-xl-6" id="${val[0]}">
+                if(val[1].server === undefined) list +=    `    <div class="col-lg-6 col-xl-6" id="${val[0]}">
                                     <div class="card card-widget widget-user  item-box">
                                         <div class="card bg-dark card-widget widget-user mb-0">
                                             <div class="row p-2" title="${val[1].sessionName}">

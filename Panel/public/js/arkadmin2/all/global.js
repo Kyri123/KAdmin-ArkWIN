@@ -47,7 +47,7 @@ function getServerList() {
             if(val[1].pid !== 0 && val[1].online)     stateColor = "success";
             if(val[1].cmd || val[1].steamcmd)         stateColor = "info";
 
-            newServerList += `
+            if(val[1].server === undefined) newServerList += `
         <a href="/servercenter/${val[0]}/home" class="dropdown-item bg-light">
             <div class="media">
                 <div class="mr-2"><img src="/img/igmap/${val[1].serverMap}.jpg" style="border-width: 3px!important;background-color: #001f3f" class="img-size-50 border border-${stateColor}"></div>

@@ -85,7 +85,7 @@ module.exports = {
             };
 
             groups.forEach((val) => {
-                let group_result = synccon.query(`SELECT * FROM ArkAdmin_user_group WHERE \`id\`='${val}'`);
+                let group_result = synccon.query(mysql.format('SELECT * FROM ArkAdmin_user_group WHERE `id`=?', [val]));
                 if(group_result.length > 0) {
                     let groups_perm = JSON.parse(group_result[0].permissions);
                     permissions = array_replace_recursive(permissions, groups_perm);

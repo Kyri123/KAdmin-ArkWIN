@@ -44,7 +44,8 @@ router.route('/')
                         if(post.loggedin !== undefined) {
                             res.cookie('id', md5(sess.uid), { maxAge: (525600*60*10000), httpOnly: true });
                             res.cookie('validate', md5(rndstring), { maxAge: (525600*60*10000), httpOnly: true });
-                            synccon.query(`INSERT INTO \`ArkAdmin_user_cookies\` (\`md5id\`, \`validate\`, \`userid\`) VALUES ('${md5(sess.uid)}', '${md5(rndstring)}', '${sess.uid}')`);
+                            sql             = `INSERT INTO \`ArkAdmin_user_cookies\` (\`md5id\`, \`validate\`, \`userid\`) VALUES (?, ?, ?)`
+                            synccon.query(mysql.format(sql, [md5(sess.uid), md5(rndstring), sess.uid]));
                         }
 
                         res.redirect("/home");
