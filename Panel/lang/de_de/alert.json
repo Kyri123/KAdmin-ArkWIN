@@ -135,12 +135,12 @@
 
   "3996": {
     "title" : "Mods nicht Installiert",
-    "text"  : "Eine Mod oder mehrere sind nicht Installiert"
+    "text"  : "Eine Mod oder mehrere sind nicht Installiert: <ul><li>{modi}</li></ul>"
   },
 
   "3997": {
     "title" : "Mods benötigen Update",
-    "text"  : "Eine Mod oder mehrere sind nicht auf dem neusten Stand"
+    "text"  : "Eine Mod oder mehrere sind nicht auf dem neusten Stand: <ul><li>{modu}</li></ul>"
   },
 
   "3998": {

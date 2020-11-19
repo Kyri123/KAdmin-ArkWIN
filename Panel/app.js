@@ -18,6 +18,7 @@ const logger                          = require('morgan');
 const uuid                            = require('uuid');
 const backgroundRunner                = require('./app/src/background/backgroundRunner');
 const fs                              = require('fs');
+const helmet                          = require("helmet");
 global.ip                             = require('ip');
 global.alerter                        = require('./app/src/alert.js');
 global.md5                            = require('md5');
@@ -26,7 +27,7 @@ global.availableVersion_public        = 0;
 global.availableVersion_activeevent   = 0;
 global.mode                           = "dev";
 global.dateFormat                     = require('dateformat');
-global.panelVersion                   = "0.0.2a";
+global.panelVersion                   = "0.0.3";
 global.mainDir                        = __dirname;
 global.mysql                          = require('mysql');
 global.isUpdate                       = false;
@@ -64,9 +65,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 //app.use(logger(mode));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(helmet.ieNoOpen());
+app.use(helmet.noSniff());
+app.use(helmet.hidePoweredBy());
 
 // Routes
 // Main
@@ -83,8 +87,10 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(PANEL_CONFIG.port);
-console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m http://${ip.address()}:${PANEL_CONFIG.port}/`);
+app.listen(PANEL_CONFIG.port, "0.0.0.0", ()=>{
+  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m http://${ip.address()}:${PANEL_CONFIG.port}/`);
+});
+
 module.exports = app;
 
 // Starte Intverall aufgaben

@@ -64,12 +64,28 @@ function getSCState() {
 
         // Alerts
         if(serverInfos.alerts !== undefined) {
-            $(`#infoCounter`).html(serverInfos.alerts.length);
-            let list = ``;
-            if(serverInfos.alerts.length > 0) {} serverInfos.alerts.forEach((val) => {
-                list += alerter(val, "", 0);
+            $.get('/json/steamAPI/mods.json', (mods) => {
+                let rplf    = [];
+                let tplt    = [];
+                mods.response.publishedfiledetails.forEach((val) => {
+                    rplf.push(val.publishedfileid);
+                    tplt.push(`<b>${val.title}</b>`);
+                });
+
+                $(`#infoCounter`).html(serverInfos.alerts.length);
+                let list = [];
+
+                if (serverInfos.alerts.length > 0) {
+                }
+                serverInfos.alerts.forEach((val) => {
+                    list.push(alerter(val, "", 3, false, 3, 32, 3, true));
+                });
+
+                $(`#AlertBody`).html(list.join('<hr class="m-0">')
+                    .replace("{modu}", (serverInfos.modNeedUpdates === false ? []: serverInfos.modNeedUpdates.join("</li><li>")))
+                    .replace("{modi}", serverInfos.notInstalledMods.join("</li><li>"))
+                    .replaceArray(rplf, tplt));
             });
-            if(list !== ``) $(`#AlertBody`).html(list);
         }
     });
 }

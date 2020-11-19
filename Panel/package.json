@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "snyk test"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -18,6 +19,7 @@
     "express-session": "^1.17.1",
     "find-process": "^1.4.4",
     "gamedig": "^2.0.23",
+    "helmet": "^4.2.0",
     "htmlspecialchars": "^1.0.5",
     "http-errors": "~1.6.3",
     "install": "^0.13.0",
@@ -39,5 +41,8 @@
     "tar": "^6.0.5",
     "uncompress": "^1.0.2",
     "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "snyk": "^1.428.2"
   }
 }

@@ -73,13 +73,13 @@ module.exports = {
                             if(
                                 (val.isFile()       && val.name !== "111111111.mod" && !isNaN(val.name.replace(".mod", ""))) ||
                                 (val.isDirectory()  && val.name !== "111111111"     && !isNaN(val.name))
-                            ) if(!data.installedMods.includes(parseInt(val.name))) data.installedMods.push(parseInt(val.name));
+                            ) if(!data.installedMods.includes(parseInt(val.name).toString())) data.installedMods.push(val.name);
                         })
                     }
 
                     if(servCFG.mods.length > 0) {
                         servCFG.mods.forEach((val) => {
-                            if(!data.notInstalledMods.includes(val)) data.notInstalledMods.push(val);
+                            if(!data.installedMods.includes(val) && !data.notInstalledMods.includes(val)) data.notInstalledMods.push(val);
                         });
                     }
                 }
@@ -115,6 +115,7 @@ module.exports = {
                 data.aplayersarr    = [];
                 data.ping           = 0;
                 data.version        = data.version === undefined ? "" : data.version;
+                data.modNeedUpdates = serverUtil.checkModUpdates(name);
 
 
                 // Alerts
@@ -124,7 +125,7 @@ module.exports = {
                     if(serverUtil.checkSeverUpdate(name)) data.alerts.push("3998");
 
                     // Prüfe Mod Updates
-                    if(serverUtil.checkModUpdates(name) !== false) data.alerts.push("3997");
+                    if(data.modNeedUpdates !== false) data.alerts.push("3997");
 
                     // Prüfe Mod Installiert
                     if(data.notInstalledMods.length > 0) data.alerts.push("3996");

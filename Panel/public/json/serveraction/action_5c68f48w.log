@@ -1,4 +1,7 @@
-[ 16.11.2020 20:39:01 ]
-Dieser vorgang wird jenach Server eine weile dauern
-Aktion <b>Starten</b> für den Server: 5c68f48w
-start D:\servers\Servers\5c68f48w\ShooterGame\Binaries\Win64\ShooterGameServer.exe Viking_P?listen?SessionName=[ArkAdmin2]?AltSaveDirectoryName=SavedArks?ServerAdminPassword=12345679?Port=7777?QueryPort=27015?MaxPlayers=70?RCONEnabled=True?RCONPort27020?GameModIds=1428596566,2275336562,942185438 -allcores -UseDynamicConfig -allowansel -automanagedmods -ClearOldItems -noantispeedhack -NotifyAdminCommandsInChat -logs
+[ 19.11.2020 16:21:44 ]
+Nach einer ausführung einer Aktion kann es eine kurze weile Dauern bis diese vollständig ausgeführt wurde oder der Server Aktiv ist (jenachdem ob ein Update nötig ist)
+Prüfe Updates für den Server und Installiere diese: 5c68f48w
+Server wird nicht Aktualisiert (kein Update nötig)
+Folgende Mods werden Installiert/Geupdated: 
+2275336562
+1838617463

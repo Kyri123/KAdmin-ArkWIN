@@ -21,9 +21,10 @@ module.exports = {
      * @param {boolean} noAutoUpdate soll ein Automatisches Update ausgeführt werden
      * @param {boolean} validate Soll der server vorher Validiert werden
      * @param {boolean} alwaysStart Startet den Server wenn dieser abgestürtzt ist
+     * @param {boolean} isBackground Wird es vom Server ausgeführt
      * @returns {boolean}
      */
-    doStart: (server, noAutoUpdate = false, validate = false, alwaysStart = false) => {
+    doStart: (server, noAutoUpdate = false, validate = false, alwaysStart = false, isBackground = false) => {
         let servConfig  = serverUtilInfos.getConfig(server);
         let servInfos   = serverUtilInfos.getServerInfos(server);
         if(servConfig.server === undefined && !servInfos.cmd) {
@@ -31,8 +32,8 @@ module.exports = {
             let serverPath          = servConfig.path;
 
             // CMD Line
-            let cmdFile             = `${servConfig.pathLogs}.cmd`
-            let cmdCommand          = `@echo off\n`
+            let cmdFile             = `${mainDir}\\app\\cmd\\${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`;
+            let cmdCommand          = `@echo off\n`;
 
             // Logmeldungen
             let actionResponse      = `[ ${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")} ]\n`;
@@ -89,9 +90,10 @@ module.exports = {
     /**
      * Installiert den Server
      * @param {string} server Server Name
+     * @param {boolean} isBackground Wird es vom Server ausgeführt
      * @returns {boolean}
      */
-    doInstallServer: (server) => {
+    doInstallServer: (server, isBackground = false) => {
         let servConfig  = serverUtilInfos.getConfig(server);
         let servInfos   = serverUtilInfos.getServerInfos(server);
         if(servConfig.server === undefined && !servInfos.cmd) {
@@ -102,8 +104,8 @@ module.exports = {
             let actionResponse      = `[ ${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")} ]\n`;
             actionResponse += `${PANEL_LANG.logger.infoDoInstall}\n`;
             actionResponse += `${PANEL_LANG.logger.doInstallServer}: ${server}\n`;
-            let cmdFile             = `${servConfig.pathLogs}.cmd`
-            let cmdCommand          = `@echo off\n`
+            let cmdFile             = `${mainDir}\\app\\cmd\\${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`;
+            let cmdCommand          = `@echo off\n`;
 
             // Prüfe ob der Server bereits installiert ist
             if(!servInfos.is_installed) {
@@ -149,8 +151,8 @@ module.exports = {
             let updateNeed  = serverUtil.checkSeverUpdate(server);
 
             // CMD Line
-            let cmdFile             = `${isBackground ? mainDir + '\\app\\cmd\\' + md5(servConfig.pathLogs + "doUpdate") : servConfig.pathLogs}.cmd`
-            let cmdCommand          = `@echo off\n`
+            let cmdFile             = `${mainDir}\\app\\cmd\\${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`;
+            let cmdCommand          = `@echo off\n`;
 
             // Countdown
             if(servInfos.online && warn) {
@@ -221,16 +223,17 @@ module.exports = {
      * @param {int|array} modID ModID die installiert werden soll
      * @param {boolean} validate use validate on mods
      * @param {boolean} backAsString für Interne nutzungen
+     * @param {boolean} isBackground Wird es vom Server ausgeführt
      * @returns {boolean}
      */
-    doInstallMods: (server, modID, validate = false, backAsString = false) => {
+    doInstallMods: (server, modID, validate = false, backAsString = false, isBackground = false) => {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
         if(servConfig.server === undefined && servInfos.is_installed) {
             let steamCMDPath            = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
             let serverPath              = servConfig.path;
-            let cmdFile                 = `${servConfig.pathLogs}.cmd`
-            let cmdCommand              = backAsString ? '' :`@echo off\n`
+            let cmdFile             = `${mainDir}\\app\\cmd\\${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`;
+            let cmdCommand              = backAsString ? '' :`@echo off\n`;
             let workshop_download_item  = ``;
             let copys                   = ``;
 
@@ -285,16 +288,17 @@ module.exports = {
      * @param {string} server Server Name
      * @param {boolean} saveworld Soll die welt gespeichert werden?
      * @param {boolean} warn Sollen die Spieler gewant werden?
+     * @param {boolean} isBackground Wird es vom Server ausgeführt
      * @return {boolean}
      */
-    doStop: (server, saveworld = false, warn = false) => {
+    doStop: (server, saveworld = false, warn = false, isBackground = false) => {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
 
         if(servConfig.server === undefined && !servInfos.cmd) {
             // CMD Line
-            let cmdFile             = `${servConfig.pathLogs}.cmd`
-            let cmdCommand          = `@echo off\n`
+            let cmdFile             = `${mainDir}\\app\\cmd\\${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`;
+            let cmdCommand          = `@echo off\n`;
 
             // Logmeldungen
             let actionResponse      = `[ ${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")} ]\n`;
@@ -341,9 +345,10 @@ module.exports = {
      * @param {boolean} validate Soll Validate angewand werden?
      * @param {boolean} noAutoUpdate soll NICHT nach Updates geprüft werden?
      * @param {boolean} alwaysStart Startet den Server wenn dieser abgestürtzt ist
+     * @param {boolean} isBackground Wird es vom Server ausgeführt
      * @return {boolean}
      */
-    doRestart: (server, saveworld = false, warn = false, validate = false, noAutoUpdate = false, alwaysStart = false) => {
+    doRestart: (server, saveworld = false, warn = false, validate = false, noAutoUpdate = false, alwaysStart = false, isBackground = false) => {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
 
@@ -352,8 +357,8 @@ module.exports = {
             let serverPath              = servConfig.path;
 
             // CMD Line
-            let cmdFile             = `${servConfig.pathLogs}.cmd`
-            let cmdCommand          = `@echo off\n`
+            let cmdFile             = `${mainDir}\\app\\cmd\\${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`;
+            let cmdCommand          = `@echo off\n`;
 
             // Logmeldungen
             let actionResponse      = `[ ${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")} ]\n`;
@@ -416,7 +421,6 @@ module.exports = {
         return false;
     },
 
-
     /**
      * Erstellt ein Backup von Konfig & Spielständen
      * @param {string} server Server Name
@@ -435,8 +439,8 @@ module.exports = {
             let canZIP                  = fs.existsSync(pathToZip) && !fs.existsSync(`${backupPath}\\${ZIP_name}`);
 
             // CMD Line
-            let cmdFile             = `${isBackground ? mainDir + '\\app\\cmd\\' + md5(servConfig.pathLogs + "doBackup") : servConfig.pathLogs}.cmd`
-            let cmdCommand          = `@echo off\n`
+            let cmdFile             = `${mainDir}\\app\\cmd\\${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`;
+            let cmdCommand          = `@echo off\n`;
 
             // Logmeldungen
             let actionResponse      = `[ ${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")} ]\n`;

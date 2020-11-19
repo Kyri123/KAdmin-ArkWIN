@@ -48,24 +48,23 @@ function getServerList() {
             if(val[1].cmd || val[1].steamcmd)         stateColor = "info";
 
             if(val[1].server === undefined) newServerList += `
-        <a href="/servercenter/${val[0]}/home" class="dropdown-item bg-light">
-            <div class="media">
-                <div class="mr-2"><img src="/img/igmap/${val[1].serverMap}.jpg" style="border-width: 3px!important;background-color: #001f3f" class="img-size-50 border border-${stateColor}"></div>
-                <div class="media-body">
-                    <h3 class="dropdown-item-title">
-                        ${val[1].sessionName}
-                    </h3>
-                    <p class="text-sm pt-2">
-                        ${stateColor === "success" ? `${val[1].aplayers} / ${val[1].players}` : "0 / 0"} | V.${val[1].version}
-                        <!--<br><span class="info-box-text"><i class="fas fa-random" aria-hidden="true"></i> %CLUSTER%</span>-->
-                    </p>
+            <a href="/servercenter/${val[0]}/home" class="dropdown-item bg-light">
+                <div class="media">
+                    <div class="mr-2"><img src="/img/igmap/${val[1].serverMap}.jpg" style="border-width: 3px!important;background-color: #001f3f" class="img-size-50 border border-${stateColor}"></div>
+                    <div class="media-body">
+                        <h3 class="dropdown-item-title">
+                            ${val[1].sessionName}
+                        </h3>
+                        <p class="text-sm pt-2">
+                            ${stateColor === "success" ? `${val[1].aplayers} / ${val[1].players}` : "0 / 0"} | V.${val[1].version}
+                            <!--<br><span class="info-box-text"><i class="fas fa-random" aria-hidden="true"></i> %CLUSTER%</span>-->
+                        </p>
+                    </div>
                 </div>
-            </div>
-        </a>`;
-        })
-
+            </a>`;
+        });
         if(globalServerList.html() !== newServerList) globalServerList.html(newServerList);
-    })
+    });
 }
 
 

@@ -112,7 +112,6 @@ function getTnstalled() {
             let json            = JSON.parse(server)
             server              = json.serverCFG;
             let serverInfos     = json.serverInfos;
-            console.log(serverInfos.installedMods)
             let list = ``;
             if(serverInfos.installedMods.length > 0) {
                 serverInfos.installedMods.forEach((val, key) => {
