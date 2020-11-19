@@ -78,6 +78,8 @@ module.exports = {
                     }
 
                     if(servCFG.mods.length > 0) {
+                        let modarr = servCFG.mods;
+                        if(servCFG.MapModID !== 0) modarr.push(servCFG.MapModID);
                         servCFG.mods.forEach((val) => {
                             if(!data.installedMods.includes(val) && !data.notInstalledMods.includes(val)) data.notInstalledMods.push(val);
                         });
@@ -95,7 +97,6 @@ module.exports = {
                 data.ARKServers     = `https://arkservers.net/server/${ip.address()}:${servCFG.query}`;
                 data.connect        = `steam://connect/${ip.address()}:${servCFG.query}`;
                 data.is_installing  = fs.existsSync(`${serverPath}\\steamapps\\appmanifest_${PANEL_CONFIG.appID_server}.acf`) && !fs.existsSync(`${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe`);
-                let exePath         = `${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe`;
                 data.is_installed   = fs.existsSync(`${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe`);
                 data.is_free        = true;
                 // Runing infos

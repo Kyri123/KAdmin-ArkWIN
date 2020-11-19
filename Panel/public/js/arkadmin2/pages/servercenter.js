@@ -65,24 +65,33 @@ function getSCState() {
         // Alerts
         if(serverInfos.alerts !== undefined) {
             $.get('/json/steamAPI/mods.json', (mods) => {
-                let rplf    = [];
-                let tplt    = [];
+                let rplf                = [];
+                let tplt                = [];
+                let modNeedUpdates      = [];
+
+                if(serverInfos.modNeedUpdates !== false) serverInfos.modNeedUpdates.forEach((val) => {
+                    val     = parseInt(val).toString();
+                    if(serverInfos.installedMods.includes(val) && !modNeedUpdates.includes(val)) modNeedUpdates.push(val);
+                });
+
                 mods.response.publishedfiledetails.forEach((val) => {
                     rplf.push(val.publishedfileid);
-                    tplt.push(`<b>${val.title}</b>`);
+                    tplt.push(`<b>[${val.publishedfileid}]</b> ${val.title}`);
                 });
-
-                $(`#infoCounter`).html(serverInfos.alerts.length);
                 let list = [];
 
-                if (serverInfos.alerts.length > 0) {
-                }
+                let counter = 0;
                 serverInfos.alerts.forEach((val) => {
-                    list.push(alerter(val, "", 3, false, 3, 32, 3, true));
+                    if(!(val === "3997" && modNeedUpdates.length === 0)) {
+                        list.push(alerter(val, "", 3, false, 3, 3, 3, true));
+                        counter++;
+                    }
                 });
 
+                $(`#infoCounter`).html(counter);
+
                 $(`#AlertBody`).html(list.join('<hr class="m-0">')
-                    .replace("{modu}", (serverInfos.modNeedUpdates === false ? []: serverInfos.modNeedUpdates.join("</li><li>")))
+                    .replace("{modu}", modNeedUpdates.join("</li><li>"))
                     .replace("{modi}", serverInfos.notInstalledMods.join("</li><li>"))
                     .replaceArray(rplf, tplt));
             });

@@ -248,19 +248,29 @@ module.exports = {
             if(Array.isArray(modID)) {
                 modID.forEach((val) => {
                     actionResponse              += `${val}\n`;
-                    workshop_download_item  +=  ` +workshop_download_item ${PANEL_CONFIG.appID} ${val}`;
-                    copys  += `${mainDir}\\tools\\ArkModCopy\\ArkModCopy.exe "${serverPath}" "${serverPath}" "${val}"\n`;
-                    copys  += `echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${val}".modtime\n`;
-                    copys  += `@RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${val}"\n`;
+                    workshop_download_item      +=  ` +workshop_download_item ${PANEL_CONFIG.appID} ${val}`;
+
+                    copys   += `if exist "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${val}\\modmeta.info" (\n`;
+                    copys   += `    ${mainDir}\\tools\\ArkModCopy\\ArkModCopy.exe "${serverPath}" "${serverPath}" "${val}"\n`;
+                    copys   += `    echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${val}".modtime\n`;
+                    copys   += `    @RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${val}"\n`;
+                    copys   += `) else (\n`;
+                    copys   += `  echo ${modID}-FAILED >> ${mainDir}\\public\\json\\serveraction\\action_${server}.log\n`;
+                    copys   += `)\n`;
                 })
             }
             // Wenn nur eine Mod installiert werden soll
             else {
                 actionResponse              += `${modID}\n`;
-                workshop_download_item  +=  `+workshop_download_item ${PANEL_CONFIG.appID} ${modID}`;
-                copys  += `${mainDir}\\tools\\ArkModCopy\\ArkModCopy.exe "${serverPath}" "${serverPath}" "${modID}"\n`;
-                copys  += `echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${modID}".modtime\n`;
-                copys  += `@RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${modID}"\n`;
+                workshop_download_item      +=  `+workshop_download_item ${PANEL_CONFIG.appID} ${modID}`;
+
+                copys   += `if exist "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${modID}\\modmeta.info" (\n`;
+                copys   += `    ${mainDir}\\tools\\ArkModCopy\\ArkModCopy.exe "${serverPath}" "${serverPath}" "${modID}"\n`;
+                copys   += `    echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${modID}".modtime\n`;
+                copys   += `    @RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${modID}"\n`;
+                copys   += `) else (\n`;
+                copys   += `  echo ${modID}-FAILED >> ${mainDir}\\public\\json\\serveraction\\action_${server}.log\n`;
+                copys   += `)\n`;
             }
             cmdCommand      += `${steamCMDPath} +login anonymous +force_install_dir "${serverPath}"${workshop_download_item}${validate ? " validate" : ""} +quit\n`;
             cmdCommand      +=  copys;
