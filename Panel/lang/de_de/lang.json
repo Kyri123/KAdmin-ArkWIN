@@ -126,7 +126,8 @@
     "doBackup"            : "Server Backup wird erstellt",
     "doBackupThis"        : "Backup",
     "doNotBackup"         : "Server Backup wird nicht erstellt (Ordner konnte nicht gefunden werden)",
-    "doInstall"           : "Installiert"
+    "doInstall"           : "Installiert",
+    "FAILED"               : "Installation Fehlgeschlagen"
   },
 
   "all": {

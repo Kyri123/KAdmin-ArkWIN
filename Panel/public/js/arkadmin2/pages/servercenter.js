@@ -65,8 +65,6 @@ function getSCState() {
         // Alerts
         if(serverInfos.alerts !== undefined) {
             $.get('/json/steamAPI/mods.json', (mods) => {
-                let rplf                = [];
-                let tplt                = [];
                 let modNeedUpdates      = [];
 
                 if(serverInfos.modNeedUpdates !== false) serverInfos.modNeedUpdates.forEach((val) => {
@@ -74,6 +72,8 @@ function getSCState() {
                     if(serverInfos.installedMods.includes(val) && !modNeedUpdates.includes(val)) modNeedUpdates.push(val);
                 });
 
+                let rplf                = [];
+                let tplt                = [];
                 mods.response.publishedfiledetails.forEach((val) => {
                     rplf.push(val.publishedfileid);
                     tplt.push(`<b>[${val.publishedfileid}]</b> ${val.title}`);

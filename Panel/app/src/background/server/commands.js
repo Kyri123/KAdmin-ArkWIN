@@ -255,7 +255,7 @@ module.exports = {
                     copys   += `    echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${val}.modtime\n`;
                     copys   += `    @RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${val}"\n`;
                     copys   += `) else (\n`;
-                    copys   += `  echo ${modID}-FAILED >> ${mainDir}\\public\\json\\serveraction\\action_${server}.log\n`;
+                    copys   += `  echo ${val} - FAILED >> ${mainDir}\\public\\json\\serveraction\\action_${server}.log\n`;
                     copys   += `)\n`;
                 })
             }
@@ -269,7 +269,7 @@ module.exports = {
                 copys   += `    echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${modID}.modtime\n`;
                 copys   += `    @RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${modID}"\n`;
                 copys   += `) else (\n`;
-                copys   += `  echo ${modID}-FAILED >> ${mainDir}\\public\\json\\serveraction\\action_${server}.log\n`;
+                copys   += `  echo ${modID} - FAILED >> ${mainDir}\\public\\json\\serveraction\\action_${server}.log\n`;
                 copys   += `)\n`;
             }
             cmdCommand      += `${steamCMDPath} +login anonymous +force_install_dir "${serverPath}"${workshop_download_item}${validate ? " validate" : ""} +quit\n`;
