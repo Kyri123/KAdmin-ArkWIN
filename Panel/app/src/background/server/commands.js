@@ -252,7 +252,7 @@ module.exports = {
 
                     copys   += `if exist "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${val}\\modmeta.info" (\n`;
                     copys   += `    ${mainDir}\\tools\\ArkModCopy\\ArkModCopy.exe "${serverPath}" "${serverPath}" "${val}"\n`;
-                    copys   += `    echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${val}".modtime\n`;
+                    copys   += `    echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${val}.modtime\n`;
                     copys   += `    @RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${val}"\n`;
                     copys   += `) else (\n`;
                     copys   += `  echo ${modID}-FAILED >> ${mainDir}\\public\\json\\serveraction\\action_${server}.log\n`;
@@ -266,7 +266,7 @@ module.exports = {
 
                 copys   += `if exist "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${modID}\\modmeta.info" (\n`;
                 copys   += `    ${mainDir}\\tools\\ArkModCopy\\ArkModCopy.exe "${serverPath}" "${serverPath}" "${modID}"\n`;
-                copys   += `    echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${modID}".modtime\n`;
+                copys   += `    echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${modID}.modtime\n`;
                 copys   += `    @RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${modID}"\n`;
                 copys   += `) else (\n`;
                 copys   += `  echo ${modID}-FAILED >> ${mainDir}\\public\\json\\serveraction\\action_${server}.log\n`;
