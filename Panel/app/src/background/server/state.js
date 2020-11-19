@@ -71,9 +71,16 @@ module.exports = {
                     if(dirRead.length > 0) {
                         dirRead.forEach((val) => {
                             if(
+                                (val.isFile()       && val.name !== "111111111.mod" && !isNaN(val.name.replace(".modtime", ""))) ||
                                 (val.isFile()       && val.name !== "111111111.mod" && !isNaN(val.name.replace(".mod", ""))) ||
                                 (val.isDirectory()  && val.name !== "111111111"     && !isNaN(val.name))
-                            ) if(!data.installedMods.includes(parseInt(val.name).toString())) data.installedMods.push(val.name);
+                            ) if(
+                                fs.existsSync(`${modPath}\\${parseInt(val.name).toString()}`) &&
+                                fs.existsSync(`${modPath}\\${parseInt(val.name).toString()}.mod`) &&
+                                fs.existsSync(`${modPath}\\${parseInt(val.name).toString()}.modtime`)
+                            ) if(
+                                !data.installedMods.includes(parseInt(val.name).toString())
+                            ) data.installedMods.push(parseInt(val.name).toString());
                         })
                     }
 
@@ -81,9 +88,11 @@ module.exports = {
                         let modarr = servCFG.mods;
                         if(servCFG.MapModID !== 0) modarr.push(servCFG.MapModID);
                         servCFG.mods.forEach((val) => {
-                            if(!data.installedMods.includes(val) && !data.notInstalledMods.includes(val)) data.notInstalledMods.push(val);
+                            if(!data.installedMods.includes(parseInt(val).toString()) && !data.notInstalledMods.includes(parseInt(val).toString())) data.notInstalledMods.push(parseInt(val).toString());
                         });
                     }
+
+                    console.log(data.notInstalledMods);
                 }
 
                 // Default werte
