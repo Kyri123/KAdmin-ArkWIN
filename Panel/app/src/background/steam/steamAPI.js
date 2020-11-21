@@ -55,7 +55,7 @@ module.exports = {
             });
 
             req.on('close', () => {
-                fs.writeFileSync('./public/json/steamAPI/mods.json', data);
+                globalUtil.safeFileSave(`${mainDir}/public/json/steamAPI/`, `mods.json`, data, false);
             });
 
             req.write(post_data);

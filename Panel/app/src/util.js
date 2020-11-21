@@ -97,38 +97,48 @@ module.exports = {
     },
 
     /**
+     * Prüft string auf unzulässige Zeichen (Pfad)
+     * @param {string} Pfadname
+     * @return {boolean|array}
+     */
+    poisonNull(string) {
+        return string.indexOf('\0') === -1;
+    },
+
+    /**
      * Speichert sicher eine Datei
      * @param {string} path Pfad zur Datei
      * @param {string} filename Dateiname
-     * @param {string} codierung File Codierung (Standart: utf-8)
      * @param {string} data Daten die Gespeichert werden sollen
+     * @param {string} codierung File Codierung (Standart: utf-8)
      * @param {boolean} isServerPath es ein Serverpfad (Standart: JA)
      * @return {boolean}
      */
-    safeFileSave(path, filename, data, codierung = 'utf-8', isServerPath= true) {
-        // Prüfe Dateinamen
-        if(path.indexOf('\0') === -1 && filename.indexOf('\0') === -1) {
-            // Prüfe Poison Null
-            if(/^[a-z0-9]+$/.test(filename)) {
-                // Lege Pfad fest
-                let filePath        = pathMod.join(path, filename);
-                let continueSave    = isServerPath ? !(filename.indexOf(rootDirectory) !== 0) : true;
+    safeFileSave(path, filename, data, isServerPath= true, codierung = 'utf8') {
+        // Prüfe Pfad
+        if(module.exports.poisonNull(path) && module.exports.poisonNull(filename)) {
+            // Lege Pfad fest
+            let filePath        = pathMod.join(path, filename);
+            let continueSave    = isServerPath ? (
+                filename.indexOf(PANEL_CONFIG.servRoot) === 0 ||
+                filename.indexOf(PANEL_CONFIG.logRoot) === 0 ||
+                filename.indexOf(PANEL_CONFIG.pathBackup) === 0 ||
+                filename.indexOf(PANEL_CONFIG.steamCMDRoot) === 0
+            ) : true;
 
-                if(continueSave) {
-                    // Datei Speichern
-                    try {
-                        fs.writeFileSync(filePath, data, codierung);
-                        return true;
-                    }
-                    catch (e) {
-                        if(debug) console.log(e);
-                    }
+            if(continueSave === true) {
+                // Datei Speichern
+                try {
+                    fs.writeFileSync(filePath, data, codierung);
+                    return true;
+                }
+                catch (e) {
+                    if(debug) console.log(e); console.log(e);
                 }
             }
         }
         return false;
     },
-
 
     /**
      * Speichert sicher eine Datei

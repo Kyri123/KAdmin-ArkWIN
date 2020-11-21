@@ -8,10 +8,8 @@
  */
 
 const steamCMD              = require('./../steam/steamCMD');
-const util                  = require('./../../util');
 const serverUtilInfos       = require('./../../util_server/infos');
 const fs                    = require('fs');
-const steamAPI              = require('./../steam/steamAPI')
 
 module.exports = {
     /**
@@ -24,7 +22,7 @@ module.exports = {
         if(servConfig.server === undefined) {
             let serverPath          = servConfig.path;
             let manifestFile        = `${serverPath}\\steamapps\\appmanifest_${PANEL_CONFIG.appID_server}.acf`;
-            let manifestArray       = util.toAcfToArraySync(manifestFile);
+            let manifestArray       = globalUtil.toAcfToArraySync(manifestFile);
             return manifestArray    !== false ? manifestArray.AppState.buildid : false;
         }
         return false;
@@ -40,7 +38,7 @@ module.exports = {
         let logPath     = `${PANEL_CONFIG.steamCMDRoot}\\appcache\\infolog.log`;
 
         // Wandel acf to array
-        util.toAcfToArray(logPath)
+        globalUtil.toAcfToArray(logPath)
             .then((acfArray) => {
                 // SteamCMD infoupdate
                 steamCMD.runCMD(`+app_info_update 1 +app_info_print ${PANEL_CONFIG.appID_server}`, true, logPath, false);
@@ -48,7 +46,7 @@ module.exports = {
                 // schreibe Global
                 global.availableVersion_public          = acfArray !== false && acfArray[PANEL_CONFIG.appID_server] !== undefined ? acfArray[PANEL_CONFIG.appID_server].depots.branches["public"].buildid : false;
                 global.availableVersion_activeevent     = acfArray !== false && acfArray[PANEL_CONFIG.appID_server] !== undefined ? acfArray[PANEL_CONFIG.appID_server].depots.branches["activeevent"].buildid : false;
-                fs.writeFileSync('./public/json/steamAPI/version.json', JSON.stringify({availableVersion_public:availableVersion_public,availableVersion_activeevent:availableVersion_activeevent}))
+                globalUtil.safeFileSave(`${mainDir}/public/json/steamAPI/`, `version.json`, JSON.stringify({availableVersion_public:availableVersion_public,availableVersion_activeevent:availableVersion_activeevent}), false, 'utf8');
             })
     },
 

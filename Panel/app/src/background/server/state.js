@@ -42,7 +42,7 @@ function save(data, name, state, use_state = true) {
             }
         }
     });*/
-    fs.writeFileSync(`./public/json/server/${name}.json`, JSON.stringify(data));
+    globalUtil.safeFileSave(`${mainDir}/public/json/server`, `${name}.json`, JSON.stringify(data), false);
 }
 
 module.exports = {

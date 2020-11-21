@@ -99,4 +99,3 @@ backgroundRunner.startAll();
 
 // Führe Start parameter aus und fehler zu vermeiden
 //onStart.startAll(); // wurde durch ein neues System ersetzt 0.0.2
-globalUtil.saveSQL("test");

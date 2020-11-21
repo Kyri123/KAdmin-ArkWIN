@@ -82,7 +82,7 @@ module.exports = {
                                 "mem_availble" : AA_util.convertBytes(info.size - info.free)
                             };
 
-                            fs.writeFileSync(`./public/json/serverInfos/auslastung.json`, JSON.stringify(data));
+                            globalUtil.safeFileSave(`${mainDir}/public/json/serverInfos/`, `auslastung.json`, JSON.stringify(data), false);
                         });
                 });
             });
@@ -263,7 +263,7 @@ module.exports = {
                                             process.exit(2);
                                         }
                                     }, 5000);
-                                    fs.writeFileSync("./app/data/sha.txt", api.commit.sha);
+                                    globalUtil.safeFileSave(`${mainDir}/app/data/`, `sha.txt`, api.commit.sha, false);
                                 }
                             }
                         } else {

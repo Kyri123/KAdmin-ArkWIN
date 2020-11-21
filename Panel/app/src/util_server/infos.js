@@ -56,7 +56,7 @@ module.exports = {
         if(config.server === undefined) {
             config[key] = value;
             try {
-                fs.writeFileSync(file, JSON.stringify(config));
+                globalUtil.safeFileSave(`${mainDir}/app/json/server/`, `${server}.json`, JSON.stringify(config), false);
                 return true
             }
             catch (e) {
@@ -81,7 +81,7 @@ module.exports = {
                 if(cfg.mods !== undefined)  saveData.mods = cfg.mods;
                 if(cfg.opt !== undefined)   saveData.opt = cfg.opt;
                 if(cfg.flags !== undefined) saveData.flags = cfg.flags;
-                fs.writeFileSync(file, JSON.stringify(saveData));
+                globalUtil.safeFileSave(`${mainDir}/app/json/server/`, `${server}.json`, JSON.stringify(saveData), false);
                 return true;
             }
             catch (e) {
@@ -94,17 +94,16 @@ module.exports = {
     /**
      * Speichert Server Ini
      * @param {string} server Server Name
-     * @param {string} cfg Ini inhalt
+     * @param {string} ini Ini inhalt
      * @param {string} iniName Name der Ini
      * @return {boolean}
      */
     saveIni: (server, ini, iniName) => {
         let config  = module.exports.getConfig(server);
         let path    = `${config.path}\\ShooterGame\\Saved\\Config\\WindowsServer`;
-        let file    = `${path}\\${iniName}.ini`;
         if(!fs.existsSync(path)) fs.mkdirSync(path, {recursive: true});
         try {
-            fs.writeFileSync(file, ini);
+            globalUtil.safeFileSave(`${path}\\`, `${iniName}.ini`, JSON.stringify(ini));
             return true;
         }
         catch (e) {
