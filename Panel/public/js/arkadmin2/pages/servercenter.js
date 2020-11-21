@@ -89,6 +89,7 @@ function getSCState() {
                 });
 
                 $(`#infoCounter`).html(counter);
+                if(counter === 0) list.push(alerter(4000, "", 3, false, 3, 3, 3, true));
 
                 $(`#AlertBody`).html(list.join('<hr class="m-0">')
                     .replace("{modu}", modNeedUpdates.join("</li><li>"))

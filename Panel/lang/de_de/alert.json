@@ -151,5 +151,10 @@
   "3999": {
     "title" : "Server nicht Installiert",
     "text"  : "Der Server ist noch nicht Installiert"
+  },
+
+  "4000": {
+    "title" : "Keine Meldungen",
+    "text"  : "Es wurden keine Meldungen gefunden"
   }
 }
