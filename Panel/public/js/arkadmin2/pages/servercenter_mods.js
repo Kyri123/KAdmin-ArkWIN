@@ -21,12 +21,13 @@ function get() {
             serverInfos     : true,
             cfg             : vars.cfg
         }, (server) => {
-            server  = JSON.parse(server).serverCFG;
+            let serverInfos     = JSON.parse(server).serverInfos;
+            server              = JSON.parse(server).serverCFG;
             let list = ``;
             if(server.mods.length > 0) {
                 server.mods.forEach((val, key) => {
                     let i = steamAPI.find(p => p.publishedfileid == val);
-                    list += `<div class="col-lg-6 col-xl-3">
+                    list += `<div class="col-lg-6 col-xl-3"id="mod${val}">
                                 <div class="card card-widget widget-user item-box">
                                     <div class="card bg-dark card-widget widget-user mb-0">
                                         <div class="row p-2">
@@ -43,8 +44,8 @@ function get() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="widget-user-header text-white" style="background: url('/img/backgrounds/5.jpg') center center;">
-                                        <h5 title="${typeof(i) !== "undefined" ? i.title !== undefined ? i.title : "???" : "???"}" class="widget-user-desc text-bold text-center text-light border" style="background-color: rgb(66 66 66 / 58%)!important;">${typeof(i) !== "undefined" ? i.title !== undefined ? `${i.title.substr(0, 14)}...` : "???" : "???"}</h5>
+                                    <div class="widget-user-header text-" style="background: url('/img/backgrounds/5.jpg') center center;">
+                                        <h5 title="${typeof(i) !== "undefined" ? i.title !== undefined ? i.title : "???" : "???"}" class="widget-user-desc text-bold text-center border ${!serverInfos.notInstalledMods.includes(val) ? (serverInfos.modNeedUpdates === false ? 'text-success border-success' : (!serverInfos.modNeedUpdates.includes(val) ? 'text-success border-success' : 'text-danger border-danger')) : 'text-warning border-warning'}" style="background-color: rgb(66 66 66 / 58%)!important;">${typeof(i) !== "undefined" ? i.title !== undefined ? `${i.title.substr(0, 14)}...` : "???" : "???"}</h5>
                                     </div>
                                     <div class="widget-user-image" id="serv_img" style="top: 130px;z-index: 1000"><img src="${typeof(i) !== "undefined" ? i.preview_url !== undefined ? i.preview_url : "https://steamuserimages-a.akamaihd.net/ugc/885384897182110030/F095539864AC9E94AE5236E04C8CA7C2725BCEFF/" : "https://steamuserimages-a.akamaihd.net/ugc/885384897182110030/F095539864AC9E94AE5236E04C8CA7C2725BCEFF/"}" style="border-top-width: 3px!important;height: 90px;width: 90px;background-color: #001f3f" class="border-secondary"></div>
                                     
@@ -116,7 +117,7 @@ function getTnstalled() {
             if(serverInfos.installedMods.length > 0) {
                 serverInfos.installedMods.forEach((val, key) => {
                     let i = steamAPI.find(p => p.publishedfileid == val);
-                    list += `<div class="col-lg-6 col-xl-3">
+                    list += `<div class="col-lg-6 col-xl-3" id="modi${val}">
                                 <div class="card card-widget widget-user item-box">
                                     <div class="card bg-dark card-widget widget-user mb-0">
                                         <div class="row p-2">
@@ -193,6 +194,7 @@ function remove(key) {
         try {
             data    = JSON.parse(data);
             if(data.alert !== undefined) $('#all_resp').append(data.alert);
+            if(data.success === true) $(`mod${modid}`).remove();
             get();
         }
         catch (e) {

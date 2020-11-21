@@ -59,7 +59,6 @@ module.exports = {
                 let data            = serverInfos.getServerInfos(name);
                 let servCFG         = serverInfos.getConfig(name);
                 let serverPath      = servCFG.path;
-                let serverPathLogs  = servCFG.pathLogs;
 
                 // Lese installierte Mods
                 data.installedMods  = [];

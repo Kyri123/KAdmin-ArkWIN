@@ -34,7 +34,8 @@ router.route('/')
                 }
                 res.render('ajax/json', {
                     data: JSON.stringify({
-                        alert: alerter.rd(success ? 1010 : 3).replace("{modid}", modID)
+                        alert: alerter.rd(success ? 1010 : 3).replace("{modid}", modID),
+                        success: success
                     })
                 });
             }
@@ -46,9 +47,11 @@ router.route('/')
             if(serverCfg.server === undefined) {
                 let modID   = serverCfg.mods[POST.key];
                 serverCfg.mods.splice(POST.key, 1);
+                let success = serverUtilInfos.saveConfig(POST.cfg ,serverCfg);
                 res.render('ajax/json', {
                     data: JSON.stringify({
-                        alert: alerter.rd(serverUtilInfos.saveConfig(POST.cfg ,serverCfg) ? 1010 : 3).replace("{modid}", modID)
+                        alert: alerter.rd(success ? 1010 : 3).replace("{modid}", modID),
+                        success: success
                     })
                 });
             }
