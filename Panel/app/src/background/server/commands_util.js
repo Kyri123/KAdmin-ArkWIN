@@ -19,19 +19,11 @@ module.exports = {
      */
     getStartLine: (server) => {
         let servConfig  = serverUtilInfos.getConfig(server);
-        let servInfos   = serverUtilInfos.getServerInfos(server);
         if(servConfig.server === undefined) {
             let serverPath          = servConfig.path;
             // baue Mod optionen
             let mods    = ''
-            if(servConfig.mods.length > 0) {
-                mods    = `?GameModIds=${servConfig.mods[0]}`
-                if(servConfig.mods.length > 1) {
-                    servConfig.mods.forEach((val, key) => {
-                        if(key !== 0) mods += `,${val}`;
-                    })
-                }
-            }
+            if(servConfig.mods.length > 0) mods = `?GameModIds=${servConfig.mods.join(',')}`;
 
             // baue custom Optionen
             let opt    = ''
@@ -87,12 +79,10 @@ module.exports = {
     },
 
     /**
-     * {TODO: 0.0.2} Sendet ein Commando an den Server (ViaRcon)
+     * TODO Sendet ein Commando an den Server (ViaRcon)
      * @param {string} server Name des Servers
      * @param {string} command Befehl der gesendet werden soll
      * @return {string|boolean}
      */
-    sendRcon: (server, command) => {
-        // TODO: 0.0.2
-    }
+    sendRcon: (server, command) => {}
 }
