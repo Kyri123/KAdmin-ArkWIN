@@ -76,14 +76,14 @@ router.route('/')
         // Userlist
         if(GET.getuserlist) res.render('ajax/json', {
             data: JSON.stringify({
-                userlist: synccon.query(`SELECT \`id\`, \`username\`, \`email\`, \`lastlogin\`, \`registerdate\`, \`rang\`, \`ban\` FROM ArkAdmin_users`)
+                userlist: globalUtil.safeSendSQLSync('SELECT `id`, `username`, `email`, `lastlogin`, `registerdate`, `rang`, `ban` FROM ArkAdmin_users')
             })
         });
 
         // Codelist
         if(GET.getcodelist) res.render('ajax/json', {
             data: JSON.stringify({
-                codelist: synccon.query(`SELECT * FROM \`ArkAdmin_reg_code\` WHERE \`used\`=0`)
+                codelist: globalUtil.safeSendSQLSync('SELECT * FROM `ArkAdmin_reg_code` WHERE `used`=0')
             })
         });
     })

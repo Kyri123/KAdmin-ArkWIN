@@ -145,7 +145,7 @@ module.exports = {
      * @param {string} sql SQL abfrage
      * @return {boolean|array}
      */
-    saveSendSQLSync(sql) {
+    safeSendSQLSync(sql) {
         let args = [].slice.call(arguments).slice(1);
 
         // Variablien escape etc.

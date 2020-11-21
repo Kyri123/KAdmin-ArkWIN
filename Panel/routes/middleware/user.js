@@ -20,8 +20,8 @@ module.exports = {
         let sess =  req.session;
         if(sess.uid !== undefined) {
             // Prüfe ob dieser gebannt ist
-            sql    = `SELECT * FROM \`ArkAdmin_users\` WHERE \`id\`=?`;
-            result = synccon.query(mysql.format(sql, [sess.uid]));
+            sql    = 'SELECT * FROM `ArkAdmin_users` WHERE `id`=?';
+            result = globalUtil.safeSendSQLSync(sql, sess.uid);
             if(result[0].ban === 0) {
                 next();
             }
@@ -32,14 +32,14 @@ module.exports = {
         else {
             cookies = req.cookies;
             if(cookies.id !== undefined && cookies.validate !== undefined) {
-                sql    = `SELECT * FROM \`ArkAdmin_user_cookies\` WHERE \`md5id\`=? AND \`validate\`=?`;
-                result = synccon.query(mysql.format(sql, [cookies.id, cookies.validate]));
+                sql    = 'SELECT * FROM `ArkAdmin_user_cookies` WHERE `md5id`=? AND `validate`=?';
+                result = globalUtil.safeSendSQLSync(sql, cookies.id, cookies.validate);
                 if(result.length > 0) {
                     sess.uid = result[0].userid;
                     req.session.save((err) => {});
                     // Prüfe ob dieser gebannt ist
-                    sql    = `SELECT * FROM \`ArkAdmin_users\` WHERE \`id\`=?`;
-                    result = synccon.query(mysql.format(sql, [sess.uid]));
+                    sql    = 'SELECT * FROM `ArkAdmin_users` WHERE `id`=?';
+                    result = globalUtil.safeSendSQLSync(sql, sess.uid);
                     if(result[0].ban === 0) {
                         next();
                     }
@@ -68,14 +68,14 @@ module.exports = {
         if(sess.uid === undefined) {
             cookies = req.cookies;
             if(cookies.id !== undefined && cookies.validate !== undefined) {
-                sql    = `SELECT * FROM \`ArkAdmin_user_cookies\` WHERE \`md5id\`=? AND \`validate\`=?`
-                result = synccon.query(mysql.format(sql, [cookies.id, cookies.validate]));
+                sql    = 'SELECT * FROM `ArkAdmin_user_cookies` WHERE `md5id`=? AND `validate`=?';
+                result = globalUtil.safeSendSQLSync(sql, cookies.id, cookies.validate);
                 if(result.length > 0) {
                     sess.uid = result[0].userid;
                     req.session.save((err) => {});
                     // Prüfe ob dieser gebannt ist
-                    sql    = `SELECT * FROM \`ArkAdmin_users\` WHERE \`id\`=?`;
-                    result = synccon.query(mysql.format(sql, [sess.uid]));
+                    sql    = 'SELECT * FROM `ArkAdmin_users` WHERE `id`=?';
+                    result = globalUtil.safeSendSQLSync(sql, sess.uid);
                     if(result[0].ban === 0) {
                         res.redirect("/home");
                     }
@@ -107,7 +107,7 @@ module.exports = {
             if(err) {
                 return console.log(err);
             }
-            synccon.query(`DELETE FROM ArkAdmin_user_cookies WHERE \`userid\`='${userid}'`);
+            globalUtil.safeSendSQLSync('DELETE FROM `ArkAdmin_user_cookies` WHERE `userid`=?', userid);
             res.cookie('id', "", {maxAge: 0});
             res.cookie('validate', "", {maxAge: 0});
             res.redirect('/login');

@@ -28,8 +28,8 @@ router.route('/')
             post.logger = htmlspecialchars(post.logger);
             post.pw     = htmlspecialchars(post.pw);
 
-            sql             = `SELECT * FROM ArkAdmin_users WHERE username=? OR (email=? AND password=?)`
-            let result = synccon.query(mysql.format(sql, [post.logger, post.logger, md5(post.pw)]));
+            sql             = 'SELECT * FROM ArkAdmin_users WHERE `username`=? OR (`email`=? AND `password`=?)';
+            let result      = globalUtil.safeSendSQLSync(sql, post.logger, post.logger, md5(post.pw));
             // Prüfe ob Account Exsistiert
             if(result.length > 0) {
                 // Prüfe ob Account gebannt ist
@@ -44,8 +44,8 @@ router.route('/')
                         if(post.loggedin !== undefined) {
                             res.cookie('id', md5(sess.uid), { maxAge: (525600*60*10000), httpOnly: true });
                             res.cookie('validate', md5(rndstring), { maxAge: (525600*60*10000), httpOnly: true });
-                            sql             = `INSERT INTO \`ArkAdmin_user_cookies\` (\`md5id\`, \`validate\`, \`userid\`) VALUES (?, ?, ?)`
-                            synccon.query(mysql.format(sql, [md5(sess.uid), md5(rndstring), sess.uid]));
+                            sql             = 'INSERT INTO `ArkAdmin_user_cookies` (`md5id`, `validate`, `userid`) VALUES (?, ?, ?)';
+                            globalUtil.safeSendSQLSync(sql, md5(sess.uid), md5(rndstring), sess.uid);
                         }
 
                         res.redirect("/home");
