@@ -91,8 +91,6 @@ module.exports = {
                             if(!data.installedMods.includes(parseInt(val).toString()) && !data.notInstalledMods.includes(parseInt(val).toString())) data.notInstalledMods.push(parseInt(val).toString());
                         });
                     }
-
-                    console.log(data.notInstalledMods);
                 }
 
                 // Default werte
