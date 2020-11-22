@@ -89,7 +89,7 @@ function alerter(code, custom_style = "", mb = 3, closebtn = false, ml = 0, mr =
  */
 function hasPermissions(permission ,perm, server = false) {
     let userperm = permission
-    if(userperm.id === undefined && perm.includes("/")) {
+    if(typeof userperm.id !== "undefined" && perm.includes("/")) {
         try {
             let permarr = server !== false ? userperm.server[server] !== undefined ? userperm.server[server] : false : userperm;
             if(permarr === false) return false;

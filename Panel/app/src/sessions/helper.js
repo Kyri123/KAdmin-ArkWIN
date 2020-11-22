@@ -97,7 +97,7 @@ module.exports = {
      */
     hasPermissions: (uid, perm, server = false) => {
         let userperm = module.exports.permissions(uid);
-        if(userperm.id === undefined && perm.includes("/")) {
+        if(typeof userperm.id !== "undefined" && perm.includes("/")) {
             try {
                 let permarr = server !== false ? userperm.server[server] !== undefined ? userperm.server[server] : false : userperm;
                 if(permarr === false) return false;
