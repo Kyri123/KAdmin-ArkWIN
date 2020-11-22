@@ -23,9 +23,10 @@ router.route('/')
             if(serverCfg.server === undefined) {
                 let success = false;
                 try {
-                    if(fs.existsSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}.mod`))       fs.rmSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}.mod`, {recursive: true})
-                    if(fs.existsSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}.modtime`))   fs.rmSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}.modtime`, {recursive: true})
-                    if(fs.existsSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}`))           fs.rmSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}`, {recursive: true})
+                    let modPath = pathMod.join(serverCfg.path, '\\ShooterGame\\Content\\Mods\\');
+                    if(fs.existsSync(pathMod.join(modPath, `${modID}.mod`)))        fs.rmSync(pathMod.join(modPath, `${modID}.mod`), {recursive: true})
+                    if(fs.existsSync(pathMod.join(modPath, `${modID}.modtime`)))    fs.rmSync(pathMod.join(modPath, `${modID}.modtime`), {recursive: true})
+                    if(fs.existsSync(pathMod.join(modPath, modID)))                 fs.rmSync(pathMod.join(modPath, modID), {recursive: true})
                     success = true;
                 }
                 catch (e) {

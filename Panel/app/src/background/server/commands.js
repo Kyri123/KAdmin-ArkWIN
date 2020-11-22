@@ -31,7 +31,7 @@ module.exports = {
             let serverPath          = servConfig.path;
 
             // CMD Line
-            let cmdFile             = `${mainDir}\\app\\cmd\\${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`;
+            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
             let cmdCommand          = `@echo off\n`;
 
             // Logmeldungen
@@ -103,7 +103,7 @@ module.exports = {
             let actionResponse      = `[ ${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")} ]\n`;
             actionResponse += `${PANEL_LANG.logger.infoDoInstall}\n`;
             actionResponse += `${PANEL_LANG.logger.doInstallServer}: ${server}\n`;
-            let cmdFile             = `${mainDir}\\app\\cmd\\${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`;
+            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
             let cmdCommand          = `@echo off\n`;
 
             // Prüfe ob der Server bereits installiert ist
@@ -150,7 +150,7 @@ module.exports = {
             let updateNeed  = serverUtil.checkSeverUpdate(server);
 
             // CMD Line
-            let cmdFile             = `${mainDir}\\app\\cmd\\${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`;
+            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
             let cmdCommand          = `@echo off\n`;
 
             // Countdown
@@ -231,7 +231,7 @@ module.exports = {
         if(servConfig.server === undefined && servInfos.is_installed) {
             let steamCMDPath            = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
             let serverPath              = servConfig.path;
-            let cmdFile             = `${mainDir}\\app\\cmd\\${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`;
+            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
             let cmdCommand              = backAsString ? '' :`@echo off\n`;
             let workshop_download_item  = ``;
             let copys                   = ``;
@@ -308,7 +308,7 @@ module.exports = {
 
         if(servConfig.server === undefined && !servInfos.cmd) {
             // CMD Line
-            let cmdFile             = `${mainDir}\\app\\cmd\\${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`;
+            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
             let cmdCommand          = `@echo off\n`;
 
             // Logmeldungen
@@ -368,7 +368,7 @@ module.exports = {
             let serverPath              = servConfig.path;
 
             // CMD Line
-            let cmdFile             = `${mainDir}\\app\\cmd\\${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`;
+            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
             let cmdCommand          = `@echo off\n`;
 
             // Logmeldungen
@@ -444,13 +444,13 @@ module.exports = {
 
         if(servConfig.server === undefined && !servInfos.cmd) {
             // vars
-            let pathToZip               = `${servConfig.path}\\ShooterGame\\Saved`;
-            let backupPath              = servConfig.pathBackup;
+            let pathToZip               = pathMod.join(servConfig.path, '\\ShooterGame\\Saved`');
+            let backupPath              = pathMod.join(servConfig.pathBackup);
             let ZIP_name                = `${Date.now()}.zip`;
-            let canZIP                  = fs.existsSync(pathToZip) && !fs.existsSync(`${backupPath}\\${ZIP_name}`);
+            let canZIP                  = fs.existsSync(pathToZip) && !fs.existsSync(pathMod.join(backupPath, ZIP_name));
 
             // CMD Line
-            let cmdFile             = `${mainDir}\\app\\cmd\\${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`;
+            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
             let cmdCommand          = `@echo off\n`;
 
             // Logmeldungen

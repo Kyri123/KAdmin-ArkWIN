@@ -138,7 +138,7 @@ module.exports = {
             // Suche Mods zusammen
             if(serverInfos.servers_arr.length > 0) {
                 serverInfos.servers_arr.forEach((val) => {
-                    if(!fs.existsSync(`${val[0].pathLogs}.cmd`)) {
+                    if(!fs.existsSync(pathMod.join(`${val[0].pathLogs}.cmd`))) {
                         // Auto Update system
                         if(val[1].autoUpdate) {
                             if(Date.now() > val[1].autoUpdateNext && val[1].is_free) {

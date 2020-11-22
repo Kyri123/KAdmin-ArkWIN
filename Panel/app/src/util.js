@@ -27,7 +27,7 @@ module.exports = {
      * @return {Promise<array|boolean>}
      */
     toAcfToArraySync: (logPath) => {
-        if(fs.existsSync(logPath)) {
+        if(fs.existsSync(pathMod.join(logPath))) {
             let file     = module.exports.safeFileReadSync([logPath]);
             if(file !== false) {
                 let rawFile  = file.toString();
@@ -66,7 +66,7 @@ module.exports = {
      */
     toAcfToArray: async (logPath) => {
         return new Promise(resolve => {
-            if(fs.existsSync(logPath)) {
+            if(fs.existsSync(pathMod.join(logPath))) {
                 let file     = module.exports.safeFileReadSync([logPath]);
                 if(file !== false) {
                     let rawFile  = file.toString();

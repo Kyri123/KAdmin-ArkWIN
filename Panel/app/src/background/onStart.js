@@ -34,7 +34,8 @@ module.exports = {
         // Suche Mods zusammen
         if(serverInfos.servers_arr.length > 0) {
             serverInfos.servers_arr.forEach((val) => {
-               if(fs.existsSync(`${val[1].pathLogs}.cmd`)) fs.rmSync(`${val[1].pathLogs}.cmd`)
+                let file = pathMod.join(`${val[1].pathLogs}.cmd`);
+               if(fs.existsSync(file)) fs.rmSync(file)
             });
         }
     },

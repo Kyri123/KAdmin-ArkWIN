@@ -23,8 +23,10 @@ router.route('/')
             let serverCFG   = serverUtilInfos.getConfig(POST.server);
             let success     = false;
             try {
-                fs.rmSync(`${serverCFG.pathBackup}\\${POST.file}`);
-                success = true;
+                if(globalUtil.poisonNull(POST.file)) {
+                    fs.rmSync(pathMod.join(serverCFG.pathBackup, POST.file));
+                    success = true;
+                }
             }
             catch (e) {
                 if(debug) console.log(e);
@@ -43,9 +45,10 @@ router.route('/')
             let serverINFO  = serverUtilInfos.getServerInfos(POST.server);
 
             if(serverCFG.server === undefined) {
-                if(fs.existsSync(`${serverCFG.path}\\ShooterGame\\Saved`))  fs.rmSync(`${serverCFG.path}\\ShooterGame\\Saved`, {recursive: true});
-                if(!fs.existsSync(`${serverCFG.path}\\ShooterGame\\Saved`)) fs.mkdirSync(`${serverCFG.path}\\ShooterGame\\Saved`, {recursive: true});
-                if(fs.existsSync(`${serverCFG.pathBackup}\\${POST.file}`) && serverINFO.pid === 0) {
+                let savePath    = pathMod.join(serverCFG.path, '\\ShooterGame\\Saved');
+                if(fs.existsSync(savePath))  fs.rmSync(savePath, {recursive: true});
+                if(!fs.existsSync(savePath)) fs.mkdirSync(savePath);
+                if(fs.existsSync(savePath) && serverINFO.pid === 0) {
                     serverCmd.runCMD(`powershell -command "Expand-Archive -Force -LiteralPath '${serverCFG.pathBackup}\\${POST.file}' -DestinationPath '${serverCFG.path}\\ShooterGame\\Saved'"`)
                     success = true;
                 }
@@ -67,8 +70,8 @@ router.route('/')
 
         // GET serverInfos
         if(GET.getDir !== undefined && GET.server !== undefined) {
-            if(fs.existsSync(serverUtilInfos.getConfig(GET.server).pathBackup)) res.render('ajax/json', {
-                data: JSON.stringify(fs.readdirSync(serverUtilInfos.getConfig(GET.server).pathBackup))
+            if(fs.existsSync(pathMod.join(serverUtilInfos.getConfig(GET.server).pathBackup))) res.render('ajax/json', {
+                data: JSON.stringify(fs.readdirSync(pathMod.join(serverUtilInfos.getConfig(GET.server).pathBackup)))
             });
         }
     })
