@@ -80,6 +80,42 @@ function alerter(code, custom_style = "", mb = 3, closebtn = false, ml = 0, mr =
     return undefined;
 }
 
+/**
+ * Prüft ob der Nutzer die nötigen Rechte hat
+ * @param {int} permission Rechte array
+ * @param {string} perm Pfad (format: 'xxx/xxx/...')
+ * @param {string|boolean} server wenn es serverechte sind -> Servername
+ * @return {boolean}
+ */
+function hasPermissions(permission ,perm, server = false) {
+    let userperm = permission
+    if(userperm.id === undefined && perm.includes("/")) {
+        try {
+            let permarr = server !== false ? userperm.server[server] !== undefined ? userperm.server[server] : false : userperm;
+            if(permarr === false) return false;
+
+            if(server !== false) if(permarr.is_server_admin === 1) return true;
+            if(userperm.all.is_admin === 1) return true;
+
+            let bool = false;
+            perm.split('/').forEach((val) => {
+                if(permarr[val] !== undefined) {
+                    permarr = permarr[val];
+                    if(typeof permarr !== "object" && typeof permarr === "number") bool = parseInt(permarr) === 1;
+                }
+            });
+
+            return bool;
+        }
+        catch (e) {
+            if(debug) console.log(e);
+        }
+    }
+    return false;
+}
+
+
+
 String.prototype.replaceArray = function(find, replace) {
     var replaceString = this;
     var regex;

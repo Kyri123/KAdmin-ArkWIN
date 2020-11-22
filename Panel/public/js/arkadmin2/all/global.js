@@ -80,3 +80,4 @@ function setInModal() {
         if(type === "htm") $(id).html(val);
     })
 }
+

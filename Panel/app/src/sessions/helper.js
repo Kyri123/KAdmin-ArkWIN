@@ -89,7 +89,7 @@ module.exports = {
     },
 
     /**
-     * Gibt den Permission array eines Users aus
+     * Prüft ob der Nutzer die nötigen Rechte hat
      * @param {int} uid Benutzer ID
      * @param {string} perm Pfad (format: 'xxx/xxx/...')
      * @param {string|boolean} server wenn es serverechte sind -> Servername
