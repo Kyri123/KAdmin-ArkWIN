@@ -12,7 +12,6 @@ const router            = express.Router()
 const globalinfos       = require('./../../app/src/global_infos');
 const serverUtilInfos   = require('./../../app/src/util_server/infos');
 const serverCommands    = require('./../../app/src/background/server/commands');
-const fs                = require('fs');
 
 router.route('/')
 
@@ -156,8 +155,10 @@ router.route('/')
         if(GET.getscglobalinfos !== undefined) {
             try {
                 let array = [];
-                array[0] = JSON.parse(fs.readFileSync(`./public/json/sites/serverCenterActions.cfg.json`));
-                array[1] = JSON.parse(fs.readFileSync(`./public/json/sites/serverCenterAny.cfg.json`));
+                let file = globalUtil.safeFileReadSync([mainDir, '/public/json/sites/', 'serverCenterActions.cfg.json'], true);
+                array[0] = file !== false ? file : [];
+                file     = globalUtil.safeFileReadSync([mainDir, '/public/json/sites/', 'serverCenterAny.cfg.json'], true);
+                array[1] = file !== false ? file : [])
 
                 res.render('ajax/json', {
                     data: JSON.stringify(array)

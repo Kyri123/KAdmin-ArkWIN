@@ -9,7 +9,6 @@
 
 const querystring   = require('querystring');
 const http          = require('http');
-const fs            = require('fs');
 
 module.exports = {
     /**
@@ -55,7 +54,7 @@ module.exports = {
             });
 
             req.on('close', () => {
-                globalUtil.safeFileSave(`${mainDir}/public/json/steamAPI/`, `mods.json`, data, false);
+                globalUtil.safeFileSaveSync([mainDir, '/public/json/steamAPI/', 'mods.json'], data);
             });
 
             req.write(post_data);

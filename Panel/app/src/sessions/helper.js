@@ -8,8 +8,7 @@
  */
 
 const { array_replace_recursive }   = require('locutus/php/array');
-const { getServerList }             = require('./../global_infos')
-const fs                            = require('fs')
+const { getServerList }             = require('./../global_infos');
 
 
 module.exports = {
@@ -58,13 +57,13 @@ module.exports = {
     permissions: (uid) => {
         let result      = globalUtil.safeSendSQLSync('SELECT * FROM ArkAdmin_users WHERE `id`=?', uid);
         if(result.length > 0) {
-            let permissions         = JSON.parse(fs.readFileSync('./app/json/permissions/default.json'));
+            let permissions         = globalUtil.safeFileReadSync([mainDir, '/app/json/permissions/', 'default.json'], true);
             let groups              = JSON.parse(result[0].rang);
             let servers             = getServerList();
 
             for (const [key] of Object.entries(servers)) {
                 try {
-                    let permissions_servers = JSON.parse(fs.readFileSync('./app/json/permissions/default_server.json'));
+                    let permissions_servers = globalUtil.safeFileReadSync([mainDir, '/app/json/permissions/', 'default_server.json'], true);
                     permissions.server[key] = permissions_servers;
                 }
                 catch (e) {

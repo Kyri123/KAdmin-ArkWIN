@@ -9,7 +9,6 @@
 
 const steamCMD              = require('./../steam/steamCMD');
 const serverUtilInfos       = require('./../../util_server/infos');
-const fs                    = require('fs');
 
 module.exports = {
     /**
@@ -46,7 +45,7 @@ module.exports = {
                 // schreibe Global
                 global.availableVersion_public          = acfArray !== false && acfArray[PANEL_CONFIG.appID_server] !== undefined ? acfArray[PANEL_CONFIG.appID_server].depots.branches["public"].buildid : false;
                 global.availableVersion_activeevent     = acfArray !== false && acfArray[PANEL_CONFIG.appID_server] !== undefined ? acfArray[PANEL_CONFIG.appID_server].depots.branches["activeevent"].buildid : false;
-                globalUtil.safeFileSave(`${mainDir}/public/json/steamAPI/`, `version.json`, JSON.stringify({availableVersion_public:availableVersion_public,availableVersion_activeevent:availableVersion_activeevent}), false, 'utf8');
+                globalUtil.safeFileSaveSync([mainDir, '/public/json/steamAPI/', 'version.json'], JSON.stringify({availableVersion_public:availableVersion_public,availableVersion_activeevent:availableVersion_activeevent}));
             })
     },
 
@@ -75,7 +74,8 @@ module.exports = {
             let modsNeedUpdate      = [];
             let API                 = false;
             try {
-                API                 = fs.existsSync('./public/json/steamAPI/mods.json') ? JSON.parse(fs.readFileSync('./public/json/steamAPI/mods.json')).response.publishedfiledetails : false;
+                let json             = globalUtil.safeFileReadSync([mainDir, '/public/json/steamAPI/', 'mods.json'], true);
+                API                  = json !== false ? json.response.publishedfiledetails : false;
             }
             catch (e) {
                 if(debug) console.log(e);
@@ -92,16 +92,16 @@ module.exports = {
 
                     if(
                         KEY !== false &&
-                        fs.existsSync(`${servConfig.path}\\ShooterGame\\Content\\Mods\\${modid}.modtime`)
+                        fs.existsSync(pathMod.join(servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.modtime`))
                     ) {
-                        let modtime     = parseInt(fs.readFileSync(`${servConfig.path}\\ShooterGame\\Content\\Mods\\${modid}.modtime`));
+                        let modtime     = parseInt(globalUtil.safeFileReadSync([servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.modtime`]));
                         let API_UPDATE  = API[KEY].time_updated;
                         if(API_UPDATE > modtime) modsNeedUpdate.push(modid);
                     }
                     else if(
-                        !fs.existsSync(`${servConfig.path}\\ShooterGame\\Content\\Mods\\${modid}.mod`)      ||
-                        !fs.existsSync(`${servConfig.path}\\ShooterGame\\Content\\Mods\\${modid}.modtime`)  ||
-                        !fs.existsSync(`${servConfig.path}\\ShooterGame\\Content\\Mods\\${modid}`)
+                        !fs.existsSync(pathMod.join(servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.mod`))      ||
+                        !fs.existsSync(pathMod.join(servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.modtime`))  ||
+                        !fs.existsSync(pathMod.join(servConfig.path, '\\ShooterGame\\Content\\Mods\\', modid))
                     ) {
                         modsNeedUpdate.push(modid);
                     }

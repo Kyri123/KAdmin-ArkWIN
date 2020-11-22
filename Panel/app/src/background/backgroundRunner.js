@@ -17,7 +17,6 @@ const si                    = require('systeminformation');
 const osu                   = require('node-os-utils')
 const disk                  = require('check-disk-space');
 const AA_util               = require('../util');
-const fs                    = require('fs');
 const req                   = require('request');
 
 
@@ -26,13 +25,13 @@ module.exports = {
      * Startet alle Intervalle
      */
     startAll: () => {
-        module.exports.getAvailableVersion();   //getAvailableVersion   > Holt verfügbare Version von SteamCMD
-        module.exports.getStateFromServers();   //getStateFromServers   > Holt Serverstatus informationen
-        module.exports.getModsFromAPI();        //getStateFromServers   > Holt Mod Infos von SteamAPI
-        module.exports.getTraffic();            //getTraffic            > Schreibt Traffic Infos
-        module.exports.doServerBackgrounder();  //doServerBackgrounder  > Führt Hintergrund aktionen aus wie Automatisches Updaten und Backupen
-        module.exports.doReReadConfig();        //doReReadConfig        > Liest die Globalen Configurationen
-        module.exports.backgroundUpdater();     //backgroundUpdater     > Schau nach Updates für das Panel
+        module.exports.getAvailableVersion();                               //getAvailableVersion   > Holt verfügbare Version von SteamCMD
+        module.exports.getStateFromServers();                               //getStateFromServers   > Holt Serverstatus informationen
+        module.exports.getModsFromAPI();                                    //getStateFromServers   > Holt Mod Infos von SteamAPI
+        module.exports.getTraffic();                                        //getTraffic            > Schreibt Traffic Infos
+        module.exports.doServerBackgrounder();                              //doServerBackgrounder  > Führt Hintergrund aktionen aus wie Automatisches Updaten und Backupen
+        module.exports.doReReadConfig(PANEL_MAIN.doReReadConfig);           //doReReadConfig        > Liest die Globalen Configurationen
+        module.exports.backgroundUpdater();                                 //backgroundUpdater     > Schau nach Updates für das Panel
     },
 
     /**
@@ -65,7 +64,7 @@ module.exports = {
     getTraffic: async () => {
         async function getTraffic() {
             osu.cpu.usage().then (cpuPercentage => {
-                let disk_path = fs.existsSync(PANEL_CONFIG.servRoot) ? PANEL_CONFIG.servRoot : __dirname;
+                let disk_path = pathMod.join(fs.existsSync(pathMod.join(PANEL_CONFIG.servRoot)) ? PANEL_CONFIG.servRoot : mainDir);
                 disk(disk_path).then((info) => {
                     si.mem()
                         .then(mem => {
@@ -82,7 +81,7 @@ module.exports = {
                                 "mem_availble" : AA_util.convertBytes(info.size - info.free)
                             };
 
-                            globalUtil.safeFileSave(`${mainDir}/public/json/serverInfos/`, `auslastung.json`, JSON.stringify(data), false);
+                            globalUtil.safeFileSaveSync([mainDir, '/public/json/serverInfos/', 'auslastung.json'], JSON.stringify(data));
                         });
                 });
             });
@@ -178,33 +177,33 @@ module.exports = {
      * Liest die Konfigurationen neu ein
      * @returns {Promise<void>}
      */
-    doReReadConfig: async () => {
+    doReReadConfig: async (time) => {
         async function doReReadConfig() {
             // Lade Konfiguration
-            if(fs.existsSync('./app/config/app.json')) {
-                global.PANEL_CONFIG = JSON.parse(fs.readFileSync('./app/config/app.json'));
+            if(fs.existsSync(pathMod.join(mainDir, '/app/config/', 'app.json'))) {
+                global.PANEL_CONFIG = globalUtil.safeFileReadSync([mainDir, '/app/config/', 'app.json'], true);
             }
             else {
                 process.exit(1);
             }
 
-            if(fs.existsSync('./app/config/main.json')) {
-                global.PANEL_MAIN = JSON.parse(fs.readFileSync('./app/config/main.json'));
+            if(fs.existsSync(pathMod.join(mainDir, '/app/config/', 'main.json'))) {
+                global.PANEL_MAIN = globalUtil.safeFileReadSync([mainDir, '/app/config/', 'main.json'], true);
             }
             else {
                 process.exit(1);
             }
 
             // Lade Sprachdatei(en)
-            if(fs.existsSync(`./lang/${PANEL_CONFIG.lang}/lang.json`)) {
-                global.PANEL_LANG = JSON.parse(fs.readFileSync(`./lang/${PANEL_CONFIG.lang}/lang.json`));
+            if(fs.existsSync(pathMod.join(mainDir, '/lang/', PANEL_CONFIG.lang, 'lang.json'))) {
+                global.PANEL_LANG = globalUtil.safeFileReadSync([mainDir, '/lang/', PANEL_CONFIG.lang, 'lang.json'], true);
             }
             else {
                process.exit(1);
             }
 
-            if(fs.existsSync(`./lang/${PANEL_CONFIG.lang}/alert.json`)) {
-                global.PANEL_LANG_ALERT = JSON.parse(fs.readFileSync(`./lang/${PANEL_CONFIG.lang}/alert.json`));
+            if(fs.existsSync(pathMod.join(mainDir, '/lang/', PANEL_CONFIG.lang, 'alert.json'))) {
+                global.PANEL_LANG_ALERT = globalUtil.safeFileReadSync([mainDir, '/lang/', PANEL_CONFIG.lang, 'alert.json'], true);
             }
             else {
                 process.exit(1);
@@ -213,7 +212,7 @@ module.exports = {
 
         setInterval(() => {
             doReReadConfig();
-        }, PANEL_MAIN.doReReadConfig);
+        }, time);
     },
 
     /**
@@ -235,7 +234,7 @@ module.exports = {
                     if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")}] Auto-Updater: \x1b[91m${PANEL_LANG.updaterLOG.conErr}`);
                 } else if (res.statusCode === 200) {
                     // Prüfe SHA mit API
-                    fs.readFile("./app/data/sha.txt", 'utf8', (err, data) => {
+                    fs.readFile(pathMod.join(mainDir, '/app/data/', 'sha.txt'), (err, data) => {
                         if (err === null) {
                             if (data === api.commit.sha) {
                                 // kein Update
@@ -263,7 +262,7 @@ module.exports = {
                                             process.exit(2);
                                         }
                                     }, 5000);
-                                    globalUtil.safeFileSave(`${mainDir}/app/data/`, `sha.txt`, api.commit.sha, false);
+                                    globalUtil.safeFileSaveSync([mainDir, '/app/data/', 'sha.txt'], api.commit.sha);
                                 }
                             }
                         } else {

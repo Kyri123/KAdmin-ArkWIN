@@ -8,7 +8,6 @@
  */
 
 // require Module
-const fs            = require('fs');
 const Gamedig       = require('gamedig');
 const ip            = require("ip");
 const serverInfos   = require('./../../util_server/infos');
@@ -42,7 +41,7 @@ function save(data, name, state, use_state = true) {
             }
         }
     });*/
-    globalUtil.safeFileSave(`${mainDir}/public/json/server`, `${name}.json`, JSON.stringify(data), false);
+    globalUtil.safeFileSaveSync([mainDir, '/public/json/server', `${name}.json`], JSON.stringify(data));
 }
 
 module.exports = {

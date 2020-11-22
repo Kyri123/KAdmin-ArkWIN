@@ -12,7 +12,6 @@ const router            = express.Router()
 const helper_user       = require('./../../app/src/sessions/helper');
 const globalinfos       = require('./../../app/src/global_infos');
 const serverUtilInfos   = require('./../../app/src/util_server/infos');
-const fs                = require('fs');
 
 
 router.route('/')
@@ -52,8 +51,8 @@ router.route('/')
                 sinfos                  : globalinfos.get(),
                 sconfig                 : serverUtilInfos.getConfig(serverName),
                 serverName              : serverName,
-                sercerCenterAny         : JSON.parse(fs.readFileSync('./public/json/sites/serverCenterAny.cfg.json')),
-                sercerCenterActions     : JSON.parse(fs.readFileSync('./public/json/sites/serverCenterActions.cfg.json'))
+                sercerCenterAny         : globalUtil.safeFileReadSync([mainDir, '/public/json/sites/', 'serverCenterAny.cfg.json'], true),
+                sercerCenterActions     : globalUtil.safeFileReadSync([mainDir, '/public/json/sites/', 'serverCenterActions.cfg.json'], true),
             });
         }
     })

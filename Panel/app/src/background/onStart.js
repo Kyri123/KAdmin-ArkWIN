@@ -15,7 +15,6 @@ const si                    = require('systeminformation');
 const osu                   = require('node-os-utils')
 const disk                  = require('check-disk-space');
 const AA_util               = require('../util');
-const fs                    = require('fs');
 
 
 module.exports = {

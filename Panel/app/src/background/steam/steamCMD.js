@@ -8,7 +8,6 @@
  */
 
 const cmd           = require('node-cmd');
-const fs            = require('fs');
 
 
 module.exports = {

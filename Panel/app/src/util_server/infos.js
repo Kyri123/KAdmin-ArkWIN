@@ -8,7 +8,6 @@
  */
 
 const { array_replace_recursive }   = require('locutus/php/array');
-const fs                            = require('fs')
 
 
 module.exports = {
@@ -18,7 +17,8 @@ module.exports = {
      * @returns {array}
      */
     getConfig: (server) => {
-        let cfg = fs.existsSync(`./app/json/server/${server}.json`) ? JSON.parse(fs.readFileSync(`./app/json/server/${server}.json`, 'utf8')) : {"server": false};
+        let file    = globalUtil.safeFileReadSync([mainDir, '/app/json/server/', `${server}.json`], true);
+        let cfg = file !== false ? file : {"server": false};
 
         // Erzeuge Standarts (für ergänzte vars)
         if(cfg.server === undefined) {
@@ -40,7 +40,9 @@ module.exports = {
      * @returns {array}
      */
     getServerInfos: (server) => {
-        return fs.existsSync(`./public/json/server/${server}.json`) ? JSON.parse(fs.readFileSync(`./public/json/server/${server}.json`, 'utf8')) : {};
+        let file    = globalUtil.safeFileReadSync([mainDir, '/public/json/server/', `${server}.json`], true);
+        let re      = file !== false ? file : {};
+        return re;
     },
 
     /**
@@ -56,7 +58,7 @@ module.exports = {
         if(config.server === undefined) {
             config[key] = value;
             try {
-                globalUtil.safeFileSave(`${mainDir}/app/json/server/`, `${server}.json`, JSON.stringify(config), false);
+                globalUtil.safeFileSaveSync([mainDir, '/app/json/server/', `${server}.json`], JSON.stringify(config));
                 return true
             }
             catch (e) {
@@ -81,7 +83,7 @@ module.exports = {
                 if(cfg.mods !== undefined)  saveData.mods = cfg.mods;
                 if(cfg.opt !== undefined)   saveData.opt = cfg.opt;
                 if(cfg.flags !== undefined) saveData.flags = cfg.flags;
-                globalUtil.safeFileSave(`${mainDir}/app/json/server/`, `${server}.json`, JSON.stringify(saveData), false);
+                globalUtil.safeFileSaveSync([mainDir, '/app/json/server/', `${server}.json`], JSON.stringify(saveData));
                 return true;
             }
             catch (e) {
@@ -103,7 +105,7 @@ module.exports = {
         let path    = `${config.path}\\ShooterGame\\Saved\\Config\\WindowsServer`;
         if(!fs.existsSync(path)) fs.mkdirSync(path, {recursive: true});
         try {
-            globalUtil.safeFileSave(`${path}\\`, `${iniName}.ini`, JSON.stringify(ini));
+            globalUtil.safeFileSaveSync([path,`${iniName}.ini`], JSON.stringify(ini));
             return true;
         }
         catch (e) {

@@ -13,7 +13,6 @@ const router            = express.Router()
 const globalinfos       = require('./../../app/src/global_infos');
 const serverUtilInfos   = require('./../../app/src/util_server/infos');
 const serverCommands    = require('./../../app/src/background/server/commands');
-const fs                = require('fs');
 
 router.route('/')
 

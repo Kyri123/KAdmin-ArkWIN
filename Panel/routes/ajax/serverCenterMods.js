@@ -10,7 +10,6 @@
 const express           = require('express')
 const router            = express.Router()
 const serverUtilInfos   = require('./../../app/src/util_server/infos');
-const fs                = require('fs');
 
 router.route('/')
 

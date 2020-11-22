@@ -10,7 +10,6 @@
 const express           = require('express')
 const router            = express.Router()
 const serverUtilInfos   = require('./../../app/src/util_server/infos');
-const fs                = require('fs');
 
 router.route('/')
 
@@ -65,10 +64,12 @@ router.route('/')
 
         // GET serverInfos
         if(GET.serverInis !== undefined) {
-            let serverInfos = serverUtilInfos.getConfig(GET.server);
+            let serverInfos     = serverUtilInfos.getConfig(GET.server);
+            let file            = globalUtil.safeFileReadSync([serverInfos.path, '\\ShooterGame\\Saved\\Config\\WindowsServer\\', `${GET.ini}.ini`]);
+            let default_file    = globalUtil.safeFileReadSync([serverInfos.path, '/app/data/ini/', `${GET.ini}.ini`]);
 
             res.render('ajax/json', {
-                data: fs.existsSync(`${serverInfos.path}\\ShooterGame\\Saved\\Config\\WindowsServer\\${GET.ini}.ini`)     ? fs.readFileSync(`${serverInfos.path}\\ShooterGame\\Saved\\Config\\WindowsServer\\${GET.ini}.ini`, 'utf-8')   : fs.readFileSync(`./app/data/ini/${GET.ini}.ini`, 'utf-8')
+                data: file !== false ? file : default_file !== false ? default_file : 'failed'
             });
         }
     })

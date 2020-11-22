@@ -7,8 +7,7 @@
  * *******************************************************************************************
  */
 
-const fs            = require('fs')
-const serverInfos   = require('./util_server/infos')
+const serverInfos   = require('./util_server/infos');
 const { array_replace_recursive }   = require('locutus/php/array');
 
 module.exports = {
@@ -17,23 +16,23 @@ module.exports = {
      * @return {array}
      */
     getServerList: () => {
-        let serverLocalPath     = `./public/json/server`;
+        let serverLocalPath     = pathMod.join(mainDir, '/public/json/server/');
         let dirArray            = fs.readdirSync(serverLocalPath);
-        let servers             = new Array();
+        let servers             = [];
 
         dirArray.forEach((ITEM,KEY) => {
             try {
                 // Serverliste
-                if(fs.existsSync(`./app/json/server/${ITEM}`)){
-                    ITEM = ITEM.replace(".json", '');
-                    if(fs.existsSync(`${serverLocalPath}/${ITEM}.json`)) {
-                        let array = JSON.parse(fs.readFileSync(`${serverLocalPath}/${ITEM}.json`));
-                        array = array_replace_recursive(array, serverInfos.getServerInfos(ITEM), serverInfos.getConfig(ITEM));
+                if(fs.existsSync(pathMod.join(serverLocalPath, ITEM))) {
+                    let array   = globalUtil.safeFileReadSync([serverLocalPath, ITEM], true);
+                    if(array !== false) {
+                        ITEM    = ITEM.replace(".json", '');
+                        array   = array_replace_recursive(array, serverInfos.getServerInfos(ITEM), serverInfos.getConfig(ITEM));
                         servers[ITEM] = array;
                     }
                 }
                 else {
-                    fs.rmSync(`./public/json/server/${ITEM}`);
+                    fs.rmSync(pathMod.join(serverLocalPath, ITEM));
                 }
             }
             catch (e) {
@@ -46,7 +45,8 @@ module.exports = {
 
     get: () => {
         let infos               = {};
-        infos.server_data       = fs.existsSync(`./public/json/serverInfos/auslastung.json`) ? JSON.parse(fs.readFileSync(`./public/json/serverInfos/auslastung.json`)) : {};
+        let file                = globalUtil.safeFileReadSync([mainDir, '/public/json/serverInfos/', 'auslastung.json'], true);
+        infos.server_data       = file !== false ? file : {};
 
         // Erkenne die Server
         infos.servers_arr       = Object.entries(module.exports.getServerList());

@@ -12,7 +12,6 @@ const CommandUtil           = require('./commands_util');
 const serverUtil            = require('./util');
 const serverUtilInfos       = require('./../../util_server/infos');
 const serverCmd             = require('./cmd');
-const fs                    = require('fs');
 
 module.exports = {
     /**
@@ -75,10 +74,10 @@ module.exports = {
             try {
                 if (alwaysStart) serverUtilInfos.writeConfig(server, "shouldRun", true);
                 if(!servInfos.cmd && !servInfos.run) {
-                    globalUtil.safeFileSave(cmdFile, ``, cmdCommand, false);
+                    globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doStart ${server}" ${cmdFile}`);
                 }
-                globalUtil.safeFileSave(`${mainDir}/public/json/serveraction/`, `action_${server}.log`, actionResponse, false);
+                globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
             }
             catch (e) {
                 if(debug) console.log(e);
@@ -122,10 +121,10 @@ module.exports = {
             // Speichern und ausführen
             try {
                 if(!servInfos.is_installed && !servInfos.cmd) {
-                    globalUtil.safeFileSave(cmdFile, ``, cmdCommand, false);
+                    globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doInstallServer ${server}" ${cmdFile}`)
                 }
-                globalUtil.safeFileSave(`${mainDir}/public/json/serveraction/`, `action_${server}.log`, actionResponse, false);
+                globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
             }
             catch (e) {
                 if(debug) console.log(e);
@@ -205,10 +204,10 @@ module.exports = {
             // Speichern und ausführen
             try {
                 if (updateNeed || validate) {
-                    globalUtil.safeFileSave(cmdFile, ``, cmdCommand, false);
+                    globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doUpdateServer  ${isBackground ? "Server" : server}" ${cmdFile}`)
                 }
-                if(!isBackground) globalUtil.safeFileSave(`${mainDir}/public/json/serveraction/`, `action_${server}.log`, actionResponse, false);
+                if(!isBackground) globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
             }
             catch (e) {
                 if(debug) console.log(e);
@@ -283,8 +282,8 @@ module.exports = {
 
             // Speichern und ausführen
             try {
-                globalUtil.safeFileSave(cmdFile, ``, cmdCommand, false);
-                if(!backAsString) globalUtil.safeFileSave(`${mainDir}/public/json/serveraction/`, `action_${server}.log`, actionResponse, false);
+                globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
+                if(!backAsString) globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
                 return !backAsString ? serverCmd.runCMD(`start "[ArkAdminWIN] doInstallMods ${server}" ${cmdFile}`) :
                     {workshop_download_item: workshop_download_item, copys: copys};
             }
@@ -337,10 +336,10 @@ module.exports = {
             try {
                 if (servConfig.shouldRun) serverUtilInfos.writeConfig(server, "shouldRun", false);
                 if (servInfos.run) {
-                    globalUtil.safeFileSave(cmdFile, ``, cmdCommand, false);
+                    globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doStop ${server}" ${cmdFile}`);
                 }
-                globalUtil.safeFileSave(`${mainDir}/public/json/serveraction/`, `action_${server}.log`, actionResponse, false);
+                globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
             }
             catch (e) {
                 if(debug) console.log(e);
@@ -422,8 +421,8 @@ module.exports = {
             // Speichern und ausführen
             try {
                 if (alwaysStart) serverUtilInfos.writeConfig(server, "shouldRun", true);
-                globalUtil.safeFileSave(cmdFile, ``, cmdCommand, false);
-                globalUtil.safeFileSave(`${mainDir}/public/json/serveraction/`, `action_${server}.log`, actionResponse, false);
+                globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
+                globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
                 return serverCmd.runCMD(`start "[ArkAdminWIN] doRestart ${server}" ${cmdFile}`);
             }
             catch (e) {
@@ -474,9 +473,9 @@ module.exports = {
 
             // Speichern und ausführen
             try {
-                if(!isBackground) globalUtil.safeFileSave(`${mainDir}/public/json/serveraction/`, `action_${server}.log`, actionResponse, false);
+                if(!isBackground) globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
                 if(canZIP) {
-                    globalUtil.safeFileSave(cmdFile, ``, cmdCommand, false);
+                    globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doBackup ${isBackground ? "Server" : server}" ${cmdFile}`);
                 }
             }
