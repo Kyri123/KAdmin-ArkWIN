@@ -158,7 +158,7 @@ router.route('/')
                 let file = globalUtil.safeFileReadSync([mainDir, '/public/json/sites/', 'serverCenterActions.cfg.json'], true);
                 array[0] = file !== false ? file : [];
                 file     = globalUtil.safeFileReadSync([mainDir, '/public/json/sites/', 'serverCenterAny.cfg.json'], true);
-                array[1] = file !== false ? file : [])
+                array[1] = file !== false ? file : [];
 
                 res.render('ajax/json', {
                     data: JSON.stringify(array)
