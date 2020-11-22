@@ -12,7 +12,12 @@ const router        = express.Router()
 
 router.route('*')
     .all((req,res)=>{
-        res.redirect(req.baseUrl + "/home");
+        if(userHelper.hasPermissions(req.session.id, "show", req.baseUrl.split('/')[2])) {
+            res.redirect(req.baseUrl + "/home");
+        }
+        else {
+            res.redirect("/401");
+        }
     })
 
 module.exports = router;

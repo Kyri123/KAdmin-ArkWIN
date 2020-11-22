@@ -97,21 +97,22 @@ module.exports = {
      */
     hasPermissions: (uid, perm, server = false) => {
         let userperm = module.exports.permissions(uid);
-        if(typeof userperm.id !== "undefined" && perm.includes("/")) {
+        if(typeof userperm.id === "undefined") {
             try {
                 let permarr = server !== false ? userperm.server[server] !== undefined ? userperm.server[server] : false : userperm;
                 if(permarr === false) return false;
 
-                if(server !== false) if(permarr.is_server_admin === 1) return true;
-                if(userperm.all.is_admin === 1) return true;
-
                 let bool = false;
-                perm.split('/').forEach((val) => {
+                let needPerm    = perm.includes("/") ? perm.split('/') : [perm];
+                needPerm.forEach((val) => {
                     if(permarr[val] !== undefined) {
                         permarr = permarr[val];
                         if(typeof permarr !== "object" && typeof permarr === "number") bool = parseInt(permarr) === 1;
                     }
                 });
+
+                if(server !== false) if(permarr.is_server_admin === 1) bool = true;
+                if(userperm.all.is_admin === 1) bool = true;
 
                 return bool;
             }

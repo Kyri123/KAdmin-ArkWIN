@@ -20,10 +20,8 @@ router.route('/')
         global.user         = helper_user.getinfos(req.session.uid);
 
         let sess = req.session;
-        let serverName  = req.baseUrl;
-        serverName      = serverName.replace('/servercenter/', '').replace('/api', '');
+        let serverName  = req.baseUrl.split('/')[2];
         let userPerm    = helper_user.permissions(sess.uid);
-        console.log(helper_user.hasPermissions(sess.uid, "all/is_admin2"));
 
         // Leite zu 401 wenn Rechte nicht gesetzt sind
         if(

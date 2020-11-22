@@ -20,8 +20,7 @@ router.route('/')
         global.user         = helper_user.getinfos(req.session.uid);
 
         let sess = req.session;
-        let serverName  = req.baseUrl;
-        serverName      = serverName.replace('/servercenter/', '').replace('/backups', '');
+        let serverName  = req.baseUrl.split('/')[2];
         let userPerm    = helper_user.permissions(sess.uid);
 
         // Leite zu 401 wenn Rechte nicht gesetzt sind

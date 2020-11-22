@@ -21,9 +21,7 @@ router.route('/')
         // DEFAULT ServerCenter
         let GET  = req.query;
         let sess = req.session;
-        let serverName  = req.baseUrl;
-        serverName      = serverName.replace('/servercenter/', '');
-        serverName      = serverName.replace('/home', '');
+        let serverName  = req.baseUrl.split('/')[2];
         let userPerm    = helper_user.permissions(sess.uid);
 
         // Leite zu 401 wenn Rechte nicht gesetzt sind

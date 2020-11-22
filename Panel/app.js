@@ -32,6 +32,7 @@ global.isUpdate                       = false;
 global.globalUtil                     = require('./app/src/util');
 global.pathMod                        = require('path');
 global.fs                             = require('fs');
+global.userHelper                     = require('./app/src/sessions/helper');
 
 require('./app/main/main_loader.js');
 global.debug                          = PANEL_MAIN.useDebug;
