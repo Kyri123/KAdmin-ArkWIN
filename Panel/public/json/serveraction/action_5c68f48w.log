@@ -6,3 +6,6 @@ Folgende Mods werden Installiert/Geupdated:
 2275336562
 942185438
 D:\servers\SteamCMD\steamcmd.exe +login anonymous +force_install_dir "D:\servers\Servers\5c68f48w" +workshop_download_item 346110 1428596566 +workshop_download_item 346110 2275336562 +workshop_download_item 346110 942185438 +quit
+1428596566,2275336562,942185438 - SUCCESS 
+1428596566,2275336562,942185438 - SUCCESS 
+1428596566,2275336562,942185438 - SUCCESS 

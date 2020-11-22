@@ -49,7 +49,7 @@ catch (e) {
   process.exit(1);
 }
 
-let app           = express();
+let app         = express();
 
 // view engine
 app.set('views', pathMod.join(__dirname, 'views'));
