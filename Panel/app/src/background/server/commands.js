@@ -444,7 +444,7 @@ module.exports = {
 
         if(servConfig.server === undefined && !servInfos.cmd) {
             // vars
-            let pathToZip               = pathMod.join(servConfig.path, '\\ShooterGame\\Saved`');
+            let pathToZip               = pathMod.join(servConfig.path, '\\ShooterGame\\Saved');
             let backupPath              = pathMod.join(servConfig.pathBackup);
             let ZIP_name                = `${Date.now()}.zip`;
             let canZIP                  = fs.existsSync(pathToZip) && !fs.existsSync(pathMod.join(backupPath, ZIP_name));

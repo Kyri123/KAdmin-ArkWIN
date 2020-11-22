@@ -9,7 +9,7 @@
 
 const express           = require('express')
 const router            = express.Router()
-const helper_user   = require('./../../app/src/sessions/helper');
+const userHelper   = require('./../../app/src/sessions/helper');
 
 router.route('/')
 
@@ -18,8 +18,8 @@ router.route('/')
 
         // Bannen/Entbannen
         if(POST.toggleUser !== undefined) {
-            let userInfos = helper_user.getinfos(POST.id);
-            helper_user.writeinfos(POST.id, "ban", userInfos.ban === 1 ? 0 : 1);
+            let userInfos = userHelper.getinfos(POST.id);
+            userHelper.writeinfos(POST.id, "ban", userInfos.ban === 1 ? 0 : 1);
 
             res.render('ajax/json', {
                 data: JSON.stringify({
@@ -32,8 +32,8 @@ router.route('/')
 
         // Benutzer Löschen
         if(POST.deleteuser !== undefined) {
-            let userInfos = helper_user.getinfos(POST.uid);
-            helper_user.removeUser(POST.uid);
+            let userInfos = userHelper.getinfos(POST.uid);
+            userHelper.removeUser(POST.uid);
 
             res.render('ajax/json', {
                 data: JSON.stringify({
@@ -46,7 +46,7 @@ router.route('/')
 
         // Code Löschen
         if(POST.removeCode !== undefined) {
-            helper_user.removeCode(POST.id);
+            userHelper.removeCode(POST.id);
 
             res.render('ajax/json', {
                 data: JSON.stringify({
@@ -58,7 +58,7 @@ router.route('/')
 
         // Code Erzeugen
         if(POST.addCode !== undefined) {
-            let code = helper_user.createCode(POST.rank);
+            let code = userHelper.createCode(POST.rank);
 
             res.render('ajax/json', {
                 data: JSON.stringify({

@@ -17,6 +17,7 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "express-session": "^1.17.1",
+    "extract-zip": "^2.0.1",
     "find-process": "^1.4.4",
     "gamedig": "^2.0.23",
     "helmet": "^4.2.0",

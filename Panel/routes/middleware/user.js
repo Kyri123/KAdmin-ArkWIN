@@ -7,8 +7,6 @@
  * *******************************************************************************************
  */
 
-const userUtil  = require('./../../app/src/sessions/helper');
-
 module.exports = {
     /**
      * Wenn eingeloggt ist > weiter !> /login

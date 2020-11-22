@@ -252,7 +252,7 @@
       "cancel"        : "Abbrechen",
       "pitile"        : "Einspielen:",
       "pitxt"         : "Möchtest du dieses Backup einspielen? <br />",
-      "pired"         : "<b>ACHTUNG:</b> Alle Karten und Spieler Dateien werden gelöscht und mit dem Backup überschrieben",
+      "pired"         : "<b>ACHTUNG:</b> Alle Karten, Konfigurationen (ausgenommen der von ArkAdminWIN) und Spieler Dateien werden gelöscht und mit dem Backup überschrieben",
       "playin"        : "Einspielen"
     }
   },

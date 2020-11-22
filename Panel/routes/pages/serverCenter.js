@@ -12,11 +12,13 @@ const router        = express.Router()
 
 router.route('*')
     .all((req,res)=>{
-        if(userHelper.hasPermissions(req.session.id, "show", req.baseUrl.split('/')[2])) {
+        if(userHelper.hasPermissions(req.session.uid, "show", req.baseUrl.split('/')[2])) {
             res.redirect(req.baseUrl + "/home");
+            return true;
         }
         else {
             res.redirect("/401");
+            return true;
         }
     })
 
