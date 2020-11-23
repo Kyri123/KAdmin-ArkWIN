@@ -118,6 +118,29 @@ module.exports = {
     },
 
     /**
+     * Prüfe ob der Pfad erlaubt ist
+     * @param {string} path Pfad der Geprüft werden soll
+     * @return {boolean}
+     */
+    checkValidatePath(path) {
+        return (
+            (
+                path.indexOf(PANEL_CONFIG.servRoot) === 0
+                || path.indexOf(PANEL_CONFIG.logRoot) === 0
+                || path.indexOf(PANEL_CONFIG.pathBackup) === 0
+                || path.indexOf(PANEL_CONFIG.steamCMDRoot) === 0
+                || path.indexOf(`${mainDir}\\public`) === 0
+                || path.indexOf(`${mainDir}\\lang`) === 0
+                || path.indexOf(`${mainDir}\\app\\json`) === 0
+                || path.indexOf(`${mainDir}\\app\\data`) === 0
+                || path.indexOf(`${mainDir}\\app\\cmd`) === 0
+                || path.indexOf(`${mainDir}\\app\\config`) === 0
+            )
+            && path.indexOf(`${mainDir}\\app\\config\\mysql.json`) !== 0
+        );
+    },
+
+    /**
      * Entfernt eine Datei
      * @param {string[]} paths Pfade zur Datei
      * @return {boolean}
@@ -127,18 +150,8 @@ module.exports = {
         if(module.exports.poisonNull(paths)) {
             // Lege Pfad fest
             let filePath        = pathMod.join(...paths);
-            let continueSave    =
-                filePath.indexOf(PANEL_CONFIG.servRoot) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.logRoot) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.pathBackup) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.steamCMDRoot) === 0 ||
-                filePath.indexOf(`${mainDir}\\public`) === 0 ||
-                filePath.indexOf(`${mainDir}\\app\\json`) === 0 ||
-                filePath.indexOf(`${mainDir}\\app\\data`) === 0 ||
-                filePath.indexOf(`${mainDir}\\app\\cmd`) === 0
-            ;
 
-            if(continueSave === true) {
+            if(module.exports.checkValidatePath(filePath) === true) {
                 // Datei Speichern
                 try {
                     fs.rmSync(filePath, {recursive: true});
@@ -162,18 +175,8 @@ module.exports = {
         if(module.exports.poisonNull(paths)) {
             // Lege Pfad fest
             let filePath        = pathMod.join(...paths);
-            let continueSave    =
-                filePath.indexOf(PANEL_CONFIG.servRoot) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.logRoot) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.pathBackup) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.steamCMDRoot) === 0 ||
-                filePath.indexOf(`${mainDir}\\public`) === 0 ||
-                filePath.indexOf(`${mainDir}\\app\\json`) === 0 ||
-                filePath.indexOf(`${mainDir}\\app\\data`) === 0 ||
-                filePath.indexOf(`${mainDir}\\app\\cmd`) === 0
-            ;
 
-            if(continueSave === true) {
+            if(module.exports.checkValidatePath(filePath) === true) {
                 // Datei Speichern
                 try {
                     fs.mkdirSync(filePath, {recursive: true});
@@ -199,18 +202,8 @@ module.exports = {
         if(module.exports.poisonNull(paths)) {
             // Lege Pfad fest
             let filePath        = pathMod.join(...paths);
-            let continueSave    =
-                filePath.indexOf(PANEL_CONFIG.servRoot) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.logRoot) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.pathBackup) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.steamCMDRoot) === 0 ||
-                filePath.indexOf(`${mainDir}\\public`) === 0 ||
-                filePath.indexOf(`${mainDir}\\app\\json`) === 0 ||
-                filePath.indexOf(`${mainDir}\\app\\data`) === 0 ||
-                filePath.indexOf(`${mainDir}\\app\\cmd`) === 0
-            ;
 
-            if(continueSave === true) {
+            if(module.exports.checkValidatePath(filePath) === true) {
                 // Datei Speichern
                 try {
                     if(!fs.existsSync(pathMod.dirname(filePath))) fs.mkdirSync(pathMod.dirname(filePath), {recursive: true});
@@ -228,6 +221,8 @@ module.exports = {
     /**
      * Gibt aus ob eine Datei exsistiert
      * @param {string[]} paths Pfade zur Datei
+     * @param {boolean} json JSON.parse(this)
+     * @param {string} codierung Coodierung die Benutzt werden soll
      * @return {boolean}
      */
     safeFileExsistsSync(paths, json = false, codierung = 'utf8') {
@@ -235,16 +230,8 @@ module.exports = {
         if(module.exports.poisonNull(paths)) {
             // Lege Pfad fest
             let filePath        = pathMod.join(...paths);
-            let continueSave    =
-                filePath.indexOf(PANEL_CONFIG.servRoot) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.logRoot) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.pathBackup) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.steamCMDRoot) === 0 ||
-                filePath.indexOf(mainDir) === 0 ||
-                filePath.indexOf(`${mainDir}\\app\\config\\mysql.json`) !== 0
-            ;
 
-            if(continueSave === true) {
+            if(module.exports.checkValidatePath(filePath) === true) {
                 return fs.existsSync(filePath);
             }
         }
@@ -263,16 +250,8 @@ module.exports = {
         if(module.exports.poisonNull(paths)) {
             // Lege Pfad fest
             let filePath        = pathMod.join(...paths);
-            let continueSave    =
-                filePath.indexOf(PANEL_CONFIG.servRoot) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.logRoot) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.pathBackup) === 0 ||
-                filePath.indexOf(PANEL_CONFIG.steamCMDRoot) === 0 ||
-                filePath.indexOf(mainDir) === 0 ||
-                filePath.indexOf(`${mainDir}\\app\\config\\mysql.json`) !== 0
-            ;
 
-            if(continueSave === true && fs.existsSync(filePath)) {
+            if(module.exports.checkValidatePath(filePath) === true && fs.existsSync(filePath)) {
                 // Datei Speichern
                 try {
                     return json ? JSON.parse(fs.readFileSync(filePath, codierung)) : fs.readFileSync(filePath, codierung);
