@@ -33,7 +33,7 @@ router.route('/')
 
         res.render('pages/grouppanel', {
             icon                : "fas fa-users",
-            pagename            : PANEL_LANG.pagename.userpanel,
+            pagename            : PANEL_LANG.pagename.grouppanel,
             page                : "grouppanel",
             resp                : resp,
             perm                : userHelper.permissions(req.session.uid),

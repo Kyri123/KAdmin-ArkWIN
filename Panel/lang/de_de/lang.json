@@ -4,12 +4,12 @@
     "reg"                   : "Account Erstellen",
     "home"                  : "Dashboard",
     "usersettings"          : "Benutzereinstellungen",
-    "goruppanel"            : "Benutzer und Gruppen",
+    "group_user"            : "Benutzer und Gruppen",
     "userpanel"             : "Benutzer",
     "servercontrolcenter"   : "ServerControlCenter",
     "err404"                : "Seite konnte nicht gefunden werden",
     "err401"                : "Keine Berechtigung",
-    "changelog"             : "Changelogs"
+    "grouppanel"            : "Benutzergruppen"
   },
 
   "updaterLOG": {
