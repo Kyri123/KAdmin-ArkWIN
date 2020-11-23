@@ -26,7 +26,7 @@ let   pathFile  = ``;
 // Lade Konfiguration
 pathFile    = pathMod.join(mainDir, '/app/config/', 'app.json');
 console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m Load: ${pathFile}`);
-if(globalUtil.safeFileExsistsSync([pathFile])) {
+if(fs.existsSync(pathFile)) {
     global.PANEL_CONFIG = JSON.parse(fs.readFileSync(pathFile, 'utf8'));
 }
 else {
