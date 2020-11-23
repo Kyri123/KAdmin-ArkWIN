@@ -21,7 +21,7 @@ module.exports = {
      */
     runCMD: (command, doLog = false, logFile = '', useCMDWindow = true) => {
         let steamCMDPath    = pathMod.join(PANEL_CONFIG.steamCMDRoot, 'steamcmd.exe');
-        if(fs.existsSync(steamCMDPath)) {
+        if(globalUtil.safeFileExsistsSync([steamCMDPath])) {
             let doThis = useCMDWindow ?
                 `start ${steamCMDPath} +login anonymous ${command} +exit${!doLog ? '' : ` > ${logFile}`}` :
                 `${steamCMDPath} +login anonymous ${command} +exit${!doLog ? '' : ` > ${logFile}`}`;

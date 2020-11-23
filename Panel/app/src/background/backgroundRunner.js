@@ -64,7 +64,7 @@ module.exports = {
     getTraffic: async () => {
         async function getTraffic() {
             osu.cpu.usage().then (cpuPercentage => {
-                let disk_path = pathMod.join(fs.existsSync(pathMod.join(PANEL_CONFIG.servRoot)) ? PANEL_CONFIG.servRoot : mainDir);
+                let disk_path = pathMod.join(globalUtil.safeFileExsistsSync([PANEL_CONFIG.servRoot]) ? PANEL_CONFIG.servRoot : mainDir);
                 disk(disk_path).then((info) => {
                     si.mem()
                         .then(mem => {
@@ -138,30 +138,28 @@ module.exports = {
             // Suche Mods zusammen
             if(serverInfos.servers_arr.length > 0) {
                 serverInfos.servers_arr.forEach((val) => {
-                    if(!fs.existsSync(pathMod.join(`${val[0].pathLogs}.cmd`))) {
-                        // Auto Update system
-                        if(val[1].autoUpdate) {
-                            if(Date.now() > val[1].autoUpdateNext && val[1].is_free) {
-                                serverCommands.doUpdateServer(val[0], false, true, true);
-                                serverUtil.writeConfig(val[0], "autoUpdateNext", (Date.now() + val[1].autoUpdateInterval));
-                                if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m run > doServerBackgrounder > autoUpdate > ${val[0]}`);
-                            }
+                    // Auto Update system
+                    if(val[1].autoUpdate) {
+                        if(Date.now() > val[1].autoUpdateNext && val[1].is_free) {
+                            serverCommands.doUpdateServer(val[0], false, true, true);
+                            serverUtil.writeConfig(val[0], "autoUpdateNext", (Date.now() + val[1].autoUpdateInterval));
+                            if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m run > doServerBackgrounder > autoUpdate > ${val[0]}`);
                         }
+                    }
 
-                        // Auto Backup system
-                        if(val[1].autoBackup) {
-                            if(Date.now() > val[1].autoBackupNext && val[1].is_free) {
-                                serverCommands.doBackup(val[0], true);
-                                serverUtil.writeConfig(val[0], "autoBackupNext", (Date.now() + val[1].autoBackupInterval));
-                                if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m run > doServerBackgrounder > autoBackup > ${val[0]}`);
-                            }
+                    // Auto Backup system
+                    if(val[1].autoBackup) {
+                        if(Date.now() > val[1].autoBackupNext && val[1].is_free) {
+                            serverCommands.doBackup(val[0], true);
+                            serverUtil.writeConfig(val[0], "autoBackupNext", (Date.now() + val[1].autoBackupInterval));
+                            if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m run > doServerBackgrounder > autoBackup > ${val[0]}`);
                         }
+                    }
 
-                        // soll der Server laufen?
-                        if(val[1].shouldRun && val[1].is_free && val[1].pid === 0 && !val[1].run) {
-                            if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m run > doServerBackgrounder > Start > ${val[0]}`);
-                            if(val[1].is_free) serverCommands.doStart(val[0]);
-                        }
+                    // soll der Server laufen?
+                    if(val[1].shouldRun && val[1].is_free && val[1].pid === 0 && !val[1].run) {
+                        if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m run > doServerBackgrounder > Start > ${val[0]}`);
+                        if(val[1].is_free) serverCommands.doStart(val[0]);
                     }
                 })
             }
@@ -180,14 +178,14 @@ module.exports = {
     doReReadConfig: async (time) => {
         async function doReReadConfig() {
             // Lade Konfiguration
-            if(fs.existsSync(pathMod.join(mainDir, '/app/config/', 'app.json'))) {
+            if(globalUtil.safeFileExsistsSync([mainDir, '/app/config/', 'app.json'])) {
                 global.PANEL_CONFIG = globalUtil.safeFileReadSync([mainDir, '/app/config/', 'app.json'], true);
             }
             else {
                 process.exit(1);
             }
 
-            if(fs.existsSync(pathMod.join(mainDir, '/app/config/', 'main.json'))) {
+            if(globalUtil.safeFileExsistsSync([mainDir, '/app/config/', 'main.json'])) {
                 global.PANEL_MAIN = globalUtil.safeFileReadSync([mainDir, '/app/config/', 'main.json'], true);
             }
             else {
@@ -195,14 +193,14 @@ module.exports = {
             }
 
             // Lade Sprachdatei(en)
-            if(fs.existsSync(pathMod.join(mainDir, '/lang/', PANEL_CONFIG.lang, 'lang.json'))) {
+            if(globalUtil.safeFileExsistsSync([mainDir, '/lang/', PANEL_CONFIG.lang, 'lang.json'])) {
                 global.PANEL_LANG = globalUtil.safeFileReadSync([mainDir, '/lang/', PANEL_CONFIG.lang, 'lang.json'], true);
             }
             else {
                process.exit(1);
             }
 
-            if(fs.existsSync(pathMod.join(mainDir, '/lang/', PANEL_CONFIG.lang, 'alert.json'))) {
+            if(globalUtil.safeFileExsistsSync([mainDir, '/lang/', PANEL_CONFIG.lang, 'alert.json'])) {
                 global.PANEL_LANG_ALERT = globalUtil.safeFileReadSync([mainDir, '/lang/', PANEL_CONFIG.lang, 'alert.json'], true);
             }
             else {
@@ -234,7 +232,7 @@ module.exports = {
                     if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")}] Auto-Updater: \x1b[91m${PANEL_LANG.updaterLOG.conErr}`);
                 } else if (res.statusCode === 200) {
                     // Prüfe SHA mit API
-                    if(!fs.existsSync(pathMod.join(mainDir, '/app/data/', 'sha.txt'))) globalUtil.safeFileSaveSync([mainDir, '/app/data/', 'sha.txt'], "false");
+                    if(!globalUtil.safeFileExsistsSync([mainDir, '/app/data/', 'sha.txt'])) globalUtil.safeFileSaveSync([mainDir, '/app/data/', 'sha.txt'], "false");
                     fs.readFile(pathMod.join(mainDir, '/app/data/', 'sha.txt'), 'utf8', (err, data) => {
                         if (err === null) {
                             if (data === api.commit.sha) {

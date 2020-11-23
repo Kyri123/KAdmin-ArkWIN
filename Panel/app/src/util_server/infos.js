@@ -113,7 +113,7 @@ module.exports = {
         if(globalUtil.poisonNull(iniName) && globalUtil.poisonNull(server)) {
             let config  = module.exports.getConfig(server);
             let path    = pathMod.join(config.path, '\\ShooterGame\\Saved\\Config\\WindowsServer');
-            if(!fs.existsSync(path)) fs.mkdirSync(path, {recursive: true});
+            if(!globalUtil.safeFileExsistsSync([path])) globalUtil.safeFileMkdirSync([path]);
             try {
                 globalUtil.safeFileSaveSync([path,`${iniName}.ini`], JSON.stringify(ini));
                 return true;

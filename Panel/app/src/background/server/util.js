@@ -92,16 +92,16 @@ module.exports = {
 
                     if(
                         KEY !== false &&
-                        fs.existsSync(pathMod.join(servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.modtime`))
+                        globalUtil.safeFileExsistsSync([servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.modtime`])
                     ) {
                         let modtime     = parseInt(globalUtil.safeFileReadSync([servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.modtime`]));
                         let API_UPDATE  = API[KEY].time_updated;
                         if(API_UPDATE > modtime) modsNeedUpdate.push(modid);
                     }
                     else if(
-                        !fs.existsSync(pathMod.join(servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.mod`))      ||
-                        !fs.existsSync(pathMod.join(servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.modtime`))  ||
-                        !fs.existsSync(pathMod.join(servConfig.path, '\\ShooterGame\\Content\\Mods\\', modid))
+                        !globalUtil.safeFileExsistsSync([servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.mod`])      ||
+                        !globalUtil.safeFileExsistsSync([servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.modtime`])  ||
+                        !globalUtil.safeFileExsistsSync([servConfig.path, '\\ShooterGame\\Content\\Mods\\', modid])
                     ) {
                         modsNeedUpdate.push(modid);
                     }

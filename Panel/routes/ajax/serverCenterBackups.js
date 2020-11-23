@@ -24,7 +24,7 @@ router.route('/')
             let success     = false;
             try {
                 if(globalUtil.poisonNull(POST.file)) {
-                    fs.rmSync(pathMod.join(serverCFG.pathBackup, POST.file));
+                    globalUtil.safeFileRmSync([serverCFG.pathBackup, POST.file]);
                     success = true;
                 }
             }
@@ -46,9 +46,9 @@ router.route('/')
 
             if(serverCFG.server === undefined) {
                 let savePath    = pathMod.join(serverCFG.path, '\\ShooterGame\\Saved');
-                if(fs.existsSync(savePath))  fs.rmSync(savePath, {recursive: true});
-                if(!fs.existsSync(savePath)) fs.mkdirSync(savePath);
-                if(fs.existsSync(savePath) && serverINFO.pid === 0) {
+                if(globalUtil.safeFileExsistsSync([savePath]))  globalUtil.safeFileRmSync([savePath]);
+                if(!globalUtil.safeFileExsistsSync([savePath])) globalUtil.safeFileMkdirSync([savePath]);
+                if(globalUtil.safeFileExsistsSync([savePath]) && serverINFO.pid === 0) {
                     serverCmd.runCMD(`powershell -command "Expand-Archive -Force -LiteralPath '${serverCFG.pathBackup}\\${POST.file}' -DestinationPath '${serverCFG.path}\\ShooterGame\\Saved'"`)
                     success = true;
                 }
@@ -70,7 +70,7 @@ router.route('/')
 
         // GET serverInfos
         if(GET.getDir !== undefined && GET.server !== undefined) {
-            if(fs.existsSync(pathMod.join(serverUtilInfos.getConfig(GET.server).pathBackup))) res.render('ajax/json', {
+            if(globalUtil.safeFileExsistsSync([serverUtilInfos.getConfig(GET.server).pathBackup])) res.render('ajax/json', {
                 data: JSON.stringify(fs.readdirSync(pathMod.join(serverUtilInfos.getConfig(GET.server).pathBackup)))
             });
         }

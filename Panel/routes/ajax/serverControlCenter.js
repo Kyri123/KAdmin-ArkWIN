@@ -85,9 +85,9 @@ router.route('/')
 
             // lösche alle Informationen
             try {
-                if (fs.existsSync(pathMod.join(mainDir, '/app/json/server/', `${serverName}.json`)))                  fs.rmSync(pathMod.join(mainDir, '/app/json/server/', `${serverName}.json`));
-                if (fs.existsSync(pathMod.join(mainDir, '/public/json/server/', `${serverName}.json`)))               fs.rmSync(pathMod.join(mainDir, '/public/json/server/', `${serverName}.json`));
-                if (fs.existsSync(pathMod.join(mainDir, '/public/json/serveraction/', `action_${serverName}.json`)))  fs.rmSync(pathMod.join(mainDir, '/public/json/serveraction/', `action_${serverName}.json`));
+                if (globalUtil.safeFileExsistsSync([mainDir, '/app/json/server/', `${serverName}.json`]))                  globalUtil.safeFileRmSync([mainDir, '/app/json/server/', `${serverName}.json`]);
+                if (globalUtil.safeFileExsistsSync([mainDir, '/public/json/server/', `${serverName}.json`]))               globalUtil.safeFileRmSync([mainDir, '/public/json/server/', `${serverName}.json`]);
+                if (globalUtil.safeFileExsistsSync([mainDir, '/public/json/serveraction/', `action_${serverName}.json`]))  globalUtil.safeFileRmSync([mainDir, '/public/json/serveraction/', `action_${serverName}.json`]);
 
                 res.render('ajax/json', {
                     data: JSON.stringify({

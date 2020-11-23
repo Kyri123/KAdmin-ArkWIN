@@ -23,7 +23,7 @@ module.exports = {
         dirArray.forEach((ITEM,KEY) => {
             try {
                 // Serverliste
-                if(fs.existsSync(pathMod.join(serverLocalPath, ITEM))) {
+                if(globalUtil.safeFileExsistsSync([serverLocalPath, ITEM])) {
                     let array   = globalUtil.safeFileReadSync([serverLocalPath, ITEM], true);
                     if(array !== false) {
                         ITEM    = ITEM.replace(".json", '');
@@ -32,7 +32,7 @@ module.exports = {
                     }
                 }
                 else {
-                    fs.rmSync(pathMod.join(serverLocalPath, ITEM));
+                    globalUtil.safeFileRmSync([serverLocalPath, ITEM]);
                 }
             }
             catch (e) {

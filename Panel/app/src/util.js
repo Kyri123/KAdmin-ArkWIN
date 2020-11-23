@@ -27,7 +27,7 @@ module.exports = {
      * @return {Promise<array|boolean>}
      */
     toAcfToArraySync: (logPath) => {
-        if(fs.existsSync(pathMod.join(logPath))) {
+        if(globalUtil.safeFileExsistsSync([logPath])) {
             let file     = module.exports.safeFileReadSync([logPath]);
             if(file !== false) {
                 let rawFile  = file.toString();
@@ -66,7 +66,7 @@ module.exports = {
      */
     toAcfToArray: async (logPath) => {
         return new Promise(resolve => {
-            if(fs.existsSync(pathMod.join(logPath))) {
+            if(globalUtil.safeFileExsistsSync([logPath])) {
                 let file     = module.exports.safeFileReadSync([logPath]);
                 if(file !== false) {
                     let rawFile  = file.toString();
@@ -118,6 +118,76 @@ module.exports = {
     },
 
     /**
+     * Entfernt eine Datei
+     * @param {string[]} paths Pfade zur Datei
+     * @return {boolean}
+     */
+    safeFileRmSync(paths) {
+        // Prüfe Pfad
+        if(module.exports.poisonNull(paths)) {
+            // Lege Pfad fest
+            let filePath        = pathMod.join(...paths);
+            let continueSave    =
+                filePath.indexOf(PANEL_CONFIG.servRoot) === 0 ||
+                filePath.indexOf(PANEL_CONFIG.logRoot) === 0 ||
+                filePath.indexOf(PANEL_CONFIG.pathBackup) === 0 ||
+                filePath.indexOf(PANEL_CONFIG.steamCMDRoot) === 0 ||
+                filePath.indexOf(`${mainDir}\\public`) === 0 ||
+                filePath.indexOf(`${mainDir}\\app\\json`) === 0 ||
+                filePath.indexOf(`${mainDir}\\app\\data`) === 0 ||
+                filePath.indexOf(`${mainDir}\\app\\cmd`) === 0
+            ;
+
+            if(continueSave === true) {
+                // Datei Speichern
+                try {
+                    fs.rmSync(filePath, {recursive: true});
+                    return true;
+                }
+                catch (e) {
+                    if(debug) console.log(e);
+                }
+            }
+        }
+        return false;
+    },
+
+    /**
+     * Erstellt ein OrdnerPfad
+     * @param {string[]} paths Pfade zur Datei
+     * @return {boolean}
+     */
+    safeFileMkdirSync(paths) {
+        // Prüfe Pfad
+        if(module.exports.poisonNull(paths)) {
+            // Lege Pfad fest
+            let filePath        = pathMod.join(...paths);
+            let continueSave    =
+                filePath.indexOf(PANEL_CONFIG.servRoot) === 0 ||
+                filePath.indexOf(PANEL_CONFIG.logRoot) === 0 ||
+                filePath.indexOf(PANEL_CONFIG.pathBackup) === 0 ||
+                filePath.indexOf(PANEL_CONFIG.steamCMDRoot) === 0 ||
+                filePath.indexOf(`${mainDir}\\public`) === 0 ||
+                filePath.indexOf(`${mainDir}\\app\\json`) === 0 ||
+                filePath.indexOf(`${mainDir}\\app\\data`) === 0 ||
+                filePath.indexOf(`${mainDir}\\app\\cmd`) === 0
+            ;
+
+            if(continueSave === true) {
+                // Datei Speichern
+                try {
+                    fs.mkdirSync(filePath, {recursive: true});
+                    return true;
+                }
+                catch (e) {
+                    if(debug) console.log(e);
+                }
+            }
+        }
+        return false;
+    },
+
+    /**
      * Speichert sicher eine Datei
      * @param {string[]} paths Pfade zur Datei
      * @param {string} data Daten die Gespeichert werden sollen
@@ -150,6 +220,32 @@ module.exports = {
                 catch (e) {
                     if(debug) console.log(e);
                 }
+            }
+        }
+        return false;
+    },
+
+    /**
+     * Gibt aus ob eine Datei exsistiert
+     * @param {string[]} paths Pfade zur Datei
+     * @return {boolean}
+     */
+    safeFileExsistsSync(paths, json = false, codierung = 'utf8') {
+        // Prüfe Pfad
+        if(module.exports.poisonNull(paths)) {
+            // Lege Pfad fest
+            let filePath        = pathMod.join(...paths);
+            let continueSave    =
+                filePath.indexOf(PANEL_CONFIG.servRoot) === 0 ||
+                filePath.indexOf(PANEL_CONFIG.logRoot) === 0 ||
+                filePath.indexOf(PANEL_CONFIG.pathBackup) === 0 ||
+                filePath.indexOf(PANEL_CONFIG.steamCMDRoot) === 0 ||
+                filePath.indexOf(mainDir) === 0 ||
+                filePath.indexOf(`${mainDir}\\app\\config\\mysql.json`) !== 0
+            ;
+
+            if(continueSave === true) {
+                return fs.existsSync(filePath);
             }
         }
         return false;

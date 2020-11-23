@@ -447,7 +447,7 @@ module.exports = {
             let pathToZip               = pathMod.join(servConfig.path, '\\ShooterGame\\Saved');
             let backupPath              = pathMod.join(servConfig.pathBackup);
             let ZIP_name                = `${Date.now()}.zip`;
-            let canZIP                  = fs.existsSync(pathToZip) && !fs.existsSync(pathMod.join(backupPath, ZIP_name));
+            let canZIP                  = globalUtil.safeFileExsistsSync([pathToZip]) && !globalUtil.safeFileExsistsSync([backupPath, ZIP_name]);
 
             // CMD Line
             let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
@@ -461,7 +461,7 @@ module.exports = {
             // Prüfe ob Ordner exsistiert und mache davon ein Backup
             if(canZIP) {
                 actionResponse          += `${PANEL_LANG.logger.doBackupThis}: ${Date.now()}.zip\n`;
-                if(!fs.existsSync(backupPath)) fs.mkdirSync(backupPath);
+                if(!globalUtil.safeFileExsistsSync([backupPath])) globalUtil.safeFileMkdirSync([backupPath]);
                 cmdCommand  += `powershell -command "Add-Type -Assembly \\"System.IO.Compression.FileSystem\\" ;[System.IO.Compression.ZipFile]::CreateFromDirectory(\\"${pathToZip}\\", \\"${backupPath}\\${ZIP_name}\\") ;"\n`;
             }
             else {

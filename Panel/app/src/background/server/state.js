@@ -54,7 +54,7 @@ module.exports = {
             if (ITEM.includes(".json")) {
 
                 let file = pathMod.join(mainDir, '/public/json/server/');
-                if(!fs.existsSync(file)) fs.mkdirSync(file);
+                if(!globalUtil.safeFileExsistsSync([file])) globalUtil.safeFileMkdirSync([file]);
                 let name            = ITEM.replace(".json", "");
                 let data            = serverInfos.getServerInfos(name);
                 let servCFG         = serverInfos.getConfig(name);
@@ -65,7 +65,7 @@ module.exports = {
                 data.notInstalledMods  = [];
                 if(servCFG.server === undefined) {
                     let modPath         = pathMod.join(servCFG.path, '\\ShooterGame\\Content\\Mods');
-                    let dirRead         = fs.existsSync(modPath) ? fs.readdirSync(modPath, { withFileTypes: true }) : [];
+                    let dirRead         = globalUtil.safeFileExsistsSync([modPath]) ? fs.readdirSync(modPath, { withFileTypes: true }) : [];
 
                     if(dirRead.length > 0) {
                         dirRead.forEach((val) => {
@@ -74,9 +74,9 @@ module.exports = {
                                 (val.isFile()       && val.name !== "111111111.mod" && !isNaN(val.name.replace(".mod", ""))) ||
                                 (val.isDirectory()  && val.name !== "111111111"     && !isNaN(val.name))
                             ) if(
-                                fs.existsSync(pathMod.join(modPath, parseInt(val.name).toString())) &&
-                                fs.existsSync(pathMod.join(modPath, parseInt(val.name).toString() + '.mod')) &&
-                                fs.existsSync(pathMod.join(modPath, parseInt(val.name).toString() + '.modtime'))
+                                globalUtil.safeFileExsistsSync([modPath, parseInt(val.name).toString()]) &&
+                                globalUtil.safeFileExsistsSync([modPath, parseInt(val.name).toString() + '.mod']) &&
+                                globalUtil.safeFileExsistsSync([modPath, parseInt(val.name).toString() + '.modtime'])
                             ) if(
                                 !data.installedMods.includes(parseInt(val.name).toString())
                             ) data.installedMods.push(parseInt(val.name).toString());
@@ -102,8 +102,8 @@ module.exports = {
                 data.ServerName     = servCFG.sessionName;
                 data.ARKServers     = `https://arkservers.net/server/${ip.address()}:${servCFG.query}`;
                 data.connect        = `steam://connect/${ip.address()}:${servCFG.query}`;
-                data.is_installing  = fs.existsSync(pathMod.join(serverPath, '\\steamapps\\', `appmanifest_${PANEL_CONFIG.appID_server}.acf`)) && !fs.existsSync(pathMod.join(serverPath, '\\ShooterGame\\Binaries\\Win64\\', 'ShooterGameServer.exe'));
-                data.is_installed   = fs.existsSync(pathMod.join(serverPath, '\\ShooterGame\\Binaries\\Win64\\', 'ShooterGameServer.exe'));
+                data.is_installing  = globalUtil.safeFileExsistsSync([serverPath, '\\steamapps\\', `appmanifest_${PANEL_CONFIG.appID_server}.acf`]) && !globalUtil.safeFileExsistsSync([serverPath, '\\ShooterGame\\Binaries\\Win64\\', 'ShooterGameServer.exe']);
+                data.is_installed   = globalUtil.safeFileExsistsSync([serverPath, '\\ShooterGame\\Binaries\\Win64\\', 'ShooterGameServer.exe']);
                 data.is_free        = true;
                 // Runing infos
                 data.run            = false;

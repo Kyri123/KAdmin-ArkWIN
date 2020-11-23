@@ -24,9 +24,9 @@ router.route('/')
                 let success = false;
                 try {
                     let modPath = pathMod.join(serverCfg.path, '\\ShooterGame\\Content\\Mods\\');
-                    if(fs.existsSync(pathMod.join(modPath, `${modID}.mod`)))        fs.rmSync(pathMod.join(modPath, `${modID}.mod`), {recursive: true})
-                    if(fs.existsSync(pathMod.join(modPath, `${modID}.modtime`)))    fs.rmSync(pathMod.join(modPath, `${modID}.modtime`), {recursive: true})
-                    if(fs.existsSync(pathMod.join(modPath, modID)))                 fs.rmSync(pathMod.join(modPath, modID), {recursive: true})
+                    if(globalUtil.safeFileExsistsSync([modPath, `${modID}.mod`]))        globalUtil.safeFileRmSync([modPath, `${modID}.mod`])
+                    if(globalUtil.safeFileExsistsSync([modPath, `${modID}.modtime`]))    globalUtil.safeFileRmSync([modPath, `${modID}.modtime`])
+                    if(globalUtil.safeFileExsistsSync([modPath, modID]))                 globalUtil.safeFileRmSync([modPath, modID])
                     success = true;
                 }
                 catch (e) {

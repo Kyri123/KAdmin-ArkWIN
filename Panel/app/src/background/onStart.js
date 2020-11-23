@@ -35,7 +35,7 @@ module.exports = {
         if(serverInfos.servers_arr.length > 0) {
             serverInfos.servers_arr.forEach((val) => {
                 let file = pathMod.join(`${val[1].pathLogs}.cmd`);
-               if(fs.existsSync(file)) fs.rmSync(file)
+               if(globalUtil.safeFileExsistsSync([file])) globalUtil.safeFileRmSync([file])
             });
         }
     },
