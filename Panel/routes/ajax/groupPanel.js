@@ -19,6 +19,14 @@ router.route('/')
     .get((req,res)=>{
         // DEFAULT AJAX
         let GET         = req.query;
+        let sess        = req.session;
+
+        // Userlist
+        if(GET.getgrouplist) res.render('ajax/json', {
+                data: JSON.stringify({
+                    userlist: globalUtil.safeSendSQLSync('SELECT `id`, `username`, `email`, `lastlogin`, `registerdate`, `rang`, `ban` FROM ArkAdmin_user_group')
+                })
+            });
     })
 
 module.exports = router;

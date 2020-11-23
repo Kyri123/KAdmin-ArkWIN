@@ -50,6 +50,27 @@ module.exports = {
     },
 
     /**
+     * Gibt die default Permission aus
+     * @returns {array}
+     */
+    defaultPermissions: () => {
+        let permissions         = globalUtil.safeFileReadSync([mainDir, '/app/json/permissions/', 'default.json'], true);
+        let servers             = getServerList();
+
+        for (const [key] of Object.entries(servers)) {
+            try {
+                let permissions_servers = globalUtil.safeFileReadSync([mainDir, '/app/json/permissions/', 'default_server.json'], true);
+                permissions.server[key] = permissions_servers;
+            }
+            catch (e) {
+                if(debug) console.log(e);
+            }
+        }
+
+        return permissions;
+    },
+
+    /**
      * Gibt den Permission array eines Users aus
      * @param {int} uid Benutzer ID
      * @returns {any|{id: number}}

@@ -43,7 +43,7 @@ router.use('/ajax/serverCenterAPI',         isLoggedIn    ,                     
 router.use('/ajax/usersettings',            isLoggedIn    ,                     require('./ajax/usersettings'));                    // Benutzereinstellugen             | Muss eingeloggt sein
 router.use('/ajax/servercontrolcenter',     isLoggedIn    ,                     require('./ajax/serverControlCenter'));             // ServerControlCenter              | Muss eingeloggt sein
 router.use('/ajax/userpanel',               isLoggedIn    ,                     require('./ajax/userPanel'));                       // Benutzer                         | Muss eingeloggt sein
-router.use('/ajax/usergroup',               isLoggedIn    ,                     require('./ajax/userGroup'));                       // Benutzereinstellugen             | Muss eingeloggt sein
+router.use('/ajax/usergroup',               isLoggedIn    ,                     require('./ajax/groupPanel'));                       // Benutzereinstellugen             | Muss eingeloggt sein
 
 
 // Error seiten

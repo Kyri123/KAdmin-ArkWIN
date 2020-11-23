@@ -16,7 +16,7 @@
             </div>
             <div class="info" style="margin-top:-10px">
                 <span class="text-sm"><%- PANEL_LANG.sideNav.welcome %></span><br>
-                <span class="text-sm" id="leftUsername"><%- user.username %></span>
+                <span class="text-sm text-<%- userHelper.hasPermissions(user.id, "all/is_admin") ? "danger" : "success" %>" id="leftUsername"><%- user.username %></span>
             </div>
         </a>
 
@@ -57,44 +57,48 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="/servercontrolcenter" class="nav-link <%- page === "servercontrolcenter" ? "active" : "" %>">
-                        <i class="nav-icon fa fa-server" aria-hidden="true"></i>
-                        <p>
-                            <%- PANEL_LANG.pagename.servercontrolcenter %>
-                        </p>
-                    </a>
-                </li>
+                <% if(userHelper.hasPermissions(user.id, "servercontrolcenter/show")) { %>
+                    <li class="nav-item">
+                        <a href="/servercontrolcenter" class="nav-link <%- page === "servercontrolcenter" ? "active" : "" %>">
+                            <i class="nav-icon fa fa-server" aria-hidden="true"></i>
+                            <p>
+                                <%- PANEL_LANG.pagename.servercontrolcenter %>
+                            </p>
+                        </a>
+                    </li>
+                <% } %>
 
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link <%- page === "userpanel" || page === "usergroup" ? "active" : "" %>">
-                        <i class="nav-icon fas fa-users-cog" aria-hidden="true"></i>
-                        <p>
-                            <%- PANEL_LANG.pagename.gorup_user %>
-                            <i class="right fas fa-angle-left" aria-hidden="true"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <!-- Benutzer -->
-                        <li class="nav-item">
-                            <a href="/userpanel" class="nav-link <%- page === "userpanel" ? "active" : "" %>">
-                                <i class="nav-icon fas fa-user" aria-hidden="true"></i>
-                                <p><%- PANEL_LANG.pagename.userpanel %></p>
-                            </a>
-                        </li>
+                <% if(userHelper.hasPermissions(user.id, "userpanel/show")) { %>
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link <%- page === "userpanel" || page === "grouppanel" ? "active" : "" %>">
+                            <i class="nav-icon fas fa-users-cog" aria-hidden="true"></i>
+                            <p>
+                                <%- PANEL_LANG.pagename.gorup_user %>
+                                <i class="right fas fa-angle-left" aria-hidden="true"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <!-- Benutzer -->
+                            <li class="nav-item">
+                                <a href="/userpanel" class="nav-link <%- page === "userpanel" ? "active" : "" %>">
+                                    <i class="nav-icon fas fa-user" aria-hidden="true"></i>
+                                    <p><%- PANEL_LANG.pagename.userpanel %></p>
+                                </a>
+                            </li>
 
-
-                        <!-- Benutzergruppen
-                        <li class="nav-item">
-                            <a href="/usergroup" class="nav-link ">
-                                <i class="nav-icon fas fa-users" aria-hidden="true"></i>
-                                <p>Benutzergruppen</p>
-                            </a>
-                        </li>-->
-
-                    </ul>
-                </li>
+                            <% if(userHelper.hasPermissions(user.id, "all/is_admin")) { %>
+                                <!-- Benutzergruppen -->
+                                <li class="nav-item">
+                                    <a href="/grouppanel" class="nav-link <%- page === "grouppanel" ? "active" : "" %>">
+                                        <i class="nav-icon fas fa-users" aria-hidden="true"></i>
+                                        <p><%- PANEL_LANG.pagename.grouppanel %></p>
+                                    </a>
+                                </li>
+                            <% } %>
+                        </ul>
+                    </li>
+                <% } %>
 
                 <!--<li class="nav-item">
                     <a href="/changelog" class="nav-link   ">

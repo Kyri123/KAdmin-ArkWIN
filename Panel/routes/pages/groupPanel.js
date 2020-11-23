@@ -12,7 +12,13 @@ const router        = express.Router()
 const globalinfos   = require('./../../app/src/global_infos');
 const userHelper   = require('./../../app/src/sessions/helper');
 
-const topBtn    = ``;
+const topBtn    = `<div class="d-sm-inline-block">
+                        <a href="#" class="btn btn-outline-success btn-icon-split rounded-0" data-toggle="modal" data-target="#group">
+                            <span class="icon">
+                                <i class="fas fa-plus" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </div>`;
 
 router.route('/')
 
@@ -26,15 +32,14 @@ router.route('/')
         }
 
         res.render('pages/grouppanel', {
-            icon            : "fas fa-users",
-            pagename        : PANEL_LANG.pagename.userpanel,
-            page            : "grouppanel",
-            resp            : resp,
-            perm            : userHelper.permissions(req.session.uid),
-            sinfos          : globalinfos.get(),
-            new_email       : false,
-            new_username    : false,
-            topBtn          : topBtn
+            icon                : "fas fa-users",
+            pagename            : PANEL_LANG.pagename.userpanel,
+            page                : "grouppanel",
+            resp                : resp,
+            perm                : userHelper.permissions(req.session.uid),
+            sinfos              : globalinfos.get(),
+            topBtn              : topBtn,
+            defaultPermissions  : userHelper.defaultPermissions()
         });
     })
 

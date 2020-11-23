@@ -1,4 +1,4 @@
-[ 22.11.2020 12:00:57 ]
+[ 23.11.2020 09:42:16 ]
 Nach einer ausführung einer Aktion kann es eine kurze weile Dauern bis diese vollständig ausgeführt wurde oder der Server Aktiv ist (jenachdem ob ein Update nötig ist)
 Alle Mods werden Installiert/Geupdated: 5c68f48w
 Folgende Mods werden Installiert/Geupdated: 
@@ -6,6 +6,6 @@ Folgende Mods werden Installiert/Geupdated:
 2275336562
 942185438
 D:\servers\SteamCMD\steamcmd.exe +login anonymous +force_install_dir "D:\servers\Servers\5c68f48w" +workshop_download_item 346110 1428596566 +workshop_download_item 346110 2275336562 +workshop_download_item 346110 942185438 +quit
-1428596566,2275336562,942185438 - SUCCESS 
-1428596566,2275336562,942185438 - SUCCESS 
-1428596566,2275336562,942185438 - SUCCESS 
+1428596566 - SUCCESS 
+2275336562 - SUCCESS 
+942185438 - SUCCESS 
