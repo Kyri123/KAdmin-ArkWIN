@@ -234,7 +234,8 @@ module.exports = {
                     if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")}] Auto-Updater: \x1b[91m${PANEL_LANG.updaterLOG.conErr}`);
                 } else if (res.statusCode === 200) {
                     // Prüfe SHA mit API
-                    fs.readFile(pathMod.join(mainDir, '/app/data/', 'sha.txt'), (err, data) => {
+                    if(!fs.existsSync(pathMod.join(mainDir, '/app/data/', 'sha.txt'))) globalUtil.safeFileSaveSync([mainDir, '/app/data/', 'sha.txt'], "false");
+                    fs.readFile(pathMod.join(mainDir, '/app/data/', 'sha.txt'), 'utf8', (err, data) => {
                         if (err === null) {
                             if (data === api.commit.sha) {
                                 // kein Update
@@ -264,6 +265,7 @@ module.exports = {
                                     }, 5000);
                                     globalUtil.safeFileSaveSync([mainDir, '/app/data/', 'sha.txt'], api.commit.sha);
                                 }
+                                globalUtil.safeFileSaveSync([mainDir, '/app/data/', 'sha.txt'], api.commit.sha);
                             }
                         } else {
                             if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")}] Auto-Updater: \x1b[91m${PANEL_LANG.updaterLOG.noSha}`);
