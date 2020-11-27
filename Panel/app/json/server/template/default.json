@@ -21,7 +21,12 @@
   "maxPlayers"              : 70,
   "shouldRun"               : false,
   "serverMap"               : "TheIsland",
-  "flags"                   : [],
+  "flags"                   : [
+    "servergamelog",
+    "servergamelogincludetribelogs",
+    "ServerRCONOutputTribeLogs",
+    "logs"
+  ],
   "opt"                     : [],
   "mods"                    : []
 }

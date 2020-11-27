@@ -34,6 +34,12 @@ router.route('/')
             let resp    = "";
             let servCfg = serverUtilInfos.getConfig(serverName);
 
+            if(servCfg.flags.includes('epiconly') || servCfg.flags.includes('crossplay')) {
+                // wenn EpicOnly und/oder Crossplay aktiv sind
+                res.redirect(req.baseUrl + "/home");
+                return true;
+            }
+
             // Render Seite
             res.render('pages/servercenter/serverCenter_mods', {
                 icon                    : "fas fa-server",

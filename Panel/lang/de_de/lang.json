@@ -69,6 +69,14 @@
     }
   },
 
+  "parameter": {
+    "validate"            : "SteamCMD Validate",
+    "no-autoupdate"       : "Kein Automatisches Update",
+    "warn"                : "Spieler auf dem Server warnen (benötigt RCON)",
+    "saveworld"           : "Welt Speichern bevor dieser gestoppt wird (benötigt RCON)",
+    "alwaysstart"         : "Server beim Crash wieder starten"
+  },
+
   "usersettings": {
     "settings"            : "Account Einstellungen",
     "btnSave"             : "Speichern",

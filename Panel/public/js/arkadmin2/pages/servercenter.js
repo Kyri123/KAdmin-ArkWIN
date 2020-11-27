@@ -169,7 +169,7 @@ $('#action_sel').change(() => {
             <div class="icheck-primary mb-3 col-md-6">
                 <input type="checkbox" name="para[]" value="${val.parameter}" id="${val.id_js}">
                 <label for="${val.id_js}">
-                    ${val.parameter}
+                    ${vars.lang_arr.parameter[val.id_js]}
                 </label>
             </div>`;
         });

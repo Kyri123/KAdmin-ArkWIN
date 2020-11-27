@@ -128,6 +128,16 @@
     "text"  : "Es ist ein neues Update verfügbar Bitte beende den Server und starte <b>start_<branch>.cmd</b>"
   },
 
+  "3993": {
+    "title" : "Modidikationen Inaktiv",
+    "text"  : "Mods Sind auf dem Server Deaktiviert (Flagge Crossplay ODER EpicOnly ist aktiv)"
+  },
+
+  "3994": {
+    "title" : "Logs Inaktiv",
+    "text"  : "Flagge Logs Fehlt dadurch ist die Logs Seite deaktiviert"
+  },
+
   "3995": {
     "title" : "Allwaysstart",
     "text"  : "Server startet bei einem Crash neu"

@@ -41,8 +41,14 @@ router.route('/')
             let resp    = "";
             let servCfg = serverUtilInfos.getConfig(serverName);
 
+            if(!servCfg.flags.includes('logs')) {
+                // wenn EpicOnly und/oder Crossplay aktiv sind
+                res.redirect(req.baseUrl + "/home");
+                return true;
+            }
+
             // Render Seite
-            res.render('pages/servercenter/serverCenter_backups', {
+            res.render('pages/servercenter/serverCenter_logs', {
                 icon                    : "fas fa-server",
                 pagename                : servCfg.sessionName,
                 page                    : "servercenter",

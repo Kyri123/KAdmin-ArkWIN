@@ -139,6 +139,13 @@ module.exports = {
 
                     // Prüfe Mod Installiert
                     if(servCFG.shouldRun) data.alerts.push("3995");
+
+                    // Wenn Logs nicht verfügbar sind
+                    // TODO: 0.0.4 wieder Aktivieren
+                    //if(!servCFG.flags.includes('logs')) data.alerts.push("3994");
+
+                    // Wenn Mods nicht verfügbar sind
+                    if(servCFG.flags.includes('epiconly') || servCFG.flags.includes('crossplay')) data.alerts.push("3993");
                 }
                 else {
                     data.alerts.push("3999");

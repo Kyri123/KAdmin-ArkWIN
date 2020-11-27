@@ -21,14 +21,16 @@ module.exports = {
         let servConfig  = serverUtilInfos.getConfig(server);
         if(servConfig.server === undefined) {
             let serverPath          = servConfig.path;
+            let logPath          = servConfig.pathLogs + '\\latest.log';
+            if(!globalUtil.safeFileExsistsSync([logPath])) globalUtil.safeFileSaveSync([logPath], '');
+
             // baue Mod optionen
-            let mods    = ''
-            if(servConfig.mods.length > 0) mods = `?GameModIds=${servConfig.mods.join(',')}`;
+            let opt    = ''
+            if(!servConfig.flags.includes(['crossplay', 'epiconly'])) if(servConfig.mods.length > 0) opt = `?GameModIds=${servConfig.mods.join(',')}`;
 
             // baue custom Optionen
-            let opt    = ''
             if(servConfig.opt.length > 0) servConfig.opt.forEach((val) => {
-                mods += `?${val}`;
+                opt += `?${val}`;
             });
 
             // baue Flaggen
@@ -37,7 +39,7 @@ module.exports = {
                 mods += ` -${val}`;
             });
 
-            return `start ${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe ${servConfig.serverMap}?listen?SessionName=${servConfig.sessionName}?AltSaveDirectoryName=${servConfig.AltSaveDirectoryName}?ServerAdminPassword=${servConfig.ServerAdminPassword}?Port=${servConfig.game}?QueryPort=${servConfig.query}?MaxPlayers=${servConfig.maxPlayers}?RCONEnabled=True?RCONPort${servConfig.rcon}${mods}${opt}${flags}\n`;
+            return `start ${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe ${servConfig.serverMap}?listen?SessionName=${servConfig.sessionName}?AltSaveDirectoryName=${servConfig.AltSaveDirectoryName}?ServerAdminPassword=${servConfig.ServerAdminPassword}?Port=${servConfig.game}?QueryPort=${servConfig.query}?MaxPlayers=${servConfig.maxPlayers}?RCONEnabled=True?RCONPort${servConfig.rcon}${opt}${flags}\n`;
         }
         return false;
     },

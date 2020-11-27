@@ -136,7 +136,7 @@ module.exports = {
                 || path.indexOf(`${mainDir}\\app\\cmd`) === 0
                 || path.indexOf(`${mainDir}\\app\\config`) === 0
             )
-            && path.indexOf(`${mainDir}\\app\\config\\mysql.json`) !== 0
+            && path.indexOf(`${mainDir}\\app\\config\\mysql.json`) === -1
         );
     },
 
@@ -211,7 +211,7 @@ module.exports = {
                     return true;
                 }
                 catch (e) {
-                    if(debug) console.log(e);
+                    if(debug) console.log(e); console.log(e);
                 }
             }
         }
