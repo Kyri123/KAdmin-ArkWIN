@@ -75,9 +75,10 @@ function setInModal() {
         let type    = arg.split('~')[1];
         let val     = arg.split('~')[2];
 
-        if(type === "txt") $(id).text(val);
-        if(type === "val") $(id).val(val);
-        if(type === "htm") $(id).html(val);
+        if(type === "txt")      $(id).text(val);
+        if(type === "val")      $(id).val(val);
+        if(type === "htm")      $(id).html(val);
+        if(type === "checkbox") $(id).prop('checked', val === "true");
     })
 }
 

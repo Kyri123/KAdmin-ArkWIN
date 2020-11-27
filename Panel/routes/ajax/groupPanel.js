@@ -24,7 +24,7 @@ router.route('/')
         // Userlist
         if(GET.getgrouplist) res.render('ajax/json', {
             data: JSON.stringify({
-                userlist: globalUtil.safeSendSQLSync('SELECT `id`, `username`, `email`, `lastlogin`, `registerdate`, `rang`, `ban` FROM ArkAdmin_user_group')
+                grouplist: globalUtil.safeSendSQLSync('SELECT * FROM ArkAdmin_user_group')
             })
         });
     })

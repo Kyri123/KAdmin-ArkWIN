@@ -116,11 +116,19 @@
     "table_lastchange"  : "Letzte Änderung",
     "table_from"        : "von",
     "table_actions"     : "Aktionen",
+    "table_group"       : "Gruppe",
+    "remove"            : "Löschen",
+    "edit"              : "Bearbeiten",
+    "modalEdit": {
+      "cancel"          : "Abbrechen",
+      "edit"            : "Bestätigen",
+      "title"           : "Bearbeiten"
+    },
     "modalDelete": {
       "cancel"          : "Abbrechen",
       "remove"          : "Löschen bestätigen",
       "title"           : "Löschen",
-      "text"            : "Möchtest du Die Benutzergruppe <b>{groupname}</b> wirklich löschen?"
+      "text"            : "Möchtest du diese Benutzergruppe wirklich löschen?"
     },
     "modal": {
       "title"           : "Neue Benutzergruppe",
@@ -315,7 +323,7 @@
       "logs"                    : "Logs"
     },
     "perm": {
-      "is_admin"                : "Admin (Hat Rechte auf alles)",
+      "is_admin"                : "Ist Admin (Hat Rechte auf alles)",
       "show_traffic"            : "Darf Serverauslastung sehen",
       "show"                    : "Darf aufrufen",
       "create"                  : "Darf erstellen",
@@ -323,8 +331,9 @@
       "show_codes"              : "Darf Codes sehen (AdminCodes nur wenn der User über Admin verfügt)",
       "create_code"             : "Darf Codes erstellen (AdminCodes nur wenn der User über Admin verfügt)",
       "delete_code"             : "Darf Codes löschen",
-      "ban_user"                : "Benutzer Bannen",
-      "is_server_admin"         : "Admin (Hat Rechte auf alles auf dem Server)",
+      "ban_user"                : "Darf Benutzer Bannen",
+      "delete_user"             : "Darf Benutzer Löschen",
+      "is_server_admin"         : "Ist Admin (Hat Rechte auf alles auf dem Server)",
       "actions"                 : "Darf Aktionen an den Server senden",
       "changeplace"             : "Darf Mods verschieben",
       "remove"                  : "Darf Löschen",
