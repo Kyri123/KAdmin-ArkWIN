@@ -1,59 +1,67 @@
 {
   "1": {
-    "title": "Datei Fehler",
-    "text": "Datei nicht gefunden oder keine Rechte"
+    "title" : "Datei Fehler",
+    "text"  : "Datei nicht gefunden oder keine Rechte"
   },
   "2": {
-    "title": "MySQL Fehler",
-    "text": "Datensatz konnte nicht gelesen oder geschrieben werden"
+    "title" : "MySQL Fehler",
+    "text"  : "Datensatz konnte nicht gelesen oder geschrieben werden"
   },
   "3": {
-    "title": "Konnte nicht Erstellt werden",
-    "text": "Fehler beim Schreiben der Datei"
+    "title" : "Konnte nicht Erstellt werden",
+    "text"  : "Fehler beim Schreiben der Datei"
   },
   "4": {
-    "title": "Konnte nicht Gelöscht werden",
-    "text": "Fehler beim Schreiben der Datei"
+    "title" : "Konnte nicht Gelöscht werden",
+    "text"  : "Fehler beim Schreiben der Datei"
   },
   "5": {
-    "title": "Mod wurde nicht gespeichert",
-    "text": "Mod exsistiert bereits"
+    "title" : "Mod wurde nicht gespeichert",
+    "text"  : "Mod exsistiert bereits"
+  },
+  "6": {
+    "title" : "Exsistiert",
+    "text"  : "Dieser Name Exsistiert bereits"
+  },
+  "7": {
+    "title" : "Benutzergruppe nicht gefunden",
+    "text"  : "Die Gruppe wurde nicht gefunden"
   },
   "100": {
-    "title": "Form Fehler",
-    "text": "Einige Felder wurden nicht ausgefüllt"
+    "title" : "Form Fehler",
+    "text"  : "Einige Felder wurden nicht ausgefüllt"
   },
   "900": {
-    "title": "Login Fehler",
-    "text": "Benutzername/Email nicht gefunden"
+    "title" : "Login Fehler",
+    "text"  : "Benutzername/Email nicht gefunden"
   },
   "901": {
-    "title": "Login Fehler",
-    "text": "Account ist gesperrt"
+    "title" : "Login Fehler",
+    "text"  : "Account ist gesperrt"
   },
   "902": {
-    "title": "Login Fehler",
-    "text": "Passwort stimmt nicht mit dem Benutzer überein"
+    "title" : "Login Fehler",
+    "text"  : "Passwort stimmt nicht mit dem Benutzer überein"
   },
   "903": {
-    "title": "Fehler",
-    "text": "Passwörter stimmen nicht überein"
+    "title" : "Fehler",
+    "text"  : "Passwörter stimmen nicht überein"
   },
   "905": {
-    "title": "Registrierungs Fehler",
-    "text": "Benutzername muss mindestens 6 Zeichen haben"
+    "title" : "Registrierungs Fehler",
+    "text"  : "Benutzername muss mindestens 6 Zeichen haben"
   },
   "906": {
-    "title": "Registrierungs Fehler",
-    "text": "Passwörter müssen mindestens 6 Zeichen haben und müssen übereinstimmen"
+    "title" : "Registrierungs Fehler",
+    "text"  : "Passwörter müssen mindestens 6 Zeichen haben und müssen übereinstimmen"
   },
   "907": {
-    "title": "Registrierungs Fehler",
-    "text": "Account Code wurde bereits verwendet oder exsistiert nicht"
+    "title" : "Registrierungs Fehler",
+    "text"  : "Account Code wurde bereits verwendet oder exsistiert nicht"
   },
   "908": {
-    "title": "Registrierungs Fehler",
-    "text": "Ein Account mit der E-Mail UND dem Benutzernamen exsistiert bereits"
+    "title" : "Registrierungs Fehler",
+    "text"  : "Ein Account mit der E-Mail UND dem Benutzernamen exsistiert bereits"
   },
 
 
@@ -114,6 +122,18 @@
   "1013": {
     "title" : "Backup Eingespielt",
     "text"  : "Backup <b>{file}</b> wurde eingespielt"
+  },
+  "1014": {
+    "title" : "Benutzergruppe Erstellt",
+    "text"  : "Die Benutzergruppe wurde erfolgreich Erstellt"
+  },
+  "1015": {
+    "title" : "Benutzergruppe Entfernt",
+    "text"  : "Die Benutzergruppe wurde erfolgreich entfernt"
+  },
+  "1016": {
+    "title" : "Benutzergruppe Bearbeitet",
+    "text"  : "Die Benutzergruppe wurde erfolgreich verändert"
   },
 
 

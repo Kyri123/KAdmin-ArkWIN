@@ -94,7 +94,7 @@
             </div>
             <div class="modal-footer input-group">
                 <input type="hidden" name="edit" value="true">
-                <input type="hidden" name="editgroupid" value="">
+                <input type="hidden" name="editgroupid" id="editgroupid" value="">
                 <input type="button" class="btn btn-secondary" data-dismiss="modal" value="<%- PANEL_LANG.groupPanel.modalEdit.cancel %>">
                 <input type="button" class="btn btn-success" onclick="send('edit')" value="<%- PANEL_LANG.groupPanel.modalEdit.edit %>">
             </div>
@@ -102,7 +102,7 @@
     </div>
 </form>
 
-<form class="modal" method="post" action="#" id="remove" style="display: none;">
+<form class="modal fade" method="post" action="#" id="remove" style="display: none;">
     <div class="modal-dialog modal-xl" role="document" style="max-width: 700px">
         <div class="modal-content">
             <div class="modal-header bg-danger">

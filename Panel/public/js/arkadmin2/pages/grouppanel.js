@@ -39,18 +39,20 @@ function getGroupList() {
                                           <b>${val.name}</b>
                                       </td>
                                       <td>
-                                          <span class="text-${perms.all.is_admin === 1 ? "danger" : "success"}">${perms.all.is_admin === 1 ? vars.lang_arr.userPanel.modal.admin: vars.lang_arr.userPanel.modal.user}</span>
+                                          <span class="text-${perms.all !== undefined ? perms.all.is_admin !== undefined ? "danger" : "success" : "success"}">
+                                            ${perms.all !== undefined ? perms.all.is_admin !== undefined ? vars.lang_arr.userPanel.modal.admin: vars.lang_arr.userPanel.modal.user: vars.lang_arr.userPanel.modal.user}
+                                          </span>
                                       </td>
                                       <td class="project-actions text-right">
-                                          <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#remove" onclick="setInModal(${remove.join(',')})">
+                                          ${val.id !== 1 ? `<a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#remove" onclick="setInModal(${remove.join(',')})">
                                               <i class="fas fa-trash" aria-hidden="true">
                                               </i> ${vars.lang_arr.groupPanel.remove}
                                           </a>
-                                        
+
                                           <a class="btn btn-success btn-sm" href="#" data-toggle="modal" data-target="#edit" onclick="$('#edit').trigger('reset');setInModal(${js.join(',')})">
                                               <i class="fas fa-edit" aria-hidden="true"></i>
                                               ${vars.lang_arr.groupPanel.edit}
-                                          </a>
+                                          </a>` : ''}
                                       </td>
                                   </tr>`;
             });
@@ -80,11 +82,12 @@ function hasPermFiller(permission, keys = '') {
 }
 
 function send(modal) {
-    $.post(`/ajax/grouppanel`, $(modal).serialize(), (data) => {
+    $.post(`/ajax/grouppanel`, $(`#${modal}`).serialize(), (data) => {
         try {
             data    = JSON.parse(data);
+            getGroupList();
             if(data.alert !== undefined) $('#global_resp').append(data.alert);
-            if(data.success !== undefined) $(modal).modal('hide');
+            if(data.success !== undefined) $(`#${modal}`).modal('hide');
         }
         catch (e) {
             console.log(e);
