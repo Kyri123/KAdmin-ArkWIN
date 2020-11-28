@@ -12,14 +12,6 @@ const router        = express.Router()
 const globalinfos   = require('./../../app/src/global_infos');
 const userHelper   = require('./../../app/src/sessions/helper');
 
-const topBtn    = `<div class="d-sm-inline-block">
-                        <a href="#" class="btn btn-outline-success btn-icon-split rounded-0" data-toggle="modal" data-target="#addserver">
-                            <span class="icon">
-                                <i class="fas fa-plus" aria-hidden="true"></i>
-                            </span>
-                        </a>
-                    </div>`;
-
 router.route('/')
 
     .all((req,res)=>{
@@ -31,7 +23,18 @@ router.route('/')
             return true;
         }
 
+        let topBtn = '';
+        if(userHelper.hasPermissions(req.session.uid, "userpanel/show_codes")) topBtn =
+            `<div class="d-sm-inline-block">
+                <a href="#" class="btn btn-outline-success btn-icon-split rounded-0" data-toggle="modal" data-target="#addserver">
+                    <span class="icon">
+                        <i class="fas fa-plus" aria-hidden="true"></i>
+                    </span>
+                </a>
+            </div>`;
+
         res.render('pages/userpanel', {
+            userID          : req.session.uid,
             icon            : "fas fa-user",
             pagename        : PANEL_LANG.pagename.userpanel,
             page            : "userpanel",
@@ -40,7 +43,8 @@ router.route('/')
             sinfos          : globalinfos.get(),
             new_email       : false,
             new_username    : false,
-            topBtn          : topBtn
+            topBtn          : topBtn,
+            groups          : globalUtil.safeSendSQLSync('SELECT * FROM `arkadmin_user_group` ORDER BY `id`')
         });
     })
 

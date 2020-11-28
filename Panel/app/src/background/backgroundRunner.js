@@ -140,7 +140,7 @@ module.exports = {
                 serverInfos.servers_arr.forEach((val) => {
                     // Auto Update system
                     if(val[1].autoUpdate) {
-                        if(Date.now() > val[1].autoUpdateNext && val[1].is_free) {
+                        if(Date.now() > val[1].autoUpdateNext) {
                             serverCommands.doUpdateServer(val[0], false, true, true);
                             serverUtil.writeConfig(val[0], "autoUpdateNext", (Date.now() + val[1].autoUpdateInterval));
                             if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m run > doServerBackgrounder > autoUpdate > ${val[0]}`);
@@ -149,7 +149,7 @@ module.exports = {
 
                     // Auto Backup system
                     if(val[1].autoBackup) {
-                        if(Date.now() > val[1].autoBackupNext && val[1].is_free) {
+                        if(Date.now() > val[1].autoBackupNext) {
                             serverCommands.doBackup(val[0], true);
                             serverUtil.writeConfig(val[0], "autoBackupNext", (Date.now() + val[1].autoBackupInterval));
                             if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m run > doServerBackgrounder > autoBackup > ${val[0]}`);

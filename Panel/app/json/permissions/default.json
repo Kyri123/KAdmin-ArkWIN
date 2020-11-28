@@ -16,5 +16,5 @@
     "delete_user"       : 0,
     "ban_user"          : 0
   },
-  "server":               []
+  "server": {}
 }

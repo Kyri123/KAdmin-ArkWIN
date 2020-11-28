@@ -13,7 +13,7 @@ const globalinfos   = require('./../../app/src/global_infos');
 const userHelper   = require('./../../app/src/sessions/helper');
 
 const topBtn    = `<div class="d-sm-inline-block">
-                        <a href="#" class="btn btn-outline-success btn-icon-split rounded-0" data-toggle="modal" data-target="#group">
+                        <a href="#" class="btn btn-outline-success btn-icon-split rounded-0" onclick="$('#group').trigger('reset')" data-toggle="modal" data-target="#group">
                             <span class="icon">
                                 <i class="fas fa-plus" aria-hidden="true"></i>
                             </span>

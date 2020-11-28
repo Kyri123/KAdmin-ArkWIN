@@ -19,6 +19,7 @@ router.route('/')
         let resp        = "";
 
         res.render('pages/usersettings', {
+            perm            : userHelper.permissions(req.session.uid),
             icon            : "fas fa-user-cog",
             pagename        : PANEL_LANG.pagename.usersettings,
             page            : "usersettings",

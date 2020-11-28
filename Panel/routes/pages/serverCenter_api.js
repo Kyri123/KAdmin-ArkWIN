@@ -20,7 +20,6 @@ router.route('/')
 
         let sess = req.session;
         let serverName  = req.baseUrl.split('/')[2];
-        let userPerm    = userHelper.permissions(sess.uid);
 
         if(!userHelper.hasPermissions(req.session.uid, "api/show", serverName)) {
             res.redirect("/401");
@@ -48,7 +47,7 @@ router.route('/')
                 page                    : "servercenter",
                 subpage                 : "api",
                 resp                    : resp,
-                perm                    : userPerm,
+                perm                    : userHelper.permissions(req.session.uid),
                 scfg                    : servCfg,
                 servinfos               : serverUtilInfos.getServerInfos(serverName),
                 sinfos                  : globalinfos.get(),
