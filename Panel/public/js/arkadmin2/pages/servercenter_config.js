@@ -6,7 +6,7 @@
  * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
-
+hasPermissions(globalvars.perm, "actions", varser.cfg)
 $.get('/ajax/serverCenterConfig' , {
     serverInis  : true,
     ini         : "GameUserSettings",
