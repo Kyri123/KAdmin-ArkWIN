@@ -38,9 +38,9 @@ function get() {
                                             </div>
                                             <div class="col-6 btn-group">
                                                 <!-- Push Up -->
-                                                <a class="btn btn-sm btn-outline-secondary ${server.mods[(key-1)] !== undefined ? `" onclick="push(true, '${key}')"` : "disabled\""}><i class="fas fa-arrow-up" aria-hidden="true"></i></a>
+                                                <a class="btn btn-sm btn-outline-secondary ${hasPermissions(globalvars.perm, "mods/changeplace", varser.cfg) && server.mods[(key-1)] !== undefined ? `" onclick="push(true, '${key}')"` : "disabled\""}><i class="fas fa-arrow-up" aria-hidden="true"></i></a>
                                                 <!-- Push down -->
-                                                <a class="btn btn-sm btn-outline-secondary ${server.mods[(key+1)] !== undefined ? `" onclick="push(false, '${key}')"` : "disabled\""}><i class="fas fa-arrow-down" aria-hidden="true"></i></a>
+                                                <a class="btn btn-sm btn-outline-secondary ${hasPermissions(globalvars.perm, "mods/changeplace", varser.cfg) && server.mods[(key+1)] !== undefined ? `" onclick="push(false, '${key}')"` : "disabled\""}><i class="fas fa-arrow-down" aria-hidden="true"></i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -56,7 +56,7 @@ function get() {
                                         </div>
                                         <!-- Remove btn -->
                                         <div class="right-no-top ml-auto d-inline" style="width:50%;padding-left: 45px;">
-                                            <a style="width: 100%" onclick="remove('${key}')" class="text-white btn btn-danger  "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                            <a style="width: 100%" class="text-white btn btn-danger${hasPermissions(globalvars.perm, "mods/remove", varser.cfg) ? `" onclick="remove('${key}')"` : ' disabled"'}><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                         </div>
                                     </div>
                                     
@@ -140,7 +140,7 @@ function getTnstalled() {
                                         </div>
                                         <!-- Remove btn -->
                                         <div class="right-no-top ml-auto d-inline" style="width:50%;padding-left: 45px;">
-                                            <a style="width: 100%" onclick="removeInstalled('${val}')" class="text-white btn btn-danger  "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                            <a style="width: 100%" class="text-white btn btn-danger${hasPermissions(globalvars.perm, "mods/remove", varser.cfg) ? `" onclick="removeInstalled('${val}')"` : ' disabled"'}><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                         </div>
                                     </div>
                                     
