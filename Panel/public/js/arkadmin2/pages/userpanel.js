@@ -40,7 +40,7 @@ function getUserList() {
                                                     ${val.username}
                                                 </td>
                                                 <td>
-                                                    <span class="text-${rangIDs.includes(1) ? "danger" : "success"}">${rangIDs.includes(1) ? vars.lang_arr.userPanel.modal.admin: vars.lang_arr.userPanel.modal.user}</span>
+                                                    <span class="text-${rangIDs.includes(1) ? "danger" : "success"}">${rangIDs.includes(1) ? globalvars.lang_arr.userPanel.modal.admin: globalvars.lang_arr.userPanel.modal.user}</span>
                                                 </td>
                                                 <td>
                                                     ${val.email}
@@ -52,18 +52,18 @@ function getUserList() {
                                                     val.lastlogin
                                                 </td>-->
                                                 <td class="project-actions text-right">
-                                                    ${hasPermissions(vars.perm, "all/is_admin") ? `<a id="banbtn${val.id}" class="btn btn-info btn-sm" href="#" data-toggle="modal" data-target="#groups" onclick="$('#groups').trigger('reset');setInModal(${groups.join(',')})">
+                                                    ${hasPermissions(globalvars.perm, "all/is_admin") ? `<a id="banbtn${val.id}" class="btn btn-info btn-sm" href="#" data-toggle="modal" data-target="#groups" onclick="$('#groups').trigger('reset');setInModal(${groups.join(',')})">
                                                         <i class="fas fa-edit" aria-hidden="true"></i>                                                         
-                                                        <!--${vars.lang_arr.userPanel.perm}-->
+                                                        <!--${globalvars.lang_arr.userPanel.perm}-->
                                                     </a>` : ''}
                                                     
-                                                    ${hasPermissions(vars.perm, "userpanel/delete_user") ? `<a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#remove" onclick="setInModal(${remove.join(',')})">
+                                                    ${hasPermissions(globalvars.perm, "userpanel/delete_user") ? `<a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#remove" onclick="setInModal(${remove.join(',')})">
                                                         <i class="fas fa-trash" aria-hidden="true"></i> 
-                                                        <!--${vars.lang_arr.userPanel.remove}-->
+                                                        <!--${globalvars.lang_arr.userPanel.remove}-->
                                                     </a>` : ''}
                                                     
-                                                    ${hasPermissions(vars.perm, "userpanel/ban_user") ? `<a id="banbtn${val.id}" class="btn btn-${val.ban === 1 ? "danger" : "success"} btn-sm" href="#" onclick="toggleUser('${val.id}', this.id)">
-                                                        ${val.ban === 0 ? vars.lang_arr.userPanel.banned: vars.lang_arr.userPanel.free}
+                                                    ${hasPermissions(globalvars.perm, "userpanel/ban_user") ? `<a id="banbtn${val.id}" class="btn btn-${val.ban === 1 ? "danger" : "success"} btn-sm" href="#" onclick="toggleUser('${val.id}', this.id)">
+                                                        ${val.ban === 0 ? globalvars.lang_arr.userPanel.banned: globalvars.lang_arr.userPanel.free}
                                                     </a>` : ''}
                                                 </td>
                                             </tr>`;
@@ -89,7 +89,7 @@ function getCodeList() {
             codes.forEach((val, key) => {
                 codeList += `<tr id="code${val.id}">
                                 <td style="width:5%">
-                                    <span class="text-${val.rang === 1 ? "danger" : "success"}">${val.rang === 1 ? vars.lang_arr.userPanel.modal.admin: vars.lang_arr.userPanel.modal.user}</span>
+                                    <span class="text-${val.rang === 1 ? "danger" : "success"}">${val.rang === 1 ? globalvars.lang_arr.userPanel.modal.admin: globalvars.lang_arr.userPanel.modal.user}</span>
                                 </td>
                                 <td style="width:80%">
                                     <div class="input-group">
@@ -98,7 +98,7 @@ function getCodeList() {
                                             <button onclick="copythis('copy${val.id}')" class="btn btn-primary btn-flat" type="button">
                                                 <i class="fas fa-copy" aria-hidden="true"></i>
                                             </button>
-                                            ${hasPermissions(vars.perm, "userpanel/delete_code") ? `<a class="btn btn-danger" href="#" onclick="removeCode('${val.id}', '#code${val.id}')">
+                                            ${hasPermissions(globalvars.perm, "userpanel/delete_code") ? `<a class="btn btn-danger" href="#" onclick="removeCode('${val.id}', '#code${val.id}')">
                                                 <i class="fas fa-trash" aria-hidden="true"></i>
                                             </a>` : ''}
                                         </span>
@@ -181,7 +181,7 @@ function toggleUser(id, btnID) {
             data    = JSON.parse(data);
             if(data.alert !== undefined) $('#global_resp').append(data.alert);
             if (data.toggled !== undefined) {
-                $('#' + btnID).html(data.ban === 0 ? vars.lang_arr.userPanel.banned: vars.lang_arr.userPanel.free).toggleClass('btn-danger', data.ban === 1).toggleClass('btn-success', data.ban === 0);
+                $('#' + btnID).html(data.ban === 0 ? globalvars.lang_arr.userPanel.banned: globalvars.lang_arr.userPanel.free).toggleClass('btn-danger', data.ban === 1).toggleClass('btn-success', data.ban === 0);
             }
         }
         catch (e) {

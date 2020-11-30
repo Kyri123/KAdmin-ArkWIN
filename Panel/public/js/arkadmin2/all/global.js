@@ -24,20 +24,26 @@ function getServerList() {
         let newServerList = ``;
         data = JSON.parse(data);
 
-        $('#top_on').html(data.servercounter.on);
-        $('#top_off').html(data.servercounter.off);
-        $('#top_proc').html(data.servercounter.proc);
-        $('#top_total').html(data.servercounter.total);
-        $('#top_perc').css('width', `${data.servercounter.on / data.servercounter.total * 100}%`);
+        if(hasPermissions(globalvars.perm, "all/show_traffic")) {
+            // Server
+            $('#top_on')        .html(data.servercounter.on);
+            $('#top_off')       .html(data.servercounter.off);
+            $('#top_proc')      .html(data.servercounter.proc);
+            $('#top_total')     .html(data.servercounter.total);
+            $('#top_perc')      .css('width', `${data.servercounter.on / data.servercounter.total * 100}%`);
 
-        $('#cpu').html(`${data.server_data.cpu} <small>%</small>`);
-        $('#cpu_perc').css('width', `${data.server_data.cpu}%`);
+            // CPU
+            $('#cpu')           .html(`${data.server_data.cpu} <small>%</small>`);
+            $('#cpu_perc')      .css('width', `${data.server_data.cpu}%`);
 
-        $('#mem').html(`${data.server_data.mem_availble} / ${data.server_data.mem_total}`);
-        $('#mem_perc').css('width', `${data.server_data.mem}%`);
+            // Speicher
+            $('#mem')           .html(`${data.server_data.mem_availble} / ${data.server_data.mem_total}`);
+            $('#mem_perc')      .css('width', `${data.server_data.mem}%`);
 
-        $('#ram').html(`${data.server_data.ram_availble} / ${data.server_data.ram_total}`);
-        $('#ram_perc').css('width', `${data.server_data.ram}%`);
+            // RAM
+            $('#ram')           .html(`${data.server_data.ram_availble} / ${data.server_data.ram_total}`);
+            $('#ram_perc')      .css('width', `${data.server_data.ram}%`);
+        }
 
         data.servers_arr.forEach((val, key) => {
 
@@ -47,7 +53,7 @@ function getServerList() {
             if(val[1].pid !== 0 && val[1].online)     stateColor = "success";
             if(val[1].cmd || val[1].steamcmd)         stateColor = "info";
 
-            if(val[1].server === undefined) newServerList += `
+            if(val[1].server === undefined && hasPermissions(globalvars.perm, "show", val[0])) newServerList += `
             <a href="/servercenter/${val[0]}/home" class="dropdown-item bg-light">
                 <div class="media">
                     <div class="mr-2"><img src="/img/igmap/${val[1].serverMap}.jpg" style="border-width: 3px!important;background-color: #001f3f" class="img-size-50 border border-${stateColor}"></div>

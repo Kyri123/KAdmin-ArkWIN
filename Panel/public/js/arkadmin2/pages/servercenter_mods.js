@@ -65,13 +65,13 @@ function get() {
                                             <div class="col-sm-6 border-right">
                                                 <div class="description-block">
                                                     <h5 class="description-header">${convertTime(typeof(i) !== "undefined" ? i.time_updated !== undefined ? i.time_updated * 1000 : 0 : 0)}</h5>
-                                                    <span class="description-text">${vars.lang_arr.serverCenterMods.time}</span>
+                                                    <span class="description-text">${globalvars.lang_arr.serverCenterMods.time}</span>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="description-block">
                                                     <h5 class="description-header"><b>${val}</b></h5>
-                                                    <span class="description-text">${vars.lang_arr.serverCenterMods.modid}</span>
+                                                    <span class="description-text">${globalvars.lang_arr.serverCenterMods.modid}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -88,7 +88,7 @@ function get() {
                                 <div class="row p-0">
                                     <div class="col-12">
                                         <i class="text-black-50 fas fa-exclamation-triangle -align-left position-absolute" style="font-size: 45px;color: rgba(0,0,0,.5)!important;" height="50" width="50" aria-hidden="true"></i>
-                                        <div style="margin-left: 60px;">${vars.lang_arr.serverCenterMods.noModFoundTitle}<br><span style="font-size: 11px;">${vars.lang_arr.serverCenterMods.noModFoundText}</span></div>
+                                        <div style="margin-left: 60px;">${globalvars.lang_arr.serverCenterMods.noModFoundTitle}<br><span style="font-size: 11px;">${globalvars.lang_arr.serverCenterMods.noModFoundText}</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -123,7 +123,7 @@ function getTnstalled() {
                                         <div class="row p-2">
                                             <div class="col-6">
                                                 <h5 class="text-center left d-inline pt-3 pl-0 m-0 ${server.mods.includes(parseInt(val).toString()) ? "text-success" : "text-danger"}">
-                                                    ${server.mods.includes(parseInt(val).toString()) ? vars.lang_arr.serverCenterMods.active : vars.lang_arr.serverCenterMods.notActive}
+                                                    ${server.mods.includes(parseInt(val).toString()) ? globalvars.lang_arr.serverCenterMods.active : globalvars.lang_arr.serverCenterMods.notActive}
                                                 </h5>
                                             </div>
                                         </div>
@@ -149,13 +149,13 @@ function getTnstalled() {
                                             <div class="col-sm-6 border-right">
                                                 <div class="description-block">
                                                     <h5 class="description-header">${convertTime(typeof(i) !== "undefined" ? i.time_updated !== undefined ? i.time_updated * 1000 : 0 : 0)}</h5>
-                                                    <span class="description-text">${vars.lang_arr.serverCenterMods.time}</span>
+                                                    <span class="description-text">${globalvars.lang_arr.serverCenterMods.time}</span>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="description-block">
                                                     <h5 class="description-header"><b>${val}</b></h5>
-                                                    <span class="description-text">${vars.lang_arr.serverCenterMods.modid}</span>
+                                                    <span class="description-text">${globalvars.lang_arr.serverCenterMods.modid}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -172,7 +172,7 @@ function getTnstalled() {
                                 <div class="row p-0">
                                     <div class="col-12">
                                         <i class="text-black-50 fas fa-exclamation-triangle -align-left position-absolute" style="font-size: 45px;color: rgba(0,0,0,.5)!important;" height="50" width="50" aria-hidden="true"></i>
-                                        <div style="margin-left: 60px;">${vars.lang_arr.serverCenterMods.noModFoundTitle}<br><span style="font-size: 11px;">${vars.lang_arr.serverCenterMods.noModFoundText}</span></div>
+                                        <div style="margin-left: 60px;">${globalvars.lang_arr.serverCenterMods.noModFoundTitle}<br><span style="font-size: 11px;">${globalvars.lang_arr.serverCenterMods.noModFoundText}</span></div>
                                     </div>
                                 </div>
                             </div>

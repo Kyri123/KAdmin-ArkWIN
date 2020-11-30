@@ -40,18 +40,18 @@ function getGroupList() {
                                       </td>
                                       <td>
                                           <span class="text-${perms.all !== undefined ? perms.all.is_admin !== undefined ? "danger" : "success" : "success"}">
-                                            ${perms.all !== undefined ? perms.all.is_admin !== undefined ? vars.lang_arr.userPanel.modal.admin: vars.lang_arr.userPanel.modal.user: vars.lang_arr.userPanel.modal.user}
+                                            ${perms.all !== undefined ? perms.all.is_admin !== undefined ? globalvars.lang_arr.userPanel.modal.admin: globalvars.lang_arr.userPanel.modal.user: globalvars.lang_arr.userPanel.modal.user}
                                           </span>
                                       </td>
                                       <td class="project-actions text-right">
                                           ${val.id !== 1 ? `<a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#remove" onclick="setInModal(${remove.join(',')})">
                                               <i class="fas fa-trash" aria-hidden="true">
-                                              </i> ${vars.lang_arr.groupPanel.remove}
+                                              </i> ${globalvars.lang_arr.groupPanel.remove}
                                           </a>
 
                                           <a class="btn btn-success btn-sm" href="#" data-toggle="modal" data-target="#edit" onclick="$('#edit').trigger('reset');setInModal(${js.join(',')})">
                                               <i class="fas fa-edit" aria-hidden="true"></i>
-                                              ${vars.lang_arr.groupPanel.edit}
+                                              ${globalvars.lang_arr.groupPanel.edit}
                                           </a>` : ''}
                                       </td>
                                   </tr>`;

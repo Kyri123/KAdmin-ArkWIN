@@ -59,10 +59,10 @@ function copythis(id) {
  * @returns {string|undefined}      Undefined -> Code nicht vorhanden
  */
 function alerter(code, custom_style = "", mb = 3, closebtn = false, ml = 0, mr = 0, mt = 0, alertform = false) {
-    if(alertlang[code] !== undefined) {
+    if(globalvars.alertlang[code] !== undefined) {
         let color   = code >= 1000 ? (code >= 2000 ? (code >= 3000 ? "info" : "warning") : "success") : "danger";
-        let text    = alertlang[code].text;
-        let title   = alertlang[code].title;
+        let text    = globalvars.alertlang[code].text;
+        let title   = globalvars.alertlang[code].title;
         let rnd     = Math.random().toString(36).substring(2, 7) + Math.random().toString(36).substring(2, 7);
 
         return !alertform ?

@@ -16,7 +16,7 @@ function loadActionLog() {
         .done(function(data) {
             let convLog = ``;
             if(data.includes('ArkAdmin ::')) {
-                let convLog = vars.lang_arr.logger.notFound;
+                let convLog = globalvars.lang_arr.logger.notFound;
                 if($('#actionLogs').html() !== convLog) $('#actionLogs').html(convLog);
             }
             else {
@@ -35,8 +35,8 @@ function loadActionLog() {
                         });
                         $('#actionlog').html('<tr><td class="p-2">' + log.join('</td></tr><tr><td class="p-2">')
                             .replaceArray(rplf, tplt)
-                            .replace("FAILED", `<b class="text-danger">${vars.lang_arr.logger.FAILED}</b>`)
-                            .replace("SUCCESS", `<b class="text-success">${vars.lang_arr.logger.SUCCESS}</b>`) + '</td></tr>');
+                            .replace("FAILED", `<b class="text-danger">${globalvars.lang_arr.logger.FAILED}</b>`)
+                            .replace("SUCCESS", `<b class="text-success">${globalvars.lang_arr.logger.SUCCESS}</b>`) + '</td></tr>');
                     })
                     .fail(function() {
                         data.split('\n').forEach((val) => {
@@ -49,7 +49,7 @@ function loadActionLog() {
             }
         })
         .fail(function() {
-            let convLog = vars.lang_arr.logger.notFound;
+            let convLog = globalvars.lang_arr.logger.notFound;
             if($('#actionLogs').html() !== convLog) $('#actionLogs').html(convLog);
         });
 }
