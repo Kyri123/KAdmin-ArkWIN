@@ -2,22 +2,22 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWINWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWINWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
 
 // Modulealerter
+global.mainDir                        = __dirname;
 const createError                     = require('http-errors');
 const express                         = require('express');
 const session                         = require('express-session');
 const bodyParser                      = require('body-parser');
-const path                            = require('path');
 const cookieParser                    = require('cookie-parser');
 const logger                          = require('morgan');
 const uuid                            = require('uuid');
 const backgroundRunner                = require('./app/src/background/backgroundRunner');
-const fs                              = require('fs');
+const helmet                          = require("helmet");
 global.ip                             = require('ip');
 global.alerter                        = require('./app/src/alert.js');
 global.md5                            = require('md5');
@@ -26,30 +26,34 @@ global.availableVersion_public        = 0;
 global.availableVersion_activeevent   = 0;
 global.mode                           = "dev";
 global.dateFormat                     = require('dateformat');
-global.panelVersion                   = "0.0.2a";
-global.mainDir                        = __dirname;
+global.panelVersion                   = "0.0.3";
 global.mysql                          = require('mysql');
 global.isUpdate                       = false;
+global.globalUtil                     = require('./app/src/util');
+global.pathMod                        = require('path');
+global.fs                             = require('fs');
+global.userHelper                     = require('./app/src/sessions/helper');
 
 require('./app/main/main_loader.js');
 global.debug                          = PANEL_MAIN.useDebug;
 
 // lese Changelog
+let pathFile    = pathMod.join(mainDir, '/app/json/panel/', 'changelog.json');
 try {
-  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m Load: ./app/json/changelog.json`)
-  global.changelog                    = JSON.parse(fs.readFileSync(`./app/json/changelog.json`));
+  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m Load: ${pathFile}`)
+  global.changelog                    = globalUtil.safeFileReadSync([pathFile], true);
   changelog.reverse();
 }
 catch (e) {
   if(debug) console.log(e);
-  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ./app/json/changelog.json not found`);
+  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ${pathFile} not found`);
   process.exit(1);
 }
 
-let app           = express();
+let app         = express();
 
 // view engine
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', pathMod.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(session({
@@ -64,9 +68,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 //app.use(logger(mode));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(pathMod.join(__dirname, 'public')));
+app.use(helmet.ieNoOpen());
+app.use(helmet.noSniff());
+app.use(helmet.hidePoweredBy());
 
 // Routes
 // Main
@@ -83,8 +90,10 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(PANEL_CONFIG.port);
-console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m http://${ip.address()}:${PANEL_CONFIG.port}/`);
+app.listen(PANEL_CONFIG.port, "0.0.0.0", ()=>{
+  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m http://${ip.address()}:${PANEL_CONFIG.port}/`);
+});
+
 module.exports = app;
 
 // Starte Intverall aufgaben

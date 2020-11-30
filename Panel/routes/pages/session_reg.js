@@ -2,8 +2,8 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWINWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWINWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
 
@@ -33,8 +33,8 @@ router.route('/')
             post.email      = htmlspecialchars(post.email);
             post.code       = htmlspecialchars(post.code);
 
-            sql             = `SELECT * FROM ArkAdmin_users WHERE username=? AND email=?`
-            let result = synccon.query(mysql.format(sql, [post.logger, post.logger]));
+            sql             = 'SELECT * FROM ArkAdmin_users WHERE `username`=? AND `email`=?'
+            let result      = globalUtil.safeSendSQLSync(sql, post.logger, post.logger);
 
             // Prüfe ob Benutzer in Kombination der Email bereits exsistiert
             if(result.length === 0) {
@@ -50,14 +50,14 @@ router.route('/')
                         post.pw1        = md5(htmlspecialchars(post.pw1));
                         post.pw2        = md5(htmlspecialchars(post.pw2));
 
-                        sql             = `SELECT * FROM ArkAdmin_reg_code WHERE \`used\` = '0' AND \`code\` = ?`
-                        let code_result = synccon.query(mysql.format(sql, [post.code]));
+                        sql             = 'SELECT * FROM ArkAdmin_reg_code WHERE `used`=0 AND `code`=?';
+                        let code_result = globalUtil.safeSendSQLSync(sql, post.code);
                         if(code_result.length > 0) {
                             sql             = `INSERT INTO ArkAdmin_users (\`username\`, \`email\`, \`password\`, \`ban\`, \`registerdate\` ,\`rang\`) VALUES (?, ?, ?, '0', '${Date.now()}', '${code_result[0].rang === "0" ? "[]" : "[1]"}')`
-                            if(synccon.query(mysql.format(sql, [post.username, post.email, post.username]))) {
-                                sql         = `UPDATE ArkAdmin_reg_code SET \`used\`='1' WHERE \`code\`='${post.code}'`
-                                synccon.query(mysql.format(sql, [post.code]))
-                                response    += alerter.rd(1000);
+                            if(globalUtil.safeSendSQLSync(sql, post.username, post.email, post.username) !== false) {
+                                sql         = 'UPDATE ArkAdmin_reg_code SET `used`=1 WHERE `code`=?';
+                                result      = globalUtil.safeSendSQLSync(sql, post.code);
+                                response    += alerter.rd(result !== false ? 1000 : 2);
                             }
                             else {
                                 response    += alerter.rd(2);

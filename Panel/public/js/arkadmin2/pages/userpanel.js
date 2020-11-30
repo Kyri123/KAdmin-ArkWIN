@@ -25,13 +25,22 @@ function getUserList() {
             let htmUserList = $('#userlist');
 
             users.forEach((val, key) => {
+                let remove  = [
+                    `'#removeID~val~${val.id}'`,
+                    `'#removeTitle~htm~${val.username}'`
+                ];
                 let rangIDs = JSON.parse(val.rang);
+                let groups = [
+                    `'#userID~val~${val.id}'`,
+                    `'#userTitle~htm~${val.username}'`
+                ];
+                rangIDs.forEach((val) => groups.push(`'#group${val}~checkbox~true'`));
                 if(key !== 0) userlist += `<tr>
                                                 <td>
                                                     ${val.username}
                                                 </td>
                                                 <td>
-                                                    <span class="text-${rangIDs.includes(1) ? "danger" : "success"}">${rangIDs.includes(1) ? vars.lang_arr.userPanel.modal.admin: vars.lang_arr.userPanel.modal.user}</span>
+                                                    <span class="text-${rangIDs.includes(1) ? "danger" : "success"}">${rangIDs.includes(1) ? globalvars.lang_arr.userPanel.modal.admin: globalvars.lang_arr.userPanel.modal.user}</span>
                                                 </td>
                                                 <td>
                                                     ${val.email}
@@ -43,37 +52,21 @@ function getUserList() {
                                                     val.lastlogin
                                                 </td>-->
                                                 <td class="project-actions text-right">
-                                                    <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#remove${val.id}">
-                                                        <i class="fas fa-trash" aria-hidden="true">
-                                                        </i> ${vars.lang_arr.userPanel.remove}
-                                                    </a>
+                                                    ${hasPermissions(globalvars.perm, "all/is_admin") ? `<a id="banbtn${val.id}" class="btn btn-info btn-sm" href="#" data-toggle="modal" data-target="#groups" onclick="$('#groups').trigger('reset');setInModal(${groups.join(',')})">
+                                                        <i class="fas fa-edit" aria-hidden="true"></i>                                                         
+                                                        <!--${globalvars.lang_arr.userPanel.perm}-->
+                                                    </a>` : ''}
                                                     
-                                                    <a id="banbtn${val.id}" class="btn btn-${val.ban === 1 ? "danger" : "success"} btn-sm" href="#" onclick="toggleUser('${val.id}', this.id)">
-                                                        ${val.ban === 0 ? vars.lang_arr.userPanel.banned: vars.lang_arr.userPanel.free}
-                                                    </a>
+                                                    ${hasPermissions(globalvars.perm, "userpanel/delete_user") ? `<a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#remove" onclick="setInModal(${remove.join(',')})">
+                                                        <i class="fas fa-trash" aria-hidden="true"></i> 
+                                                        <!--${globalvars.lang_arr.userPanel.remove}-->
+                                                    </a>` : ''}
+                                                    
+                                                    ${hasPermissions(globalvars.perm, "userpanel/ban_user") ? `<a id="banbtn${val.id}" class="btn btn-${val.ban === 1 ? "danger" : "success"} btn-sm" href="#" onclick="toggleUser('${val.id}', this.id)">
+                                                        ${val.ban === 0 ? globalvars.lang_arr.userPanel.banned: globalvars.lang_arr.userPanel.free}
+                                                    </a>` : ''}
                                                 </td>
                                             </tr>`;
-
-                if($(`#remove${val.id}`).html() === undefined && key !== 0) $('#modallist').append(`<form class="modal fade" method="post" action="#" id="remove${val.id}" tabindex="-1" style="display: none;" aria-hidden="true">
-                                    <div class="modal-dialog modal-xl" role="document" style="max-width: 700px">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">${vars.lang_arr.userPanel.modalDelete.title}</h5>
-                                            </div>
-                                
-                                            <div class="modal-body">
-                                                <p>${vars.lang_arr.userPanel.modalDelete.text.replace("{username}", val.username)}</p>
-                                                <input name="uid" value="${val.id}" type="hidden">
-                                                <input name="deleteuser" value="true" type="hidden">
-                                            </div>
-                                
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">${vars.lang_arr.userPanel.modalDelete.cancel}</button>
-                                                <button type="button" class="btn btn-danger" name="del" onclick="removeUser('#remove${val.id}')">${vars.lang_arr.userPanel.modalDelete.remove}</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>`);
             });
 
             if(htmUserList.html() !== userlist) htmUserList.html(userlist);
@@ -96,7 +89,7 @@ function getCodeList() {
             codes.forEach((val, key) => {
                 codeList += `<tr id="code${val.id}">
                                 <td style="width:5%">
-                                    <span class="text-${val.rang === 1 ? "danger" : "success"}">${val.rang === 1 ? vars.lang_arr.userPanel.modal.admin: vars.lang_arr.userPanel.modal.user}</span>
+                                    <span class="text-${val.rang === 1 ? "danger" : "success"}">${val.rang === 1 ? globalvars.lang_arr.userPanel.modal.admin: globalvars.lang_arr.userPanel.modal.user}</span>
                                 </td>
                                 <td style="width:80%">
                                     <div class="input-group">
@@ -105,9 +98,9 @@ function getCodeList() {
                                             <button onclick="copythis('copy${val.id}')" class="btn btn-primary btn-flat" type="button">
                                                 <i class="fas fa-copy" aria-hidden="true"></i>
                                             </button>
-                                            <a class="btn btn-danger" href="#" onclick="removeCode('${val.id}', '#code${val.id}')">
+                                            ${hasPermissions(globalvars.perm, "userpanel/delete_code") ? `<a class="btn btn-danger" href="#" onclick="removeCode('${val.id}', '#code${val.id}')">
                                                 <i class="fas fa-trash" aria-hidden="true"></i>
-                                            </a>
+                                            </a>` : ''}
                                         </span>
                                     </div>
                                 </td>
@@ -162,16 +155,13 @@ function createCode() {
 }
 
 // Create Code
-function removeUser(htmlID) {
+function removeUser() {
     // führe Aktion aus
-    $.post(`/ajax/userpanel`, $(htmlID).serialize(), (data) => {
+    $.post(`/ajax/userpanel`, $('#remove').serialize(), (data) => {
         try {
             data    = JSON.parse(data);
             if(data.alert !== undefined) $('#global_resp').append(data.alert);
-            if (data.remove !== undefined) {
-                $(htmlID).modal('hide').remove();
-                $('.modal-backdrop').remove();
-            }
+            if (data.remove !== undefined) $('#remove').modal('hide');
         }
         catch (e) {
             console.log(e);
@@ -179,7 +169,6 @@ function removeUser(htmlID) {
     });
     return false;
 }
-
 
 // Toggle Ban
 function toggleUser(id, btnID) {
@@ -192,8 +181,23 @@ function toggleUser(id, btnID) {
             data    = JSON.parse(data);
             if(data.alert !== undefined) $('#global_resp').append(data.alert);
             if (data.toggled !== undefined) {
-                $('#' + btnID).html(data.ban === 0 ? vars.lang_arr.userPanel.banned: vars.lang_arr.userPanel.free).toggleClass('btn-danger', data.ban === 1).toggleClass('btn-success', data.ban === 0);
+                $('#' + btnID).html(data.ban === 0 ? globalvars.lang_arr.userPanel.banned: globalvars.lang_arr.userPanel.free).toggleClass('btn-danger', data.ban === 1).toggleClass('btn-success', data.ban === 0);
             }
+        }
+        catch (e) {
+            console.log(e);
+        }
+    });
+    return false;
+}
+
+function sendGroups() {
+    $.post(`/ajax/userpanel`, $(`#groups`).serialize(), (data) => {
+        try {
+            data    = JSON.parse(data);
+            if(data.alert !== undefined) $('#global_resp').append(data.alert);
+            getUserList();
+            if(data.success !== undefined) $(`#groups`).modal('hide');
         }
         catch (e) {
             console.log(e);

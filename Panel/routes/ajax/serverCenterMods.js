@@ -2,15 +2,14 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWINWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWINWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
 
 const express           = require('express')
 const router            = express.Router()
 const serverUtilInfos   = require('./../../app/src/util_server/infos');
-const fs                = require('fs');
 
 router.route('/')
 
@@ -18,15 +17,16 @@ router.route('/')
         let POST        = req.body;
 
         // Installierte Mod entfernen
-        if(POST.removeIstalled !== undefined) {
+        if(POST.removeIstalled !== undefined && userHelper.hasPermissions(req.session.uid, "mods/remove", POST.cfg)) {
             let modID       = POST.modID;
             let serverCfg   = serverUtilInfos.getConfig(POST.cfg);
             if(serverCfg.server === undefined) {
                 let success = false;
                 try {
-                    if(fs.existsSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}.mod`))       fs.rmSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}.mod`, {recursive: true})
-                    if(fs.existsSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}.modtime`))   fs.rmSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}.modtime`, {recursive: true})
-                    if(fs.existsSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}`))           fs.rmSync(`${serverCfg.path}\\ShooterGame\\Content\\Mods\\${modID}`, {recursive: true})
+                    let modPath = pathMod.join(serverCfg.path, '\\ShooterGame\\Content\\Mods\\');
+                    if(globalUtil.safeFileExsistsSync([modPath, `${modID}.mod`]))        globalUtil.safeFileRmSync([modPath, `${modID}.mod`])
+                    if(globalUtil.safeFileExsistsSync([modPath, `${modID}.modtime`]))    globalUtil.safeFileRmSync([modPath, `${modID}.modtime`])
+                    if(globalUtil.safeFileExsistsSync([modPath, modID]))                 globalUtil.safeFileRmSync([modPath, modID])
                     success = true;
                 }
                 catch (e) {
@@ -34,28 +34,31 @@ router.route('/')
                 }
                 res.render('ajax/json', {
                     data: JSON.stringify({
-                        alert: alerter.rd(success ? 1010 : 3).replace("{modid}", modID)
+                        alert: alerter.rd(success ? 1010 : 3).replace("{modid}", modID),
+                        success: success
                     })
                 });
             }
         }
 
         // Mod entfernen
-        if(POST.remove !== undefined) {
+        if(POST.remove !== undefined && userHelper.hasPermissions(req.session.uid, "mods/remove", POST.cfg)) {
             let serverCfg   = serverUtilInfos.getConfig(POST.cfg);
             if(serverCfg.server === undefined) {
                 let modID   = serverCfg.mods[POST.key];
                 serverCfg.mods.splice(POST.key, 1);
+                let success = serverUtilInfos.saveConfig(POST.cfg ,serverCfg);
                 res.render('ajax/json', {
                     data: JSON.stringify({
-                        alert: alerter.rd(serverUtilInfos.saveConfig(POST.cfg ,serverCfg) ? 1010 : 3).replace("{modid}", modID)
+                        alert: alerter.rd(success ? 1010 : 3).replace("{modid}", modID),
+                        success: success
                     })
                 });
             }
         }
 
         // Mod Hinzufügen
-        if(POST.addmod !== undefined) {
+        if(POST.addmod !== undefined && userHelper.hasPermissions(req.session.uid, "mods/add", POST.cfg)) {
             let mods        = serverUtilInfos.getConfig(POST.cfg).mods;
             let modid       = 0;
             if(POST.data !== '' && isNaN(POST.data)) {
@@ -85,7 +88,7 @@ router.route('/')
         }
 
         // Mod schieben
-        if(POST.push !== undefined) {
+        if(POST.push !== undefined && userHelper.hasPermissions(req.session.uid, "mods/changeplace", POST.cfg)) {
             let mods        = serverUtilInfos.getConfig(POST.cfg).mods;
             let k           = parseInt(POST.key);
             let k1          = k + 1;
@@ -119,6 +122,9 @@ router.route('/')
     .get((req,res)=>{
         // DEFAULT AJAX
         let GET         = req.query;
+
+        // Wenn keine Rechte zum abruf
+        if(!userHelper.hasPermissions(req.session.uid, "show", GET.server) || !userHelper.hasPermissions(req.session.uid, "mods/show", GET.server)) return true;
 
         // GET serverInfos
         if(GET.serverInfos !== undefined) {

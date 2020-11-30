@@ -17,7 +17,6 @@ setInterval(() => {
     $.get('/ajax/serverCenterAny?getglobalinfos', (datas) => {
         serverList  = JSON.parse(datas).servers_arr;
         if(serverList.length > 0) {
-            let modallist = ``;
             let list = ``;
             serverList.forEach((val) => {
                 let stateColor = val[1].is_installed ? (
@@ -27,7 +26,7 @@ setInterval(() => {
                     ) : "info"
                 ) : (val[1].is_free ? "warning" : "info");
 
-                if(val[1].server === undefined) list +=    `    <div class="col-lg-6 col-xl-6" id="${val[0]}">
+                if(val[1].server === undefined && hasPermissions(globalvars.perm, "show", val[0])) list +=    `    <div class="col-lg-6 col-xl-6" id="${val[0]}">
                                     <div class="card card-widget widget-user  item-box">
                                         <div class="card bg-dark card-widget widget-user mb-0">
                                             <div class="row p-2" title="${val[1].sessionName}">
@@ -52,7 +51,7 @@ setInterval(() => {
                                                 <a href="/servercenter/${val[0]}" target="_blank" style="width: 100%" class="btn btn-dark"><i class="fas fa-server" aria-hidden="true"></i></a>
                                             </div>
                                             <div class="right-no-top ml-auto d-inline" style="width:50%;padding-left: 45px;">
-                                                <a style="width: 100%" class="text-white btn btn-danger " data-toggle="modal" data-target="#remove${val[0]}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                <a style="width: 100%" class="text-white btn btn-danger${hasPermissions(globalvars.perm, "servercontrolcenter/delete", val[0]) ? `" data-toggle="modal" data-target="#remove${val[0]}"` : ' disabled"'}><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                             </div>
                                         </div>
                                         <div class="card-footer p-0">
@@ -60,19 +59,19 @@ setInterval(() => {
                                                 <div class="col-sm-4 border-right border-sm-right">
                                                     <div class="description-block">
                                                         <h5 class="description-header"><b><a href="steam://connect/${vars.ip}:${val[1].query}">${vars.ip}:${val[1].query}</a></b></h5>
-                                                        <span class="description-text">${vars.lang_arr.servercontrolcenter.ip}</span>
+                                                        <span class="description-text">${globalvars.lang_arr.servercontrolcenter.ip}</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4 border-right border-sm-right">
                                                     <div class="description-block">
-                                                        <h5 class="description-header"><b class="text-${stateColor}">${vars.lang_arr.state[stateColor]}</b></h5>
-                                                        <span class="description-text">${vars.lang_arr.servercontrolcenter.state}</span>
+                                                        <h5 class="description-header"><b class="text-${stateColor}">${globalvars.lang_arr.state[stateColor]}</b></h5>
+                                                        <span class="description-text">${globalvars.lang_arr.servercontrolcenter.state}</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="description-block">
                                                         <h5 class="description-header"><b>${val[1].serverMap}</b></h5>
-                                                        <span class="description-text">${vars.lang_arr.servercontrolcenter.map}</span>
+                                                        <span class="description-text">${globalvars.lang_arr.servercontrolcenter.map}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -83,26 +82,26 @@ setInterval(() => {
 
                 if($(`#remove${val[0]}`).html() === undefined) $('#modallist').append(`<form class="modal fade" method="post" action="#" id="remove${val[0]}" tabindex="-1" style="display: none;" aria-hidden="true">
                                     <div class="modal-dialog modal-xl" role="document" style="max-width: 700px">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">${vars.lang_arr.servercontrolcenter.modalDelete.title}</h5>
+                                        <div class="modal-content border-0">
+                                            <div class="modal-header bg-danger">
+                                                <h5 class="modal-title">${globalvars.lang_arr.servercontrolcenter.modalDelete.title}</h5>
                                             </div>
                                 
                                             <div class="modal-body">
-                                                <p>${vars.lang_arr.servercontrolcenter.modalDelete.text.replace("{servername}", val[1].sessionName)}</p>
+                                                <p>${globalvars.lang_arr.servercontrolcenter.modalDelete.text.replace("{servername}", val[1].sessionName)}</p>
                                                 <input name="cfg" value="${val[0]}" type="hidden">
                                                 <input name="deleteserver" value="true" type="hidden">
                                             </div>
                                 
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">${vars.lang_arr.servercontrolcenter.modalDelete.cancel}</button>
-                                                <button type="button" class="btn btn-danger" name="del" onclick="submitform('#remove${val[0]}')">${vars.lang_arr.servercontrolcenter.modalDelete.remove}</button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">${globalvars.lang_arr.servercontrolcenter.modalDelete.cancel}</button>
+                                                <button type="button" class="btn btn-danger" name="del" onclick="submitform('#remove${val[0]}')">${globalvars.lang_arr.servercontrolcenter.modalDelete.remove}</button>
                                             </div>
                                         </div>
                                     </div>
                                 </form>`);
             });
-            list    += toEnd
+            if(hasPermissions(globalvars.perm, "servercontrolcenter/create")) list += toEnd
 
             if($('#serverlist').html() !== list)        $('#serverlist').html(list);
         }

@@ -8,7 +8,6 @@
  */
 
 // require Module
-const fs            = require('fs');
 const Gamedig       = require('gamedig');
 const ip            = require("ip");
 const serverInfos   = require('./../../util_server/infos');
@@ -42,7 +41,7 @@ function save(data, name, state, use_state = true) {
             }
         }
     });*/
-    fs.writeFileSync(`./public/json/server/${name}.json`, JSON.stringify(data));
+    globalUtil.safeFileSaveSync([mainDir, '/public/json/server', `${name}.json`], JSON.stringify(data));
 }
 
 module.exports = {
@@ -54,32 +53,41 @@ module.exports = {
             // Erstelle Abfrage wenn es eine .cfg Datei ist
             if (ITEM.includes(".json")) {
 
-                if(!fs.existsSync(`./public/json/server/`)) fs.mkdirSync(`./public/json/server/`);
+                let file = pathMod.join(mainDir, '/public/json/server/');
+                if(!globalUtil.safeFileExsistsSync([file])) globalUtil.safeFileMkdirSync([file]);
                 let name            = ITEM.replace(".json", "");
                 let data            = serverInfos.getServerInfos(name);
                 let servCFG         = serverInfos.getConfig(name);
                 let serverPath      = servCFG.path;
-                let serverPathLogs  = servCFG.pathLogs;
 
                 // Lese installierte Mods
                 data.installedMods  = [];
                 data.notInstalledMods  = [];
                 if(servCFG.server === undefined) {
-                    let modPath         = `${servCFG.path}\\ShooterGame\\Content\\Mods`;
-                    let dirRead         = fs.existsSync(modPath) ? fs.readdirSync(modPath, { withFileTypes: true }) : [];
+                    let modPath         = pathMod.join(servCFG.path, '\\ShooterGame\\Content\\Mods');
+                    let dirRead         = globalUtil.safeFileExsistsSync([modPath]) ? fs.readdirSync(modPath, { withFileTypes: true }) : [];
 
                     if(dirRead.length > 0) {
                         dirRead.forEach((val) => {
                             if(
+                                (val.isFile()       && val.name !== "111111111.mod" && !isNaN(val.name.replace(".modtime", ""))) ||
                                 (val.isFile()       && val.name !== "111111111.mod" && !isNaN(val.name.replace(".mod", ""))) ||
                                 (val.isDirectory()  && val.name !== "111111111"     && !isNaN(val.name))
-                            ) if(!data.installedMods.includes(parseInt(val.name))) data.installedMods.push(parseInt(val.name));
+                            ) if(
+                                globalUtil.safeFileExsistsSync([modPath, parseInt(val.name).toString()]) &&
+                                globalUtil.safeFileExsistsSync([modPath, parseInt(val.name).toString() + '.mod']) &&
+                                globalUtil.safeFileExsistsSync([modPath, parseInt(val.name).toString() + '.modtime'])
+                            ) if(
+                                !data.installedMods.includes(parseInt(val.name).toString())
+                            ) data.installedMods.push(parseInt(val.name).toString());
                         })
                     }
 
                     if(servCFG.mods.length > 0) {
+                        let modarr = servCFG.mods;
+                        if(servCFG.MapModID !== 0) modarr.push(servCFG.MapModID);
                         servCFG.mods.forEach((val) => {
-                            if(!data.notInstalledMods.includes(val)) data.notInstalledMods.push(val);
+                            if(!data.installedMods.includes(parseInt(val).toString()) && !data.notInstalledMods.includes(parseInt(val).toString())) data.notInstalledMods.push(parseInt(val).toString());
                         });
                     }
                 }
@@ -94,9 +102,8 @@ module.exports = {
                 data.ServerName     = servCFG.sessionName;
                 data.ARKServers     = `https://arkservers.net/server/${ip.address()}:${servCFG.query}`;
                 data.connect        = `steam://connect/${ip.address()}:${servCFG.query}`;
-                data.is_installing  = fs.existsSync(`${serverPath}\\steamapps\\appmanifest_${PANEL_CONFIG.appID_server}.acf`) && !fs.existsSync(`${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe`);
-                let exePath         = `${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe`;
-                data.is_installed   = fs.existsSync(`${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe`);
+                data.is_installing  = globalUtil.safeFileExsistsSync([serverPath, '\\steamapps\\', `appmanifest_${PANEL_CONFIG.appID_server}.acf`]) && !globalUtil.safeFileExsistsSync([serverPath, '\\ShooterGame\\Binaries\\Win64\\', 'ShooterGameServer.exe']);
+                data.is_installed   = globalUtil.safeFileExsistsSync([serverPath, '\\ShooterGame\\Binaries\\Win64\\', 'ShooterGameServer.exe']);
                 data.is_free        = true;
                 // Runing infos
                 data.run            = false;
@@ -115,6 +122,7 @@ module.exports = {
                 data.aplayersarr    = [];
                 data.ping           = 0;
                 data.version        = data.version === undefined ? "" : data.version;
+                data.modNeedUpdates = serverUtil.checkModUpdates(name);
 
 
                 // Alerts
@@ -124,13 +132,20 @@ module.exports = {
                     if(serverUtil.checkSeverUpdate(name)) data.alerts.push("3998");
 
                     // Prüfe Mod Updates
-                    if(serverUtil.checkModUpdates(name) !== false) data.alerts.push("3997");
+                    if(data.modNeedUpdates !== false) data.alerts.push("3997");
 
                     // Prüfe Mod Installiert
                     if(data.notInstalledMods.length > 0) data.alerts.push("3996");
 
                     // Prüfe Mod Installiert
                     if(servCFG.shouldRun) data.alerts.push("3995");
+
+                    // Wenn Logs nicht verfügbar sind
+                    // TODO: 0.0.4 wieder Aktivieren
+                    //if(!servCFG.flags.includes('logs')) data.alerts.push("3994");
+
+                    // Wenn Mods nicht verfügbar sind
+                    if(servCFG.flags.includes('epiconly') || servCFG.flags.includes('crossplay')) data.alerts.push("3993");
                 }
                 else {
                     data.alerts.push("3999");

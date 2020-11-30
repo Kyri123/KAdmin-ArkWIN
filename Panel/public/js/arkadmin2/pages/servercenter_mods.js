@@ -21,12 +21,13 @@ function get() {
             serverInfos     : true,
             cfg             : vars.cfg
         }, (server) => {
-            server  = JSON.parse(server).serverCFG;
+            let serverInfos     = JSON.parse(server).serverInfos;
+            server              = JSON.parse(server).serverCFG;
             let list = ``;
             if(server.mods.length > 0) {
                 server.mods.forEach((val, key) => {
                     let i = steamAPI.find(p => p.publishedfileid == val);
-                    list += `<div class="col-lg-6 col-xl-3">
+                    list += `<div class="col-lg-6 col-xl-3"id="mod${val}">
                                 <div class="card card-widget widget-user item-box">
                                     <div class="card bg-dark card-widget widget-user mb-0">
                                         <div class="row p-2">
@@ -37,14 +38,14 @@ function get() {
                                             </div>
                                             <div class="col-6 btn-group">
                                                 <!-- Push Up -->
-                                                <a class="btn btn-sm btn-outline-secondary ${server.mods[(key-1)] !== undefined ? `" onclick="push(true, '${key}')"` : "disabled\""}><i class="fas fa-arrow-up" aria-hidden="true"></i></a>
+                                                <a class="btn btn-sm btn-outline-secondary ${hasPermissions(globalvars.perm, "mods/changeplace", varser.cfg) && server.mods[(key-1)] !== undefined ? `" onclick="push(true, '${key}')"` : "disabled\""}><i class="fas fa-arrow-up" aria-hidden="true"></i></a>
                                                 <!-- Push down -->
-                                                <a class="btn btn-sm btn-outline-secondary ${server.mods[(key+1)] !== undefined ? `" onclick="push(false, '${key}')"` : "disabled\""}><i class="fas fa-arrow-down" aria-hidden="true"></i></a>
+                                                <a class="btn btn-sm btn-outline-secondary ${hasPermissions(globalvars.perm, "mods/changeplace", varser.cfg) && server.mods[(key+1)] !== undefined ? `" onclick="push(false, '${key}')"` : "disabled\""}><i class="fas fa-arrow-down" aria-hidden="true"></i></a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="widget-user-header text-white" style="background: url('/img/backgrounds/5.jpg') center center;">
-                                        <h5 title="${typeof(i) !== "undefined" ? i.title !== undefined ? i.title : "???" : "???"}" class="widget-user-desc text-bold text-center text-light border" style="background-color: rgb(66 66 66 / 58%)!important;">${typeof(i) !== "undefined" ? i.title !== undefined ? `${i.title.substr(0, 14)}...` : "???" : "???"}</h5>
+                                    <div class="widget-user-header text-" style="background: url('/img/backgrounds/5.jpg') center center;">
+                                        <h5 title="${typeof(i) !== "undefined" ? i.title !== undefined ? i.title : "???" : "???"}" class="widget-user-desc text-bold text-center border ${!serverInfos.notInstalledMods.includes(val) ? (serverInfos.modNeedUpdates === false ? 'text-success border-success' : (!serverInfos.modNeedUpdates.includes(val) ? 'text-success border-success' : 'text-danger border-danger')) : 'text-warning border-warning'}" style="background-color: rgb(66 66 66 / 58%)!important;">${typeof(i) !== "undefined" ? i.title !== undefined ? `${i.title.substr(0, 14)}...` : "???" : "???"}</h5>
                                     </div>
                                     <div class="widget-user-image" id="serv_img" style="top: 130px;z-index: 1000"><img src="${typeof(i) !== "undefined" ? i.preview_url !== undefined ? i.preview_url : "https://steamuserimages-a.akamaihd.net/ugc/885384897182110030/F095539864AC9E94AE5236E04C8CA7C2725BCEFF/" : "https://steamuserimages-a.akamaihd.net/ugc/885384897182110030/F095539864AC9E94AE5236E04C8CA7C2725BCEFF/"}" style="border-top-width: 3px!important;height: 90px;width: 90px;background-color: #001f3f" class="border-secondary"></div>
                                     
@@ -55,7 +56,7 @@ function get() {
                                         </div>
                                         <!-- Remove btn -->
                                         <div class="right-no-top ml-auto d-inline" style="width:50%;padding-left: 45px;">
-                                            <a style="width: 100%" onclick="remove('${key}')" class="text-white btn btn-danger  "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                            <a style="width: 100%" class="text-white btn btn-danger${hasPermissions(globalvars.perm, "mods/remove", varser.cfg) ? `" onclick="remove('${key}')"` : ' disabled"'}><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                         </div>
                                     </div>
                                     
@@ -64,13 +65,13 @@ function get() {
                                             <div class="col-sm-6 border-right">
                                                 <div class="description-block">
                                                     <h5 class="description-header">${convertTime(typeof(i) !== "undefined" ? i.time_updated !== undefined ? i.time_updated * 1000 : 0 : 0)}</h5>
-                                                    <span class="description-text">${vars.lang_arr.serverCenterMods.time}</span>
+                                                    <span class="description-text">${globalvars.lang_arr.serverCenterMods.time}</span>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="description-block">
                                                     <h5 class="description-header"><b>${val}</b></h5>
-                                                    <span class="description-text">${vars.lang_arr.serverCenterMods.modid}</span>
+                                                    <span class="description-text">${globalvars.lang_arr.serverCenterMods.modid}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -87,7 +88,7 @@ function get() {
                                 <div class="row p-0">
                                     <div class="col-12">
                                         <i class="text-black-50 fas fa-exclamation-triangle -align-left position-absolute" style="font-size: 45px;color: rgba(0,0,0,.5)!important;" height="50" width="50" aria-hidden="true"></i>
-                                        <div style="margin-left: 60px;">${vars.lang_arr.serverCenterMods.noModFoundTitle}<br><span style="font-size: 11px;">${vars.lang_arr.serverCenterMods.noModFoundText}</span></div>
+                                        <div style="margin-left: 60px;">${globalvars.lang_arr.serverCenterMods.noModFoundTitle}<br><span style="font-size: 11px;">${globalvars.lang_arr.serverCenterMods.noModFoundText}</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -112,18 +113,17 @@ function getTnstalled() {
             let json            = JSON.parse(server)
             server              = json.serverCFG;
             let serverInfos     = json.serverInfos;
-            console.log(serverInfos.installedMods)
             let list = ``;
             if(serverInfos.installedMods.length > 0) {
                 serverInfos.installedMods.forEach((val, key) => {
                     let i = steamAPI.find(p => p.publishedfileid == val);
-                    list += `<div class="col-lg-6 col-xl-3">
+                    list += `<div class="col-lg-6 col-xl-3" id="modi${val}">
                                 <div class="card card-widget widget-user item-box">
                                     <div class="card bg-dark card-widget widget-user mb-0">
                                         <div class="row p-2">
                                             <div class="col-6">
                                                 <h5 class="text-center left d-inline pt-3 pl-0 m-0 ${server.mods.includes(parseInt(val).toString()) ? "text-success" : "text-danger"}">
-                                                    ${server.mods.includes(parseInt(val).toString()) ? vars.lang_arr.serverCenterMods.active : vars.lang_arr.serverCenterMods.notActive}
+                                                    ${server.mods.includes(parseInt(val).toString()) ? globalvars.lang_arr.serverCenterMods.active : globalvars.lang_arr.serverCenterMods.notActive}
                                                 </h5>
                                             </div>
                                         </div>
@@ -140,7 +140,7 @@ function getTnstalled() {
                                         </div>
                                         <!-- Remove btn -->
                                         <div class="right-no-top ml-auto d-inline" style="width:50%;padding-left: 45px;">
-                                            <a style="width: 100%" onclick="removeInstalled('${val}')" class="text-white btn btn-danger  "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                            <a style="width: 100%" class="text-white btn btn-danger${hasPermissions(globalvars.perm, "mods/remove", varser.cfg) ? `" onclick="removeInstalled('${val}')"` : ' disabled"'}><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                         </div>
                                     </div>
                                     
@@ -149,13 +149,13 @@ function getTnstalled() {
                                             <div class="col-sm-6 border-right">
                                                 <div class="description-block">
                                                     <h5 class="description-header">${convertTime(typeof(i) !== "undefined" ? i.time_updated !== undefined ? i.time_updated * 1000 : 0 : 0)}</h5>
-                                                    <span class="description-text">${vars.lang_arr.serverCenterMods.time}</span>
+                                                    <span class="description-text">${globalvars.lang_arr.serverCenterMods.time}</span>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="description-block">
                                                     <h5 class="description-header"><b>${val}</b></h5>
-                                                    <span class="description-text">${vars.lang_arr.serverCenterMods.modid}</span>
+                                                    <span class="description-text">${globalvars.lang_arr.serverCenterMods.modid}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -172,7 +172,7 @@ function getTnstalled() {
                                 <div class="row p-0">
                                     <div class="col-12">
                                         <i class="text-black-50 fas fa-exclamation-triangle -align-left position-absolute" style="font-size: 45px;color: rgba(0,0,0,.5)!important;" height="50" width="50" aria-hidden="true"></i>
-                                        <div style="margin-left: 60px;">${vars.lang_arr.serverCenterMods.noModFoundTitle}<br><span style="font-size: 11px;">${vars.lang_arr.serverCenterMods.noModFoundText}</span></div>
+                                        <div style="margin-left: 60px;">${globalvars.lang_arr.serverCenterMods.noModFoundTitle}<br><span style="font-size: 11px;">${globalvars.lang_arr.serverCenterMods.noModFoundText}</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -194,6 +194,7 @@ function remove(key) {
         try {
             data    = JSON.parse(data);
             if(data.alert !== undefined) $('#all_resp').append(data.alert);
+            if(data.success === true) $(`mod${modid}`).remove();
             get();
         }
         catch (e) {

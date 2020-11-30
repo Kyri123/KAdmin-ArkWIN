@@ -1,12 +1,12 @@
 @echo off
 
 WHERE npm
-IF %ERRORLEVEL% NEQ 0 ECHO Python command "npm" not found!
+IF %ERRORLEVEL% NEQ 0 ECHO command "npm" not found!
 IF %ERRORLEVEL% NEQ 0 pause
 IF %ERRORLEVEL% NEQ 0 exit
 
 WHERE node
-IF %ERRORLEVEL% NEQ 0 ECHO Python command "node" not found!
+IF %ERRORLEVEL% NEQ 0 ECHO command "node" not found!
 IF %ERRORLEVEL% NEQ 0 pause
 IF %ERRORLEVEL% NEQ 0 exit
 

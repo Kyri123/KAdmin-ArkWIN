@@ -64,17 +64,17 @@ function get() {
                                 </table>
                                 <div class="right">
     
-                                    ${serverInfos.pid === 0 ? `<a href="javascript:void();" onclick="setInModal('#filepi~val~${val}', '#filepititle~htm~${time}')" class="btn btn-info btn-sm" data-toggle="modal" data-target="#playinBackup">
+                                    ${serverInfos.pid === 0 && hasPermissions(globalvars.perm, "backups/playin", varser.cfg) ? `<a href="javascript:void();" onclick="setInModal('#filepi~val~${val}', '#filepititle~htm~${time}')" class="btn btn-info btn-sm" data-toggle="modal" data-target="#playinBackup">
                                         <span class="icon text-white">
                                             <i class="fas fa-play" aria-hidden="true"></i>
                                         </span>
                                     </a>` : ""}
     
-                                    <a href="javascript:void();" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#removeBackup" onclick="setInModal('#fileNameRemove~val~${val}', '#removeTitle~htm~${time}')">
+                                    ${hasPermissions(globalvars.perm, "backups/remove", varser.cfg) ? `<a href="javascript:void();" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#removeBackup" onclick="setInModal('#fileNameRemove~val~${val}', '#removeTitle~htm~${time}')">
                                         <span class="icon text-white">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </span>
-                                    </a>
+                                    </a>` : ""}
                                 </div>
                             </li>`);
                     $(`#lcc${ktimes}`).html($(`#lc${ktimes} li`).length);

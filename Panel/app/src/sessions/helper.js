@@ -2,14 +2,13 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWINWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWINWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
 
 const { array_replace_recursive }   = require('locutus/php/array');
-const { getServerList }             = require('./../global_infos')
-const fs                            = require('fs')
+const { getServerList }             = require('./../global_infos');
 
 
 module.exports = {
@@ -19,32 +18,21 @@ module.exports = {
      * @returns {boolean}
      */
     user_exsists: (uid) => {
-        let sql         = `SELECT * FROM ArkAdmin_users WHERE \`id\`=?`;
-        sql             = mysql.format(sql, [uid]);
-        let result      = synccon.query(sql);
-        if(result.length > 0) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        let result = globalUtil.safeSendSQLSync('SELECT * FROM `ArkAdmin_users` WHERE `id`=?', uid);
+        return result !== false ? result.length > 0 : false;
     },
 
     /**
-     * Gibt alle
+     * Gibt alle Infomationen über einen Benutzer wieder
      * @param {int|string} uid Benutzer ID
-     * @returns {{id: number}|*}
+     * @returns {boolean|array}
      */
     getinfos: (uid) => {
-        let sql         = `SELECT * FROM ArkAdmin_users WHERE \`id\`=?`;
-        sql             = mysql.format(sql, [uid]);
-        let result      = synccon.query(sql);
-        if(result.length > 0) {
-            return result[0];
+        if(module.exports.user_exsists(uid)) {
+            let result = globalUtil.safeSendSQLSync('SELECT * FROM `ArkAdmin_users` WHERE `id`=?', uid);
+            if(result !== false) if(result.length > 0) return result[0];
         }
-        else {
-            return {"id":0};
-        }
+        return false;
     },
 
     /**
@@ -52,12 +40,34 @@ module.exports = {
      * @param {int|string} uid Benutzer ID
      * @param {string} field Feldname
      * @param {int|string} data Information
-     * @returns {*}
+     * @returns {boolean}
      */
     writeinfos: (uid, field, data) => {
-        let sql         = `UPDATE arkadmin_users SET ?? = ? WHERE \`id\` = ?`;
-        sql             = mysql.format(sql, [field, data, uid]);
-        return synccon.query(sql);
+        if(module.exports.user_exsists(uid)) {
+            return globalUtil.safeSendSQLSync('UPDATE arkadmin_users SET ?? = ? WHERE \`id\` = ?', field, data, uid) !== false;
+        }
+        return false;
+    },
+
+    /**
+     * Gibt die default Permission aus
+     * @returns {array}
+     */
+    defaultPermissions: () => {
+        let permissions         = globalUtil.safeFileReadSync([mainDir, '/app/json/permissions/', 'default.json'], true);
+        let servers             = getServerList();
+
+        for (const [key] of Object.entries(servers)) {
+            try {
+                let permissions_servers = globalUtil.safeFileReadSync([mainDir, '/app/json/permissions/', 'default_server.json'], true);
+                permissions.server[key] = permissions_servers;
+            }
+            catch (e) {
+                if(debug) console.log(e);
+            }
+        }
+
+        return permissions;
     },
 
     /**
@@ -66,17 +76,15 @@ module.exports = {
      * @returns {any|{id: number}}
      */
     permissions: (uid) => {
-        let sql         = `SELECT * FROM ArkAdmin_users WHERE \`id\`=?`;
-        sql             = mysql.format(sql, [uid]);
-        let result      = synccon.query(sql);
+        let result      = globalUtil.safeSendSQLSync('SELECT * FROM ArkAdmin_users WHERE `id`=?', uid);
         if(result.length > 0) {
-            let permissions         = JSON.parse(fs.readFileSync('./app/json/permissions/default.json'));
+            let permissions         = globalUtil.safeFileReadSync([mainDir, '/app/json/permissions/', 'default.json'], true);
             let groups              = JSON.parse(result[0].rang);
             let servers             = getServerList();
 
             for (const [key] of Object.entries(servers)) {
                 try {
-                    let permissions_servers = JSON.parse(fs.readFileSync('./app/json/permissions/default_server.json'));
+                    let permissions_servers = globalUtil.safeFileReadSync([mainDir, '/app/json/permissions/', 'default_server.json'], true);
                     permissions.server[key] = permissions_servers;
                 }
                 catch (e) {
@@ -85,10 +93,12 @@ module.exports = {
             };
 
             groups.forEach((val) => {
-                let group_result = synccon.query(mysql.format('SELECT * FROM ArkAdmin_user_group WHERE `id`=?', [val]));
-                if(group_result.length > 0) {
-                    let groups_perm = JSON.parse(group_result[0].permissions);
-                    permissions = array_replace_recursive(permissions, groups_perm);
+                let group_result = globalUtil.safeSendSQLSync('SELECT * FROM ArkAdmin_user_group WHERE `id`=?', val);
+                if(group_result !== false) {
+                    if(group_result.length > 0) {
+                        let groups_perm = JSON.parse(group_result[0].permissions);
+                        permissions = array_replace_recursive(permissions, groups_perm);
+                    }
                 }
             });
 
@@ -100,14 +110,48 @@ module.exports = {
     },
 
     /**
+     * Prüft ob der Nutzer die nötigen Rechte hat
+     * @param {int} uid Benutzer ID
+     * @param {string} perm Pfad (format: 'xxx/xxx/...')
+     * @param {string|boolean} server wenn es serverechte sind -> Servername
+     * @returns {any|{id: number}}
+     */
+    hasPermissions: (uid, perm, server = false) => {
+        let userperm = module.exports.permissions(uid);
+        if(typeof userperm.id === "undefined") {
+            try {
+                let permarr = server !== false ? userperm.server[server] !== undefined ? userperm.server[server] : false : userperm;
+                if(permarr === false) return false;
+
+                let bool = false;
+                let needPerm    = perm.includes("/") ? perm.split('/') : [perm];
+                needPerm.forEach((val) => {
+                    if(permarr[val] !== undefined) {
+                        permarr = permarr[val];
+                        if(typeof permarr !== "object" && typeof permarr === "number") bool = parseInt(permarr) === 1;
+                    }
+                });
+
+                if(server !== false) if(permarr.is_server_admin === 1) bool = true;
+                if(userperm.all.is_admin === 1) bool = true;
+
+                return bool;
+            }
+            catch (e) {
+                if(debug) console.log(e);
+            }
+        }
+        return false;
+    },
+
+    /**
      *
      * @param {int} uid
      *
      */
     setLoginTime: (uid) => {
-        let sql         = `UPDATE arkadmin_users SET \`lastlogin\` = ? WHERE \`id\` = ?`;
-        sql             = mysql.format(sql, [Date.now(), uid]);
-        return synccon.query(sql);
+        let result = globalUtil.safeSendSQLSync('UPDATE arkadmin_users SET `lastlogin` = ? WHERE `id` = ?', Date.now(), uid);
+        return result !== false;
     },
 
     /**
@@ -116,23 +160,20 @@ module.exports = {
      * @returns {*}
      */
     removeUser: (uid) => {
-        let sql         = `DELETE FROM arkadmin_users WHERE \`id\` = ?`;
-        sql             = mysql.format(sql, [uid]);
-        return synccon.query(sql);
+        let result = globalUtil.safeSendSQLSync('DELETE FROM arkadmin_users WHERE `id` = ?', uid);
+        return result !== false;
     },
 
     /**
      * Erzeugt einen Register Code
      * @param {int|string} rank Rang (0 === Benutzer | 1 === Admin)
-     * @returns {*}
+     * @returns {boolean|string}
      */
     createCode: (rank) => {
         rank = parseInt(rank);
         let rnd         = Math.random().toString(36).substring(2, 7) + Math.random().toString(36).substring(2, 7);
-        let sql         = `INSERT INTO arkadmin_reg_code (code, used, rang) VALUES (?, 0, ?);`;
-        sql             = mysql.format(sql, [rnd, rank === 1 ? 1 : 0]);
-        synccon.query(sql)
-        return rnd;
+        let result      = globalUtil.safeSendSQLSync('INSERT INTO arkadmin_reg_code (code, used, rang) VALUES (?, 0, ?)', rnd, rank === 1 ? 1 : 0);
+        return result !== false ? rnd : false;
     },
 
     /**
@@ -141,8 +182,7 @@ module.exports = {
      * @returns {*}
      */
     removeCode: (id) => {
-        let sql         = `DELETE FROM arkadmin_reg_code WHERE \`id\` = ?`;
-        sql             = mysql.format(sql, [id]);
-        return synccon.query(sql);
+        let result = globalUtil.safeSendSQLSync('DELETE FROM arkadmin_reg_code WHERE `id` = ?', id);
+        return result !== false;
     },
 }

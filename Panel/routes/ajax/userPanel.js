@@ -2,24 +2,27 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWINWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWINWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
 
 const express           = require('express')
 const router            = express.Router()
-const helper_user   = require('./../../app/src/sessions/helper');
+const userHelper   = require('./../../app/src/sessions/helper');
 
 router.route('/')
 
     .post((req,res)=>{
         let POST        = req.body;
 
+        // Wenn der Benutzer keine Rechte hat diese Seite aufzurufen
+        if(!userHelper.hasPermissions(req.session.uid, "userpanel/show")) return true;
+
         // Bannen/Entbannen
-        if(POST.toggleUser !== undefined) {
-            let userInfos = helper_user.getinfos(POST.id);
-            helper_user.writeinfos(POST.id, "ban", userInfos.ban === 1 ? 0 : 1);
+        if(POST.toggleUser !== undefined && userHelper.hasPermissions(req.session.uid, "userpanel/ban_user")) {
+            let userInfos = userHelper.getinfos(POST.id);
+            userHelper.writeinfos(POST.id, "ban", userInfos.ban === 1 ? 0 : 1);
 
             res.render('ajax/json', {
                 data: JSON.stringify({
@@ -31,9 +34,9 @@ router.route('/')
         }
 
         // Benutzer Löschen
-        if(POST.deleteuser !== undefined) {
-            let userInfos = helper_user.getinfos(POST.uid);
-            helper_user.removeUser(POST.uid);
+        if(POST.deleteuser !== undefined && userHelper.hasPermissions(req.session.uid, "userpanel/delete_user")) {
+            let userInfos = userHelper.getinfos(POST.uid);
+            userHelper.removeUser(POST.uid);
 
             res.render('ajax/json', {
                 data: JSON.stringify({
@@ -45,8 +48,8 @@ router.route('/')
         }
 
         // Code Löschen
-        if(POST.removeCode !== undefined) {
-            helper_user.removeCode(POST.id);
+        if(POST.removeCode !== undefined && userHelper.hasPermissions(req.session.uid, "userpanel/delete_code")) {
+            userHelper.removeCode(POST.id);
 
             res.render('ajax/json', {
                 data: JSON.stringify({
@@ -57,13 +60,32 @@ router.route('/')
         }
 
         // Code Erzeugen
-        if(POST.addCode !== undefined) {
-            let code = helper_user.createCode(POST.rank);
+        if(POST.addCode !== undefined && userHelper.hasPermissions(req.session.uid, "userpanel/create_code")) {
+            let code = userHelper.createCode(POST.rank);
 
             res.render('ajax/json', {
                 data: JSON.stringify({
                     added: true,
                     alert: alerter.rd(1008).replace("{code}", code)
+                })
+            });
+        }
+
+        // Gruppen zuweisen
+        if(POST.setGroups !== undefined && userHelper.hasPermissions(req.session.uid, "all/is_admin")) {
+            let alertcode   = 8;
+            let userInfos   = userHelper.getinfos(POST.uid);
+            let groups      = POST.groups === undefined ? [] : Array.isArray(POST.groups) ? POST.groups : [];
+            groups.forEach((value, index) => groups[index] = parseInt(value));
+
+            if(userInfos !== false) {
+                alertcode   = userHelper.writeinfos(userInfos.id, "rang", JSON.stringify(groups)) !== false ? 1017 : alertcode;
+            }
+
+            res.render('ajax/json', {
+                data: JSON.stringify({
+                    alert: alerter.rd(alertcode),
+                    success: true
                 })
             });
         }
@@ -73,17 +95,20 @@ router.route('/')
         // DEFAULT AJAX
         let GET         = req.query;
 
+        // Wenn der Benutzer keine Rechte hat diese Seite aufzurufen
+        if(!userHelper.hasPermissions(req.session.uid, "userpanel/show")) return true;
+
         // Userlist
         if(GET.getuserlist) res.render('ajax/json', {
             data: JSON.stringify({
-                userlist: synccon.query(`SELECT \`id\`, \`username\`, \`email\`, \`lastlogin\`, \`registerdate\`, \`rang\`, \`ban\` FROM ArkAdmin_users`)
+                userlist: globalUtil.safeSendSQLSync('SELECT `id`, `username`, `email`, `lastlogin`, `registerdate`, `rang`, `ban` FROM ArkAdmin_users')
             })
         });
 
         // Codelist
         if(GET.getcodelist) res.render('ajax/json', {
             data: JSON.stringify({
-                codelist: synccon.query(`SELECT * FROM \`ArkAdmin_reg_code\` WHERE \`used\`=0`)
+                codelist: globalUtil.safeSendSQLSync(`SELECT * FROM \`ArkAdmin_reg_code\` WHERE \`used\`=0${!userHelper.hasPermissions(req.session.uid, "all/is_admin") ? ' AND `rang`=0' : ''}`)
             })
         });
     })

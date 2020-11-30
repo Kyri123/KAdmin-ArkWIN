@@ -2,8 +2,8 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWINWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWINWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
 
@@ -19,25 +19,22 @@ module.exports = {
      */
     getStartLine: (server) => {
         let servConfig  = serverUtilInfos.getConfig(server);
-        let servInfos   = serverUtilInfos.getServerInfos(server);
         if(servConfig.server === undefined) {
             let serverPath          = servConfig.path;
+            let logPath          = servConfig.pathLogs + '\\latest.log';
+            if(!globalUtil.safeFileExsistsSync([logPath])) globalUtil.safeFileSaveSync([logPath], '');
+
             // baue Mod optionen
-            let mods    = ''
-            if(servConfig.mods.length > 0) {
-                mods    = `?GameModIds=${servConfig.mods[0]}`
-                if(servConfig.mods.length > 1) {
-                    servConfig.mods.forEach((val, key) => {
-                        if(key !== 0) mods += `,${val}`;
-                    })
-                }
-            }
+            let opt    = ''
+            if(!servConfig.flags.includes(['crossplay', 'epiconly'])) if(servConfig.mods.length > 0) opt = `?GameModIds=${servConfig.mods.join(',')}`;
 
             // baue custom Optionen
-            let opt    = ''
             if(servConfig.opt.length > 0) servConfig.opt.forEach((val) => {
-                mods += `?${val}`;
+                opt += `?${val}`;
             });
+
+            // TotalConversionMod
+            if(parseInt(servConfig.TotalConversionMod) !== 0) opt += `?TotalConversionMod=${servConfig.TotalConversionMod}`;
 
             // baue Flaggen
             let flags    = ''
@@ -45,7 +42,7 @@ module.exports = {
                 mods += ` -${val}`;
             });
 
-            return `start ${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe ${servConfig.serverMap}?listen?SessionName=${servConfig.sessionName}?AltSaveDirectoryName=${servConfig.AltSaveDirectoryName}?ServerAdminPassword=${servConfig.ServerAdminPassword}?Port=${servConfig.game}?QueryPort=${servConfig.query}?MaxPlayers=${servConfig.maxPlayers}?RCONEnabled=True?RCONPort${servConfig.rcon}${mods}${opt}${flags}\n`;
+            return `start ${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe ${servConfig.serverMap}?listen?SessionName=${servConfig.sessionName}?AltSaveDirectoryName=${servConfig.AltSaveDirectoryName}?ServerAdminPassword=${servConfig.ServerAdminPassword}?Port=${servConfig.game}?QueryPort=${servConfig.query}?MaxPlayers=${servConfig.maxPlayers}?RCONEnabled=True?RCONPort${servConfig.rcon}${opt}${flags}\n`;
         }
         return false;
     },
@@ -87,12 +84,10 @@ module.exports = {
     },
 
     /**
-     * {TODO: 0.0.2} Sendet ein Commando an den Server (ViaRcon)
+     * TODO Sendet ein Commando an den Server (ViaRcon)
      * @param {string} server Name des Servers
      * @param {string} command Befehl der gesendet werden soll
      * @return {string|boolean}
      */
-    sendRcon: (server, command) => {
-        // TODO: 0.0.2
-    }
+    sendRcon: (server, command) => {}
 }

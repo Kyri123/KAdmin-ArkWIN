@@ -2,8 +2,8 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWINWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWINWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
 
@@ -12,7 +12,6 @@ const CommandUtil           = require('./commands_util');
 const serverUtil            = require('./util');
 const serverUtilInfos       = require('./../../util_server/infos');
 const serverCmd             = require('./cmd');
-const fs                    = require('fs');
 
 module.exports = {
     /**
@@ -21,9 +20,10 @@ module.exports = {
      * @param {boolean} noAutoUpdate soll ein Automatisches Update ausgeführt werden
      * @param {boolean} validate Soll der server vorher Validiert werden
      * @param {boolean} alwaysStart Startet den Server wenn dieser abgestürtzt ist
+     * @param {boolean} isBackground Wird es vom Server ausgeführt
      * @returns {boolean}
      */
-    doStart: (server, noAutoUpdate = false, validate = false, alwaysStart = false) => {
+    doStart: (server, noAutoUpdate = false, validate = false, alwaysStart = false, isBackground = false) => {
         let servConfig  = serverUtilInfos.getConfig(server);
         let servInfos   = serverUtilInfos.getServerInfos(server);
         if(servConfig.server === undefined && !servInfos.cmd) {
@@ -31,8 +31,8 @@ module.exports = {
             let serverPath          = servConfig.path;
 
             // CMD Line
-            let cmdFile             = `${servConfig.pathLogs}.cmd`
-            let cmdCommand          = `@echo off\n`
+            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
+            let cmdCommand          = `@echo off\n`;
 
             // Logmeldungen
             let actionResponse      = `[ ${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")} ]\n`;
@@ -74,10 +74,10 @@ module.exports = {
             try {
                 if (alwaysStart) serverUtilInfos.writeConfig(server, "shouldRun", true);
                 if(!servInfos.cmd && !servInfos.run) {
-                    fs.writeFileSync(cmdFile, cmdCommand);
+                    globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doStart ${server}" ${cmdFile}`);
                 }
-                fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
+                globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
             }
             catch (e) {
                 if(debug) console.log(e);
@@ -89,9 +89,10 @@ module.exports = {
     /**
      * Installiert den Server
      * @param {string} server Server Name
+     * @param {boolean} isBackground Wird es vom Server ausgeführt
      * @returns {boolean}
      */
-    doInstallServer: (server) => {
+    doInstallServer: (server, isBackground = false) => {
         let servConfig  = serverUtilInfos.getConfig(server);
         let servInfos   = serverUtilInfos.getServerInfos(server);
         if(servConfig.server === undefined && !servInfos.cmd) {
@@ -102,8 +103,8 @@ module.exports = {
             let actionResponse      = `[ ${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")} ]\n`;
             actionResponse += `${PANEL_LANG.logger.infoDoInstall}\n`;
             actionResponse += `${PANEL_LANG.logger.doInstallServer}: ${server}\n`;
-            let cmdFile             = `${servConfig.pathLogs}.cmd`
-            let cmdCommand          = `@echo off\n`
+            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
+            let cmdCommand          = `@echo off\n`;
 
             // Prüfe ob der Server bereits installiert ist
             if(!servInfos.is_installed) {
@@ -120,10 +121,10 @@ module.exports = {
             // Speichern und ausführen
             try {
                 if(!servInfos.is_installed && !servInfos.cmd) {
-                    fs.writeFileSync(cmdFile, cmdCommand);
+                    globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doInstallServer ${server}" ${cmdFile}`)
                 }
-                fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
+                globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
             }
             catch (e) {
                 if(debug) console.log(e);
@@ -149,8 +150,8 @@ module.exports = {
             let updateNeed  = serverUtil.checkSeverUpdate(server);
 
             // CMD Line
-            let cmdFile             = `${isBackground ? mainDir + '\\app\\cmd\\' + md5(servConfig.pathLogs + "doUpdate") : servConfig.pathLogs}.cmd`
-            let cmdCommand          = `@echo off\n`
+            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
+            let cmdCommand          = `@echo off\n`;
 
             // Countdown
             if(servInfos.online && warn) {
@@ -203,10 +204,10 @@ module.exports = {
             // Speichern und ausführen
             try {
                 if (updateNeed || validate) {
-                    fs.writeFileSync(cmdFile, cmdCommand);
+                    globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doUpdateServer  ${isBackground ? "Server" : server}" ${cmdFile}`)
                 }
-                if(!isBackground) fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
+                if(!isBackground) globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
             }
             catch (e) {
                 if(debug) console.log(e);
@@ -221,16 +222,17 @@ module.exports = {
      * @param {int|array} modID ModID die installiert werden soll
      * @param {boolean} validate use validate on mods
      * @param {boolean} backAsString für Interne nutzungen
+     * @param {boolean} isBackground Wird es vom Server ausgeführt
      * @returns {boolean}
      */
-    doInstallMods: (server, modID, validate = false, backAsString = false) => {
+    doInstallMods: (server, modID, validate = false, backAsString = false, isBackground = false) => {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
         if(servConfig.server === undefined && servInfos.is_installed) {
             let steamCMDPath            = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
             let serverPath              = servConfig.path;
-            let cmdFile                 = `${servConfig.pathLogs}.cmd`
-            let cmdCommand              = backAsString ? '' :`@echo off\n`
+            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
+            let cmdCommand              = backAsString ? '' :`@echo off\n`;
             let workshop_download_item  = ``;
             let copys                   = ``;
 
@@ -245,19 +247,31 @@ module.exports = {
             if(Array.isArray(modID)) {
                 modID.forEach((val) => {
                     actionResponse              += `${val}\n`;
-                    workshop_download_item  +=  ` +workshop_download_item ${PANEL_CONFIG.appID} ${val}`;
-                    copys  += `${mainDir}\\tools\\ArkModCopy\\ArkModCopy.exe "${serverPath}" "${serverPath}" "${val}"\n`;
-                    copys  += `echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${val}".modtime\n`;
-                    copys  += `@RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${val}"\n`;
+                    workshop_download_item      +=  ` +workshop_download_item ${PANEL_CONFIG.appID} ${val}`;
+
+                    copys   += `if exist "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${val}\\modmeta.info" (\n`;
+                    copys   += `    ${mainDir}\\tools\\ArkModCopy\\ArkModCopy.exe "${serverPath}" "${serverPath}" "${val}"\n`;
+                    copys   += `    echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${val}.modtime\n`;
+                    copys   += `    echo ${val} - SUCCESS >> ${mainDir}\\public\\json\\serveraction\\action_${server}.log\n`;
+                    copys   += `    @RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${val}"\n`;
+                    copys   += `) else (\n`;
+                    copys   += `  echo ${val} - FAILED >> ${mainDir}\\public\\json\\serveraction\\action_${server}.log\n`;
+                    copys   += `)\n`;
                 })
             }
             // Wenn nur eine Mod installiert werden soll
             else {
                 actionResponse              += `${modID}\n`;
-                workshop_download_item  +=  `+workshop_download_item ${PANEL_CONFIG.appID} ${modID}`;
-                copys  += `${mainDir}\\tools\\ArkModCopy\\ArkModCopy.exe "${serverPath}" "${serverPath}" "${modID}"\n`;
-                copys  += `echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${modID}".modtime\n`;
-                copys  += `@RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${modID}"\n`;
+                workshop_download_item      +=  `+workshop_download_item ${PANEL_CONFIG.appID} ${modID}`;
+
+                copys   += `if exist "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${modID}\\modmeta.info" (\n`;
+                copys   += `    ${mainDir}\\tools\\ArkModCopy\\ArkModCopy.exe "${serverPath}" "${serverPath}" "${modID}"\n`;
+                copys   += `    echo ${Math.round(Date.now()/1000)} > ${serverPath}\\ShooterGame\\Content\\Mods\\${modID}.modtime\n`;
+                copys   += `    echo ${modID} - SUCCESS >> ${mainDir}\\public\\json\\serveraction\\action_${server}.log\n`;
+                copys   += `    @RD /S /Q "${serverPath}\\steamapps\\workshop\\content\\${PANEL_CONFIG.appID}\\${modID}"\n`;
+                copys   += `) else (\n`;
+                copys   += `  echo ${modID} - FAILED >> ${mainDir}\\public\\json\\serveraction\\action_${server}.log\n`;
+                copys   += `)\n`;
             }
             cmdCommand      += `${steamCMDPath} +login anonymous +force_install_dir "${serverPath}"${workshop_download_item}${validate ? " validate" : ""} +quit\n`;
             cmdCommand      +=  copys;
@@ -268,8 +282,8 @@ module.exports = {
 
             // Speichern und ausführen
             try {
-                fs.writeFileSync(cmdFile, cmdCommand);
-                if(!backAsString) fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
+                globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
+                if(!backAsString) globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
                 return !backAsString ? serverCmd.runCMD(`start "[ArkAdminWIN] doInstallMods ${server}" ${cmdFile}`) :
                     {workshop_download_item: workshop_download_item, copys: copys};
             }
@@ -285,16 +299,17 @@ module.exports = {
      * @param {string} server Server Name
      * @param {boolean} saveworld Soll die welt gespeichert werden?
      * @param {boolean} warn Sollen die Spieler gewant werden?
+     * @param {boolean} isBackground Wird es vom Server ausgeführt
      * @return {boolean}
      */
-    doStop: (server, saveworld = false, warn = false) => {
+    doStop: (server, saveworld = false, warn = false, isBackground = false) => {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
 
         if(servConfig.server === undefined && !servInfos.cmd) {
             // CMD Line
-            let cmdFile             = `${servConfig.pathLogs}.cmd`
-            let cmdCommand          = `@echo off\n`
+            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
+            let cmdCommand          = `@echo off\n`;
 
             // Logmeldungen
             let actionResponse      = `[ ${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")} ]\n`;
@@ -321,10 +336,10 @@ module.exports = {
             try {
                 if (servConfig.shouldRun) serverUtilInfos.writeConfig(server, "shouldRun", false);
                 if (servInfos.run) {
-                    fs.writeFileSync(cmdFile, cmdCommand);
+                    globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doStop ${server}" ${cmdFile}`);
                 }
-                fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
+                globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
             }
             catch (e) {
                 if(debug) console.log(e);
@@ -341,9 +356,10 @@ module.exports = {
      * @param {boolean} validate Soll Validate angewand werden?
      * @param {boolean} noAutoUpdate soll NICHT nach Updates geprüft werden?
      * @param {boolean} alwaysStart Startet den Server wenn dieser abgestürtzt ist
+     * @param {boolean} isBackground Wird es vom Server ausgeführt
      * @return {boolean}
      */
-    doRestart: (server, saveworld = false, warn = false, validate = false, noAutoUpdate = false, alwaysStart = false) => {
+    doRestart: (server, saveworld = false, warn = false, validate = false, noAutoUpdate = false, alwaysStart = false, isBackground = false) => {
         let servConfig = serverUtilInfos.getConfig(server);
         let servInfos  = serverUtilInfos.getServerInfos(server);
 
@@ -352,8 +368,8 @@ module.exports = {
             let serverPath              = servConfig.path;
 
             // CMD Line
-            let cmdFile             = `${servConfig.pathLogs}.cmd`
-            let cmdCommand          = `@echo off\n`
+            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
+            let cmdCommand          = `@echo off\n`;
 
             // Logmeldungen
             let actionResponse      = `[ ${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")} ]\n`;
@@ -405,8 +421,8 @@ module.exports = {
             // Speichern und ausführen
             try {
                 if (alwaysStart) serverUtilInfos.writeConfig(server, "shouldRun", true);
-                fs.writeFileSync(cmdFile, cmdCommand);
-                fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
+                globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
+                globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
                 return serverCmd.runCMD(`start "[ArkAdminWIN] doRestart ${server}" ${cmdFile}`);
             }
             catch (e) {
@@ -415,7 +431,6 @@ module.exports = {
         }
         return false;
     },
-
 
     /**
      * Erstellt ein Backup von Konfig & Spielständen
@@ -429,14 +444,14 @@ module.exports = {
 
         if(servConfig.server === undefined && !servInfos.cmd) {
             // vars
-            let pathToZip               = `${servConfig.path}\\ShooterGame\\Saved`;
-            let backupPath              = servConfig.pathBackup;
+            let pathToZip               = pathMod.join(servConfig.path, '\\ShooterGame\\Saved');
+            let backupPath              = pathMod.join(servConfig.pathBackup);
             let ZIP_name                = `${Date.now()}.zip`;
-            let canZIP                  = fs.existsSync(pathToZip) && !fs.existsSync(`${backupPath}\\${ZIP_name}`);
+            let canZIP                  = globalUtil.safeFileExsistsSync([pathToZip]) && !globalUtil.safeFileExsistsSync([backupPath, ZIP_name]);
 
             // CMD Line
-            let cmdFile             = `${isBackground ? mainDir + '\\app\\cmd\\' + md5(servConfig.pathLogs + "doBackup") : servConfig.pathLogs}.cmd`
-            let cmdCommand          = `@echo off\n`
+            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
+            let cmdCommand          = `@echo off\n`;
 
             // Logmeldungen
             let actionResponse      = `[ ${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")} ]\n`;
@@ -446,7 +461,7 @@ module.exports = {
             // Prüfe ob Ordner exsistiert und mache davon ein Backup
             if(canZIP) {
                 actionResponse          += `${PANEL_LANG.logger.doBackupThis}: ${Date.now()}.zip\n`;
-                if(!fs.existsSync(backupPath)) fs.mkdirSync(backupPath);
+                if(!globalUtil.safeFileExsistsSync([backupPath])) globalUtil.safeFileMkdirSync([backupPath]);
                 cmdCommand  += `powershell -command "Add-Type -Assembly \\"System.IO.Compression.FileSystem\\" ;[System.IO.Compression.ZipFile]::CreateFromDirectory(\\"${pathToZip}\\", \\"${backupPath}\\${ZIP_name}\\") ;"\n`;
             }
             else {
@@ -458,9 +473,9 @@ module.exports = {
 
             // Speichern und ausführen
             try {
-                if(!isBackground) fs.writeFileSync(`./public/json/serveraction/action_${server}.log`, actionResponse);
+                if(!isBackground) globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
                 if(canZIP) {
-                    fs.writeFileSync(cmdFile, cmdCommand);
+                    globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doBackup ${isBackground ? "Server" : server}" ${cmdFile}`);
                 }
             }

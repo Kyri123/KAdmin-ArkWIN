@@ -2,14 +2,13 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWINWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWINWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
 
 const querystring   = require('querystring');
 const http          = require('http');
-const fs            = require('fs');
 
 module.exports = {
     /**
@@ -55,7 +54,7 @@ module.exports = {
             });
 
             req.on('close', () => {
-                fs.writeFileSync('./public/json/steamAPI/mods.json', data);
+                globalUtil.safeFileSaveSync([mainDir, '/public/json/steamAPI/', 'mods.json'], data);
             });
 
             req.write(post_data);

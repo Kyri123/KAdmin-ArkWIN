@@ -2,14 +2,14 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWINWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWINWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
 
 const express           = require('express')
 const router            = express.Router()
-const helper_user   = require('./../../app/src/sessions/helper');
+const userHelper   = require('./../../app/src/sessions/helper');
 
 router.route('/')
 
@@ -23,7 +23,7 @@ router.route('/')
 
             // Speicher neuen Username
             if(user.username !== POST.username) {
-                if(helper_user.writeinfos(req.session.uid, "username", POST.username)) {
+                if(userHelper.writeinfos(req.session.uid, "username", POST.username)) {
                     someChanges     = true;
                     whatChanged     += ` ${PANEL_LANG.usersettings.username} `;
                     user.username    = POST.username;
@@ -32,7 +32,7 @@ router.route('/')
 
             // Speicher neue E-Mail
             if(user.email !== POST.email) {
-                if(helper_user.writeinfos(req.session.uid, "email", POST.email)) {
+                if(userHelper.writeinfos(req.session.uid, "email", POST.email)) {
                     someChanges     = true;
                     whatChanged     += ` ${PANEL_LANG.usersettings.email} `;
                     user.email       = POST.email;
@@ -42,7 +42,7 @@ router.route('/')
             // Speicher neues Passwort
             if(POST.pw1 !== "" && POST.pw2 !== "") {
                 if(POST.pw1 === POST.pw2) {
-                    if(helper_user.writeinfos(req.session.uid, "password", md5(POST.pw1))) {
+                    if(userHelper.writeinfos(req.session.uid, "password", md5(POST.pw1))) {
                         someChanges = true;
                         whatChanged += ` ${PANEL_LANG.usersettings.pw} `;
                     }

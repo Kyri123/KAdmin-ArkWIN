@@ -57,19 +57,47 @@ function getSCState() {
             inhalt = varser.lang_arr.serverCenterAny.actionClose
         }
         else {
-            inhalt = `<a href="javascript:void()" class="small-box-footer btn btn-sm btn-success" data-toggle="modal" data-target="#action">${varser.lang_arr.serverCenterAny.actionFree}</a>`
+            inhalt = !hasPermissions(globalvars.perm, "actions", varser.cfg)
+                ? `<a href="javascript:void()" class="small-box-footer btn btn-sm btn-success" data-toggle="modal" data-target="#action">${varser.lang_arr.serverCenterAny.actionFree}</a>`
+                : varser.lang_arr.serverCenterAny.actionClose;
         }
         css = 'success';
         if($('#actions').html() !== inhalt) $('#actions').html(inhalt).attr('class',`description-header text-${css}`);// Action Card -> Select
 
         // Alerts
         if(serverInfos.alerts !== undefined) {
-            $(`#infoCounter`).html(serverInfos.alerts.length);
-            let list = ``;
-            if(serverInfos.alerts.length > 0) {} serverInfos.alerts.forEach((val) => {
-                list += alerter(val, "", 0);
+            $.get('/json/steamAPI/mods.json', (mods) => {
+                let modNeedUpdates      = [];
+
+                if(serverInfos.modNeedUpdates !== false) serverInfos.modNeedUpdates.forEach((val) => {
+                    val     = parseInt(val).toString();
+                    if(serverInfos.installedMods.includes(val) && !modNeedUpdates.includes(val)) modNeedUpdates.push(val);
+                });
+
+                let rplf                = [];
+                let tplt                = [];
+                mods.response.publishedfiledetails.forEach((val) => {
+                    rplf.push(val.publishedfileid);
+                    tplt.push(`<b>[${val.publishedfileid}]</b> ${val.title}`);
+                });
+                let list = [];
+
+                let counter = 0;
+                serverInfos.alerts.forEach((val) => {
+                    if(!(val === "3997" && modNeedUpdates.length === 0)) {
+                        list.push(alerter(val, "", 3, false, 3, 3, 3, true));
+                        counter++;
+                    }
+                });
+
+                $(`#infoCounter`).html(counter);
+                if(counter === 0) list.push(alerter(4000, "", 3, false, 3, 3, 3, true));
+
+                $(`#AlertBody`).html(list.join('<hr class="m-0">')
+                    .replace("{modu}", modNeedUpdates.join("</li><li>"))
+                    .replace("{modi}", serverInfos.notInstalledMods.join("</li><li>"))
+                    .replaceArray(rplf, tplt));
             });
-            if(list !== ``) $(`#AlertBody`).html(list);
         }
     });
 }
@@ -143,7 +171,7 @@ $('#action_sel').change(() => {
             <div class="icheck-primary mb-3 col-md-6">
                 <input type="checkbox" name="para[]" value="${val.parameter}" id="${val.id_js}">
                 <label for="${val.id_js}">
-                    ${val.parameter}
+                    ${globalvars.lang_arr.parameter[val.id_js]}
                 </label>
             </div>`;
         });

@@ -2154,7 +2154,7 @@
         return this.remaining;
       }
     }, {
-      key: __ADIR__."/php/increase",
+      key: __ADIR__ + "/php/increase",
       value: function increase(n) {
         var running = this.running;
 

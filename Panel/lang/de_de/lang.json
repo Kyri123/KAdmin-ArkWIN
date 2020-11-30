@@ -4,12 +4,12 @@
     "reg"                   : "Account Erstellen",
     "home"                  : "Dashboard",
     "usersettings"          : "Benutzereinstellungen",
-    "gorup_user"            : "Benutzer und Gruppen",
+    "group_user"            : "Benutzer und Gruppen",
     "userpanel"             : "Benutzer",
     "servercontrolcenter"   : "ServerControlCenter",
     "err404"                : "Seite konnte nicht gefunden werden",
     "err401"                : "Keine Berechtigung",
-    "changelog"             : "Changelogs"
+    "grouppanel"            : "Benutzergruppen"
   },
 
   "updaterLOG": {
@@ -69,6 +69,14 @@
     }
   },
 
+  "parameter": {
+    "validate"            : "SteamCMD Validate",
+    "no-autoupdate"       : "Kein Automatisches Update",
+    "warn"                : "Spieler auf dem Server warnen (benötigt RCON)",
+    "saveworld"           : "Welt Speichern bevor dieser gestoppt wird (benötigt RCON)",
+    "alwaysstart"         : "Server beim Crash wieder starten"
+  },
+
   "usersettings": {
     "settings"            : "Account Einstellungen",
     "btnSave"             : "Speichern",
@@ -92,7 +100,11 @@
       "cancel"      : "Abbrechen",
       "remove"      : "Löschen bestätigen",
       "title"       : "Löschen",
-      "text"        : "Möchtest du den Benutzer <b>{username}</b> wirklich löschen?"
+      "text"        : "Möchtest du diesen Benutzer wirklich löschen?"
+    },
+    "modalGroup": {
+      "cancel"      : "Abbrechen",
+      "send"        : "Gruppen setzten"
     },
     "modal": {
       "admin"             : "Administrator",
@@ -100,6 +112,33 @@
       "title"             : "Übersicht aller Codes",
       "create"            : "Code erstellen",
       "cancel"            : "Schließen"
+    }
+  },
+
+  "groupPanel": {
+    "table_groupname"   : "Benutzergruppe",
+    "table_lastchange"  : "Letzte Änderung",
+    "table_from"        : "von",
+    "table_actions"     : "Aktionen",
+    "table_group"       : "Gruppe",
+    "remove"            : "Löschen",
+    "edit"              : "Bearbeiten",
+    "modalEdit": {
+      "cancel"          : "Abbrechen",
+      "edit"            : "Bestätigen",
+      "title"           : "Bearbeiten"
+    },
+    "modalDelete": {
+      "cancel"          : "Abbrechen",
+      "remove"          : "Löschen bestätigen",
+      "title"           : "Löschen",
+      "text"            : "Möchtest du diese Benutzergruppe wirklich löschen?"
+    },
+    "modal": {
+      "title"           : "Neue Benutzergruppe",
+      "create"          : "Gruppe erstellen",
+      "cancel"          : "Schließen",
+      "groupname"       : "Name der Benutzergruppe"
     }
   },
 
@@ -126,7 +165,9 @@
     "doBackup"            : "Server Backup wird erstellt",
     "doBackupThis"        : "Backup",
     "doNotBackup"         : "Server Backup wird nicht erstellt (Ordner konnte nicht gefunden werden)",
-    "doInstall"           : "Installiert"
+    "doInstall"           : "Installiert",
+    "FAILED"              : "Installation Fehlgeschlagen",
+    "SUCCESS"             : "Installation Erfolgreich"
   },
 
   "all": {
@@ -250,7 +291,7 @@
       "cancel"        : "Abbrechen",
       "pitile"        : "Einspielen:",
       "pitxt"         : "Möchtest du dieses Backup einspielen? <br />",
-      "pired"         : "<b>ACHTUNG:</b> Alle Karten und Spieler Dateien werden gelöscht und mit dem Backup überschrieben",
+      "pired"         : "<b>ACHTUNG:</b> Alle Karten, Konfigurationen (ausgenommen der von ArkAdminWIN) und Spieler Dateien werden gelöscht und mit dem Backup überschrieben",
       "playin"        : "Einspielen"
     }
   },
@@ -269,6 +310,47 @@
       "title"       : "Server Erstellen",
       "cancel"      : "Abbrechen",
       "add"         : "Erstellen"
+    }
+  },
+
+  "permissions": {
+    "main": {
+      "all"                     : "Allgemein",
+      "servercontrolcenter"     : "ServerControlCenter",
+      "userpanel"               : "Benutzer",
+      "server"                  : "Server Rechte",
+      "home"                    : "Startseite",
+      "mods"                    : "Modifikationen",
+      "config"                  : "Konfiguration",
+      "backups"                 : "Backups",
+      "api"                     : "ArkAPI",
+      "logs"                    : "Logs"
+    },
+    "perm": {
+      "is_admin"                : "Ist Admin (Hat Rechte auf alles)",
+      "show_traffic"            : "Darf Serverauslastung sehen",
+      "show"                    : "Darf aufrufen",
+      "create"                  : "Darf erstellen",
+      "delete"                  : "Darf löschen",
+      "show_codes"              : "Darf Codes sehen (AdminCodes nur wenn der User über Admin verfügt)",
+      "create_code"             : "Darf Codes erstellen (AdminCodes nur wenn der User über Admin verfügt)",
+      "delete_code"             : "Darf Codes löschen",
+      "ban_user"                : "Darf Benutzer Bannen",
+      "delete_user"             : "Darf Benutzer Löschen",
+      "is_server_admin"         : "Ist Admin (Hat Rechte auf alles auf dem Server)",
+      "actions"                 : "Darf Aktionen an den Server senden",
+      "changeplace"             : "Darf Mods verschieben",
+      "remove"                  : "Darf Löschen",
+      "add"                     : "Darf Hinzufügen",
+      "GameUserSettings"        : "Darf GameUserSettings sehen",
+      "Game"                    : "Darf Game sehen",
+      "Engine"                  : "Darf Engine sehen",
+      "arkadmin"                : "Darf ArkAdminWIN sehen",
+      "show_GameUserSettings"   : "Darf GameUserSettings bearbeiten",
+      "show_Game"               : "Darf Game bearbeiten",
+      "show_Engine"             : "Darf GameUserSettings bearbeiten",
+      "show_arkadmin"           : "Darf ArkAdminWIN bearbeiten",
+      "playin"                  : "Darf Backup einspielen"
     }
   }
 }

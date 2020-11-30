@@ -2,13 +2,12 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWINWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWINWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
 
 const cmd           = require('node-cmd');
-const fs            = require('fs');
 
 
 module.exports = {
@@ -21,8 +20,8 @@ module.exports = {
      * @returns {boolean}
      */
     runCMD: (command, doLog = false, logFile = '', useCMDWindow = true) => {
-        let steamCMDPath    = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
-        if(fs.existsSync(steamCMDPath)) {
+        let steamCMDPath    = pathMod.join(PANEL_CONFIG.steamCMDRoot, 'steamcmd.exe');
+        if(globalUtil.safeFileExsistsSync([steamCMDPath])) {
             let doThis = useCMDWindow ?
                 `start ${steamCMDPath} +login anonymous ${command} +exit${!doLog ? '' : ` > ${logFile}`}` :
                 `${steamCMDPath} +login anonymous ${command} +exit${!doLog ? '' : ` > ${logFile}`}`;

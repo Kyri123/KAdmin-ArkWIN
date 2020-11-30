@@ -2,8 +2,8 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWINWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWINWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
 
@@ -12,7 +12,6 @@ const router            = express.Router()
 const globalinfos       = require('./../../app/src/global_infos');
 const serverUtilInfos   = require('./../../app/src/util_server/infos');
 const serverCommands    = require('./../../app/src/background/server/commands');
-const fs                = require('fs');
 
 router.route('/')
 
@@ -20,7 +19,7 @@ router.route('/')
         let POST        = req.body;
 
         // Action Handle
-        if(POST.actions !== undefined && POST.cfg !== undefined) {
+        if(POST.actions !== undefined && POST.cfg !== undefined && userHelper.hasPermissions(req.session.uid, "actions", POST.cfg)) {
             if(POST.actions === "sendcommand") {
                 let stop = false;
 
@@ -138,6 +137,9 @@ router.route('/')
         // DEFAULT AJAX
         let GET         = req.query;
 
+        // Wenn keine Rechte zum abruf
+        if(!userHelper.hasPermissions(req.session.uid, "show", GET.server)) return true;
+
         // GET serverInfos
         if(GET.getserverinfos !== undefined && GET.server !== undefined) {
             res.render('ajax/json', {
@@ -156,8 +158,10 @@ router.route('/')
         if(GET.getscglobalinfos !== undefined) {
             try {
                 let array = [];
-                array[0] = JSON.parse(fs.readFileSync(`./public/json/sites/serverCenterActions.cfg.json`));
-                array[1] = JSON.parse(fs.readFileSync(`./public/json/sites/serverCenterAny.cfg.json`));
+                let file = globalUtil.safeFileReadSync([mainDir, '/public/json/sites/', 'serverCenterActions.cfg.json'], true);
+                array[0] = file !== false ? file : [];
+                file     = globalUtil.safeFileReadSync([mainDir, '/public/json/sites/', 'serverCenterAny.cfg.json'], true);
+                array[1] = file !== false ? file : [];
 
                 res.render('ajax/json', {
                     data: JSON.stringify(array)

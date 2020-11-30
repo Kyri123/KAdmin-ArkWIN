@@ -7,7 +7,7 @@
  * *******************************************************************************************
  */
 
-$.get('/ajax/serverCenterConfig' , {
+if(hasPermissions(globalvars.perm, "config/GameUserSettings", varser.cfg)) $.get('/ajax/serverCenterConfig' , {
     serverInis  : true,
     ini         : "GameUserSettings",
     server      : vars.cfg
@@ -15,7 +15,7 @@ $.get('/ajax/serverCenterConfig' , {
     $('#GameUserSettings').text(data);
 });
 
-$.get('/ajax/serverCenterConfig' , {
+if(hasPermissions(globalvars.perm, "config/Game", varser.cfg)) $.get('/ajax/serverCenterConfig' , {
     serverInis  : true,
     ini         : "Game",
     server      : vars.cfg
@@ -23,7 +23,7 @@ $.get('/ajax/serverCenterConfig' , {
     $('#Game').text(data);
 });
 
-$.get('/ajax/serverCenterConfig' , {
+if(hasPermissions(globalvars.perm, "confg/Engine", varser.cfg)) $.get('/ajax/serverCenterConfig' , {
     serverInis  : true,
     ini         : "Engine",
     server      : vars.cfg

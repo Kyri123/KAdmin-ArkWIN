@@ -2,28 +2,29 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWINWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWINWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
 
 const express       = require('express')
 const router        = express.Router()
 const globalinfos   = require('./../../app/src/global_infos');
-const helper_user   = require('./../../app/src/sessions/helper');
+const userHelper   = require('./../../app/src/sessions/helper');
 
 router.route('/')
 
     .all((req,res)=>{
-        global.user         = helper_user.getinfos(req.session.uid);
+        global.user         = userHelper.getinfos(req.session.uid);
         let resp        = "";
 
         res.render('pages/usersettings', {
+            perm            : userHelper.permissions(req.session.uid),
             icon            : "fas fa-user-cog",
             pagename        : PANEL_LANG.pagename.usersettings,
             page            : "usersettings",
             resp            : resp,
-            perm            : helper_user.permissions(req.session.uid),
+            perm            : userHelper.permissions(req.session.uid),
             sinfos          : globalinfos.get(),
             new_email       : false,
             new_username    : false

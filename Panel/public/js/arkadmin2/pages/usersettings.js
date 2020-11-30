@@ -24,7 +24,7 @@ $("#pills-settings").submit(() => {
                     let username    = $('#username');
 
                     // Passwort
-                    if(data.what.includes(vars.lang_arr.usersettings.pw)) {
+                    if(data.what.includes(globalvars.lang_arr.usersettings.pw)) {
                         pw1.val(""); pw2.val("");
                         pw1.toggleClass("border-success", true);
                         pw2.toggleClass("border-success", true);
@@ -35,7 +35,7 @@ $("#pills-settings").submit(() => {
                     }
 
                     // Email
-                    if(data.what.includes(vars.lang_arr.usersettings.email)) {
+                    if(data.what.includes(globalvars.lang_arr.usersettings.email)) {
                         email.toggleClass("border-success", true);
                         setTimeout(() => {
                             email.toggleClass("border-success", false);
@@ -43,7 +43,7 @@ $("#pills-settings").submit(() => {
                     }
 
                     // Benutzername
-                    if(data.what.includes(vars.lang_arr.usersettings.username)) {
+                    if(data.what.includes(globalvars.lang_arr.usersettings.username)) {
                         $('#leftUsername').html(username.val());
                         username.toggleClass("border-success", true);
                         setTimeout(() => {

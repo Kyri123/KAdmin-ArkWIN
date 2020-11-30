@@ -40,8 +40,15 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 
     <!-- Intern JS -->
-    <script>const alertlang = <%- JSON.stringify(PANEL_LANG_ALERT) %></script>
-    <script src="/js/arkadmin2/all/arkadmin2.js?time=<% Date.now() %>"></script>
+    <script>
+        // Vars die zur JS übergeben werden
+        // Allgemeine Vars
+        var globalvars = {};
+        <% if(typeof PANEL_LANG !== "undefined") {%>    globalvars.alertlang    = <%- JSON.stringify(PANEL_LANG_ALERT) %>;  <% } %>
+        <% if(typeof PANEL_LANG !== "undefined") {%>    globalvars.lang_arr     = <%- JSON.stringify(PANEL_LANG) %>;        <% } %>
+        <% if(typeof perm !== "undefined") {%>          globalvars.perm         = <%- JSON.stringify(perm) %>;              <% } %>
+    </script>
+    <script src="/js/arkadmin2/all/arkadmin2.js?time=<%- Date.now() %>"></script>
     <script src="/js/adminLTE/adminlte.min.js"></script>
     <script src="/js/adminLTE/jquery.bootstrap-duallistbox.js"></script>
     <script src="/plugins/sweetalert2/sweetalert2.min.js"></script>

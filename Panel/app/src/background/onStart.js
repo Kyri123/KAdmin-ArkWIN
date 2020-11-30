@@ -2,8 +2,8 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWINWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWINWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
 
@@ -15,7 +15,6 @@ const si                    = require('systeminformation');
 const osu                   = require('node-os-utils')
 const disk                  = require('check-disk-space');
 const AA_util               = require('../util');
-const fs                    = require('fs');
 
 
 module.exports = {
@@ -35,7 +34,8 @@ module.exports = {
         // Suche Mods zusammen
         if(serverInfos.servers_arr.length > 0) {
             serverInfos.servers_arr.forEach((val) => {
-               if(fs.existsSync(`${val[1].pathLogs}.cmd`)) fs.rmSync(`${val[1].pathLogs}.cmd`)
+                let file = pathMod.join(`${val[1].pathLogs}.cmd`);
+               if(globalUtil.safeFileExsistsSync([file])) globalUtil.safeFileRmSync([file])
             });
         }
     },
