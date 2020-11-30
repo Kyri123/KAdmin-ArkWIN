@@ -33,6 +33,9 @@ module.exports = {
                 opt += `?${val}`;
             });
 
+            // TotalConversionMod
+            if(parseInt(servConfig.TotalConversionMod) !== 0) opt += `?TotalConversionMod=${servConfig.TotalConversionMod}`;
+
             // baue Flaggen
             let flags    = ''
             if(servConfig.flags.length > 0) servConfig.flags.forEach((val) => {

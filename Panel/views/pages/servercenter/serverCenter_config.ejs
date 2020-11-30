@@ -280,11 +280,12 @@
                                                 " id="mapsel">
                                                     <option value=""><%- PANEL_LANG.serverCenterConfig.cfg.pick %></option>
 
-                                                    <% for (const [key, val] of Object.entries(maps)) { %>
+                                                    <% for (const [key, val] of Object.entries(maps)) {
+                                                        if(val.mod === 0 || (val.mod !== 0 && !(sconfig.flags.includes('epiconly') || sconfig.flags.includes('crossplay')))) {%>
                                                         <option id="<%- key %>" value="<%- key %>" data-modid="<%- val.mod === 0 ? 0 : val.modid %>" <%- sconfig.serverMap === key ? "selected" : "" %>>
-                                                            <%- val.name %>
+                                                            <%- val.mod === 0 ? "" : "[MOD]" %> <%- val.name %>
                                                         </option>
-                                                    <% } %>
+                                                    <% }} %>
 
                                                 </select>
                                             </div>
@@ -292,11 +293,30 @@
                                     </td>
                                 </tr>
 
+                                <% if(!(sconfig.flags.includes('epiconly') || sconfig.flags.includes('crossplay'))) {%>
                                 <tr>
                                     <td class="p-2"><%- PANEL_LANG.serverCenterConfig.cfg.MapModID %></td>
                                     <td class="p-2">
                                         <div class="input-group mb-0">
                                             <input min="0" type="number" name="MapModID" id="MapModID" class="form-control form-control-sm" value="<%- sconfig.MapModID %>">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% } else { %>
+                                <input type="hidden" name="MapModID" value="0">
+                                <% } %>
+
+                                <tr>
+                                    <td class="p-2">TotalConversionMod</td>
+                                    <td class="p-2">
+                                        <div class="input-group mb-0">
+                                            <input type="number" min="0" name="TotalConversionMod" class="form-control form-control-sm" value="<%- sconfig.TotalConversionMod %>" id="input_TotalConversionMod">
+                                            <div class="input-group-append">
+                                                <select class="form-control form-control-sm" onchange="$('#input_TotalConversionMod').val($('#' + this.id).val());" id="tmodsel">
+                                                    <option value="0"><%- PANEL_LANG.serverCenterConfig.cfg.pick %></option>
+                                                    <option value="111111111">Primitive Plus</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>

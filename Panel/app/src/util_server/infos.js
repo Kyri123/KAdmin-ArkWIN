@@ -19,7 +19,8 @@ module.exports = {
     getConfig: (server) => {
         if(globalUtil.poisonNull(server)) {
             let file    = globalUtil.safeFileReadSync([mainDir, '/app/json/server/', `${server}.json`], true);
-            let cfg = file !== false ? file : {"server": false};
+            let dfile   = globalUtil.safeFileReadSync([mainDir, '/app/json/server/template/', `default.json`], true);
+            let cfg = file !== false ? (dfile !== false ? array_replace_recursive(dfile, file) : file) : {"server": false};
 
             // Erzeuge Standarts (für ergänzte vars)
             if(cfg.server === undefined) {

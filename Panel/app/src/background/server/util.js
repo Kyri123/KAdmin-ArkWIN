@@ -82,6 +82,7 @@ module.exports = {
             }
 
             if(servConfig.MapModID !== 0) servConfig.mods.push(servConfig.MapModID);
+            if(parseInt(servConfig.TotalConversionMod) !== 0 && parseInt(servConfig.TotalConversionMod) !== 111111111) servConfig.mods.push(servConfig.TotalConversionMod);
 
             if(servConfig.mods.length > 0) {
                 servConfig.mods.forEach((modid) => {
