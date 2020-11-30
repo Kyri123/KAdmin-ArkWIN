@@ -38,7 +38,7 @@ require('./app/main/main_loader.js');
 global.debug                          = PANEL_MAIN.useDebug;
 
 // lese Changelog
-let pathFile    = pathMod.join(mainDir, '/app/json/', 'changelog.json');
+let pathFile    = pathMod.join(mainDir, '/app/json/panel/', 'changelog.json');
 try {
   console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m Load: ${pathFile}`)
   global.changelog                    = globalUtil.safeFileReadSync([pathFile], true);
