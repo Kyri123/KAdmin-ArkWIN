@@ -19,7 +19,7 @@ router.route('/')
     .post((req,res)=>{
         let POST            = req.body;
 
-        if(POST.remove !== undefined) {
+        if(POST.remove !== undefined && userHelper.hasPermissions(req.session.uid, "backups/remove", POST.server)) {
             let serverCFG   = serverUtilInfos.getConfig(POST.server);
             let success     = false;
             try {
@@ -39,7 +39,7 @@ router.route('/')
             });
         }
 
-        if(POST.playin !== undefined) {
+        if(POST.playin !== undefined && userHelper.hasPermissions(req.session.uid, "backups/playin", POST.server)) {
             let success     = false;
             let serverCFG   = serverUtilInfos.getConfig(POST.server);
             let serverINFO  = serverUtilInfos.getServerInfos(POST.server);
@@ -67,6 +67,9 @@ router.route('/')
     .get((req,res)=>{
         // DEFAULT AJAX
         let GET         = req.query;
+
+        // Wenn keine Rechte zum abruf
+        if(!userHelper.hasPermissions(req.session.uid, "show", GET.server) || !userHelper.hasPermissions(req.session.uid, "backups/show", GET.server)) return true;
 
         // GET serverInfos
         if(GET.getDir !== undefined && GET.server !== undefined) {

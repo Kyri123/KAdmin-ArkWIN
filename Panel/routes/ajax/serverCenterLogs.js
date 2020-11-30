@@ -19,6 +19,9 @@ router.route('/')
     .get((req,res)=>{
         // DEFAULT AJAX
         let GET         = req.query;
+
+        // Wenn keine Rechte zum abruf
+        if(!userHelper.hasPermissions(req.session.uid, "show", GET.server) || !userHelper.hasPermissions(req.session.uid, "logs/show", GET.server)) return true;
     })
 
 module.exports = router;

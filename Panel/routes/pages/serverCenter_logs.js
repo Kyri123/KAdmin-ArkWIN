@@ -22,7 +22,7 @@ router.route('/')
         let serverName  = req.baseUrl.split('/')[2];
         let userPerm    = userHelper.permissions(sess.uid);
 
-        if(!userHelper.hasPermissions(req.session.uid, "logs/show", serverName)) {
+        if(!userHelper.hasPermissions(req.session.uid, "logs/show", serverName) || !userHelper.hasPermissions(req.session.uid, "show", serverName)) {
             res.redirect("/401");
             return true;
         }

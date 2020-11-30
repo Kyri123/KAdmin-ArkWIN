@@ -2,7 +2,6 @@
   "is_server_admin"       : 0,
   "show"                  : 0,
   "actions"               : 0,
-  "home": {},
   "mods": {
     "show"                  : 1,
     "changeplace"           : 0,

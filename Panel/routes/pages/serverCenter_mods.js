@@ -24,7 +24,7 @@ router.route('/')
 
         // Leite zu 401 wenn Rechte nicht gesetzt sind
 
-        if(!userHelper.hasPermissions(req.session.uid, "api/mods", serverName)) {
+        if(!userHelper.hasPermissions(req.session.uid, "mods/show", serverName) || !userHelper.hasPermissions(req.session.uid, "show", serverName)) {
             res.redirect("/401");
             return true;
         }

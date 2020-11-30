@@ -17,7 +17,6 @@ setInterval(() => {
     $.get('/ajax/serverCenterAny?getglobalinfos', (datas) => {
         serverList  = JSON.parse(datas).servers_arr;
         if(serverList.length > 0) {
-            let modallist = ``;
             let list = ``;
             serverList.forEach((val) => {
                 let stateColor = val[1].is_installed ? (

@@ -57,7 +57,9 @@ function getSCState() {
             inhalt = varser.lang_arr.serverCenterAny.actionClose
         }
         else {
-            inhalt = `<a href="javascript:void()" class="small-box-footer btn btn-sm btn-success" data-toggle="modal" data-target="#action">${varser.lang_arr.serverCenterAny.actionFree}</a>`
+            inhalt = !hasPermissions(globalvars.perm, "actions", varser.cfg)
+                ? `<a href="javascript:void()" class="small-box-footer btn btn-sm btn-success" data-toggle="modal" data-target="#action">${varser.lang_arr.serverCenterAny.actionFree}</a>`
+                : varser.lang_arr.serverCenterAny.actionClose;
         }
         css = 'success';
         if($('#actions').html() !== inhalt) $('#actions').html(inhalt).attr('class',`description-header text-${css}`);// Action Card -> Select

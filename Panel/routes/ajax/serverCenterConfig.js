@@ -17,7 +17,7 @@ router.route('/')
         let POST        = req.body;
 
         // Speicher Server
-        if(POST.saveServer !== undefined) {
+        if(POST.saveServer !== undefined && userHelper.hasPermissions(req.session.uid, "config/arkadmin", POST.cfg)) {
             let cfg = POST.cfg
 
             delete POST.saveServer;
@@ -49,10 +49,13 @@ router.route('/')
         // Speicher Inis
         if(POST.sendini !== undefined) {
             let cfg = POST.cfg
+            POST.iniSend = escape(POST.iniSend).replaceAll("/", "");
+
+            if(!userHelper.hasPermissions(req.session.uid, `config/${POST.iniSend}`, cfg)) return true;
 
             res.render('ajax/json', {
                 data: JSON.stringify({
-                    alert: alerter.rd(serverUtilInfos.saveIni(POST.cfg ,POST.iniText , POST.iniSend) ? 1009 : 3).replace("{ini}", POST.iniSend + ".ini")
+                    alert: alerter.rd(serverUtilInfos.saveIni(cfg ,POST.iniText , POST.iniSend) ? 1009 : 3).replace("{ini}", POST.iniSend + ".ini")
                 })
             });
         }
@@ -61,6 +64,9 @@ router.route('/')
     .get((req,res)=>{
         // DEFAULT AJAX
         let GET         = req.query;
+
+        // Wenn keine Rechte zum abruf
+        if(!userHelper.hasPermissions(req.session.uid, "show", GET.server) || !userHelper.hasPermissions(req.session.uid, "config/show", GET.server)) return true;
 
         // GET serverInfos
         if(GET.serverInis !== undefined) {

@@ -21,18 +21,10 @@ router.route('/')
         let sess = req.session;
         let serverName  = req.baseUrl.split('/')[2];
 
-        if(!userHelper.hasPermissions(req.session.uid, "api/show", serverName)) {
+        // Leite zu 401 wenn Rechte nicht gesetzt sind
+        if(!userHelper.hasPermissions(req.session.uid, "api/show", serverName) || !userHelper.hasPermissions(req.session.uid, "show", serverName)) {
             res.redirect("/401");
             return true;
-        }
-
-        // Leite zu 401 wenn Rechte nicht gesetzt sind
-        if(
-            userPerm.server[serverName].is_server_admin === 0 &&
-            userPerm.server[serverName].show === 0 &&
-            userPerm.all.is_admin === 0
-        ) {
-            res.redirect("/401");
         }
 
         // Die eigentl. Seite

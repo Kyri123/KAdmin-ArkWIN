@@ -17,7 +17,7 @@ router.route('/')
         let POST        = req.body;
 
         // Installierte Mod entfernen
-        if(POST.removeIstalled !== undefined) {
+        if(POST.removeIstalled !== undefined && userHelper.hasPermissions(req.session.uid, "mods/remove", POST.cfg)) {
             let modID       = POST.modID;
             let serverCfg   = serverUtilInfos.getConfig(POST.cfg);
             if(serverCfg.server === undefined) {
@@ -42,7 +42,7 @@ router.route('/')
         }
 
         // Mod entfernen
-        if(POST.remove !== undefined) {
+        if(POST.remove !== undefined && userHelper.hasPermissions(req.session.uid, "mods/remove", POST.cfg)) {
             let serverCfg   = serverUtilInfos.getConfig(POST.cfg);
             if(serverCfg.server === undefined) {
                 let modID   = serverCfg.mods[POST.key];
@@ -58,7 +58,7 @@ router.route('/')
         }
 
         // Mod Hinzufügen
-        if(POST.addmod !== undefined) {
+        if(POST.addmod !== undefined && userHelper.hasPermissions(req.session.uid, "mods/add", POST.cfg)) {
             let mods        = serverUtilInfos.getConfig(POST.cfg).mods;
             let modid       = 0;
             if(POST.data !== '' && isNaN(POST.data)) {
@@ -88,7 +88,7 @@ router.route('/')
         }
 
         // Mod schieben
-        if(POST.push !== undefined) {
+        if(POST.push !== undefined && userHelper.hasPermissions(req.session.uid, "mods/changeplace", POST.cfg)) {
             let mods        = serverUtilInfos.getConfig(POST.cfg).mods;
             let k           = parseInt(POST.key);
             let k1          = k + 1;
@@ -122,6 +122,9 @@ router.route('/')
     .get((req,res)=>{
         // DEFAULT AJAX
         let GET         = req.query;
+
+        // Wenn keine Rechte zum abruf
+        if(!userHelper.hasPermissions(req.session.uid, "show", GET.server) || !userHelper.hasPermissions(req.session.uid, "mods/show", GET.server)) return true;
 
         // GET serverInfos
         if(GET.serverInfos !== undefined) {
