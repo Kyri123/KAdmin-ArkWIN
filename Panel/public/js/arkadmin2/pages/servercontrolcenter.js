@@ -27,7 +27,7 @@ setInterval(() => {
                     ) : "info"
                 ) : (val[1].is_free ? "warning" : "info");
 
-                if(val[1].server === undefined) list +=    `    <div class="col-lg-6 col-xl-6" id="${val[0]}">
+                if(val[1].server === undefined && hasPermissions(vars.perm, "show", val[0])) list +=    `    <div class="col-lg-6 col-xl-6" id="${val[0]}">
                                     <div class="card card-widget widget-user  item-box">
                                         <div class="card bg-dark card-widget widget-user mb-0">
                                             <div class="row p-2" title="${val[1].sessionName}">
@@ -52,7 +52,7 @@ setInterval(() => {
                                                 <a href="/servercenter/${val[0]}" target="_blank" style="width: 100%" class="btn btn-dark"><i class="fas fa-server" aria-hidden="true"></i></a>
                                             </div>
                                             <div class="right-no-top ml-auto d-inline" style="width:50%;padding-left: 45px;">
-                                                <a style="width: 100%" class="text-white btn btn-danger " data-toggle="modal" data-target="#remove${val[0]}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                <a style="width: 100%" class="text-white btn btn-danger${hasPermissions(vars.perm, "servercontrolcenter/delete", val[0]) ? `" data-toggle="modal" data-target="#remove${val[0]}"` : ' disabled"'}><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                             </div>
                                         </div>
                                         <div class="card-footer p-0">
@@ -83,8 +83,8 @@ setInterval(() => {
 
                 if($(`#remove${val[0]}`).html() === undefined) $('#modallist').append(`<form class="modal fade" method="post" action="#" id="remove${val[0]}" tabindex="-1" style="display: none;" aria-hidden="true">
                                     <div class="modal-dialog modal-xl" role="document" style="max-width: 700px">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
+                                        <div class="modal-content border-0">
+                                            <div class="modal-header bg-danger">
                                                 <h5 class="modal-title">${vars.lang_arr.servercontrolcenter.modalDelete.title}</h5>
                                             </div>
                                 
@@ -102,7 +102,7 @@ setInterval(() => {
                                     </div>
                                 </form>`);
             });
-            list    += toEnd
+            if(hasPermissions(vars.perm, "servercontrolcenter/create")) list += toEnd
 
             if($('#serverlist').html() !== list)        $('#serverlist').html(list);
         }

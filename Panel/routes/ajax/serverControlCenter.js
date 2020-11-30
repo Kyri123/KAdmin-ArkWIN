@@ -17,7 +17,7 @@ router.route('/')
     .post((req,res)=>{
         let POST        = req.body;
         // Erstellen eines neuen Servers
-        if(POST.addserver !== undefined) {
+        if(POST.addserver !== undefined && userHelper.hasPermissions(req.session.uid, "servercontrolcenter/create")) {
             // Erstelle default daten & Servername
             let defaultJSON     = globalUtil.safeFileReadSync([mainDir, '/app/json/server/template/', 'default.json'], true);
             if(defaultJSON !== false) {
@@ -39,8 +39,8 @@ router.route('/')
                 defaultJSON.pathLogs    = defaultJSON.pathLogs.replace('{SERVERNAME}', serverName).replace('{LOGROOT}', PANEL_CONFIG.logRoot);
                 defaultJSON.pathBackup  = defaultJSON.pathBackup.replace('{SERVERNAME}', serverName).replace('{BACKUPROOT}', PANEL_CONFIG.pathBackup);
                 defaultJSON.rcon        = POST.port[2];
-                defaultJSON.game        = POST.port[0];
                 defaultJSON.query       = POST.port[1];
+                defaultJSON.game        = POST.port[0];
 
                 // Erstelle Server
                 try {
@@ -74,8 +74,8 @@ router.route('/')
         }
 
 
-        // Erstellen eines neuen Servers
-        if(POST.deleteserver !== undefined) {
+        // Lösche einen Servers
+        if(POST.deleteserver !== undefined && userHelper.hasPermissions(req.session.uid, "servercontrolcenter/delete")) {
             // Erstelle default daten & Servername
             let serverName              = POST.cfg;
             let serverInformationen     = serverInfos.getServerInfos(serverName);
@@ -112,6 +112,10 @@ router.route('/')
     .get((req,res)=>{
         // DEFAULT AJAX
         let GET         = req.query;
+
+        // Wenn keine Rechte zum abruf
+        if(!userHelper.hasPermissions(req.session.uid, "servercontrolcenter/show")) return true;
+
         res.render('ajax/json', {
             data: JSON.stringify({
                 done: false

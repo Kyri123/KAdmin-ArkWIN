@@ -98,7 +98,7 @@ function hasPermissions(permission ,perm, server = false) {
             if(userperm.all.is_admin === 1) return true;
 
             let bool        = false;
-            let needPerm    = perm.includes("/") ? perm.split('/') : [perm];
+            let needPerm    = perm.includes('/') ? perm.split('/') : [perm];
             needPerm.forEach((val) => {
                 if(permarr[val] !== undefined) {
                     permarr = permarr[val];

@@ -18,7 +18,7 @@ router.route('/')
         global.user         = userHelper.getinfos(req.session.uid);
         let resp        = "";
 
-        if(userHelper.hasPermissions(req.session.uid, "servercontrolcenter/show")) {
+        if(!userHelper.hasPermissions(req.session.uid, "servercontrolcenter/show")) {
             res.redirect("/401");
             return true;
         }
