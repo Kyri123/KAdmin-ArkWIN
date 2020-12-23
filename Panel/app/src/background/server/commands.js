@@ -393,8 +393,8 @@ module.exports = {
             // Prüfe ob ein update verfügbar ist (nur wenn --no-autoupdate nicht gesetzt ist)
             if(!noAutoUpdate || validate) {
                 if(serverUtil.checkSeverUpdate(server) || validate) cmdCommand  += `${steamCMDPath} +login anonymous +force_install_dir "${serverPath}" +app_update ${PANEL_CONFIG.appID_server}${validate ? " Validate" : ""} +quit\n`;
-                if(serverUtil.checkSeverUpdate(server)) actionResponse  += `${PANEL_LANG.logger.doUpdateBeforeStart}\n`;
-                if(validate) actionResponse                             += `${PANEL_LANG.logger.validate}\n`;
+                if(serverUtil.checkSeverUpdate(server)) actionResponse          += `${PANEL_LANG.logger.doUpdateBeforeStart}\n`;
+                if(validate) actionResponse                                     += `${PANEL_LANG.logger.validate}\n`;
                 if(!noAutoUpdate) {
                     let modUpdates  = serverUtil.checkModUpdates(server);
                     if(modUpdates !== false) {
@@ -444,10 +444,10 @@ module.exports = {
 
         if(servConfig.server === undefined && !servInfos.cmd) {
             // vars
-            let pathToZip               = pathMod.join(servConfig.path, '\\ShooterGame\\Saved');
-            let backupPath              = pathMod.join(servConfig.pathBackup);
-            let ZIP_name                = `${Date.now()}.zip`;
-            let canZIP                  = globalUtil.safeFileExsistsSync([pathToZip]) && !globalUtil.safeFileExsistsSync([backupPath, ZIP_name]);
+            let pathToZip           = pathMod.join(servConfig.path, '\\ShooterGame\\Saved');
+            let backupPath          = pathMod.join(servConfig.pathBackup);
+            let ZIP_name            = `${Date.now()}.zip`;
+            let canZIP              = globalUtil.safeFileExsistsSync([pathToZip]) && !globalUtil.safeFileExsistsSync([backupPath, ZIP_name]);
 
             // CMD Line
             let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
@@ -462,14 +462,14 @@ module.exports = {
             if(canZIP) {
                 actionResponse          += `${PANEL_LANG.logger.doBackupThis}: ${Date.now()}.zip\n`;
                 if(!globalUtil.safeFileExsistsSync([backupPath])) globalUtil.safeFileMkdirSync([backupPath]);
-                cmdCommand  += `powershell -command "Add-Type -Assembly \\"System.IO.Compression.FileSystem\\" ;[System.IO.Compression.ZipFile]::CreateFromDirectory(\\"${pathToZip}\\", \\"${backupPath}\\${ZIP_name}\\") ;"\n`;
+                cmdCommand              += `powershell -command "Add-Type -Assembly \\"System.IO.Compression.FileSystem\\" ;[System.IO.Compression.ZipFile]::CreateFromDirectory(\\"${pathToZip}\\", \\"${backupPath}\\${ZIP_name}\\") ;"\n`;
             }
             else {
                 actionResponse          += `${PANEL_LANG.logger.doNotBackup}\n`;
             }
 
             // Beende CMDline und Update log
-            cmdCommand  += `timeout /T 10 /nobreak & del /f ${cmdFile} & exit`;
+            cmdCommand                  += `timeout /T 10 /nobreak & del /f ${cmdFile} & exit`;
 
             // Speichern und ausführen
             try {

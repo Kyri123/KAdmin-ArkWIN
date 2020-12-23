@@ -29,20 +29,20 @@ global.PANEL_CONFIG_OTHER = [];
 fs.readdirSync(pathConfigDir).forEach(item => {
     console.log(item);
     if(item.includes(".json")) {
-        console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m Load: ${pathConfigDir + item}`);
+        console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m Load: ${pathLangDir}\\${item}`);
         try {
             if(item === "app.json") {
-                global.PANEL_CONFIG                                 = JSON.parse(fs.readFileSync(pathMod.join(pathConfigDir, item), 'utf8'));
+                global.PANEL_CONFIG                                 = JSON.parse(fs.readFileSync(pathMod.join(pathLangDir, item), 'utf8'));
             }
             else if(item === "main.json") {
-                global.PANEL_MAIN                                   = JSON.parse(fs.readFileSync(pathMod.join(pathConfigDir, item), 'utf8'));
+                global.PANEL_MAIN                                   = JSON.parse(fs.readFileSync(pathMod.join(pathLangDir, item), 'utf8'));
             }
             else {
-                PANEL_CONFIG_OTHER[item.replaceAll(".json")]        = JSON.parse(fs.readFileSync(pathMod.join(pathConfigDir, item), 'utf8'));
+                PANEL_CONFIG_OTHER[item.replaceAll(".json")]        = JSON.parse(fs.readFileSync(pathMod.join(pathLangDir, item), 'utf8'));
             }
         }
         catch (e) {
-            console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ${pathConfigDir + item} cannot Loaded`);
+            console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ${pathLangDir}\\${item} cannot Loaded`);
             console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
             process.exit(1)
         }
