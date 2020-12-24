@@ -79,14 +79,14 @@ Webbasiertes Admin Panel für Ark-Gameserver
 
 | Eigenschaften                       | Wert | 
 | :---                                | :--- |
-| `useDebug`                          | Ordner name der für die Sprachdatei verwendet werden soll |
-| `interval > getAvailableVersion`    | Port der genutzt werden soll für den Webserver |
-| `interval > getStateFromServers`    | Pfad wo die Server liegen sollen |
-| `interval > getModsFromAPI`         | Pfad wo die Logs liegen sollen |
-| `interval > getTraffic`             | Pfad wo die Backups liegen sollen |
-| `interval > doReReadConfig`         | Pfad wo die SteamCMD liegt |
-| `interval > doServerBackgrounder`   | SteamAPI key bekommt ihr von https://steamcommunity.com/dev/apikey |
-| `interval > backgroundUpdater`      | AppID von Ark:SE (dies sollte nicht geändert werden) |
+| `useDebug`                          | Aktiviert den Debug-Modus in der Konsole |
+| `interval > getAvailableVersion`    | ... |
+| `interval > getStateFromServers`    | ... |
+| `interval > getModsFromAPI`         | ... |
+| `interval > getTraffic`             | ... |
+| `interval > doReReadConfig`         | ... |
+| `interval > doServerBackgrounder`   | ... |
+| `interval > backgroundUpdater`      | ... |
 
 # Sprache Installieren
 
