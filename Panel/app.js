@@ -40,36 +40,41 @@ global.isUpdate                       = false;
 global.globalUtil                     = require('./app/src/util');
 global.Installed                      = false;
 
-// Checking Installed
-let pathToInstallerJSON    = pathMod.join(mainDir, '/app/json/panel/', 'installer.json');
-console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m checking Panel is installed`);
-try {
-  let installer       = globalUtil.safeFileReadSync([pathToInstallerJSON], true);
-  global.Installed    = installer.installed !== undefined;
-  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m ${Installed ? "is Installed... load Panel" : "not Installed... load Installer"}`);
-}
-catch (e) {
-  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m not Installed... load Installer`);
-}
-//Installed = false; //(Testing)
-
 // Modulealerter
-require('./app/main/main_loader.js');
+require('./app/main/mainLoader.js');
 global.alerter                        = require('./app/src/alert.js');
 global.debug                          = PANEL_MAIN.useDebug;
 
-// lese Changelog
-let pathFile    = pathMod.join(mainDir, '/app/json/panel/', 'changelog.json');
+// Checking Installed
+global.pathToInstallerJSON  = pathMod.join(mainDir, '/app/json/panel/', 'installer.json');
+global.installerJson       = [];
+console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[32m checking Panel is installed`);
 try {
-  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m Load: ${pathFile}`)
-  global.changelog                    = globalUtil.safeFileReadSync([pathFile], true);
-  changelog.reverse();
+  global.installerJson   = globalUtil.safeFileReadSync([pathToInstallerJSON], true);
+  global.Installed       = installerJson.installed.toLowerCase() === "true";
+  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]${Installed ? "\x1b[32m is Installed... load Panel" : "\x1b[31m not Installed... load Installer"}`);
 }
 catch (e) {
-  if(debug) console.log(e);
-  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ${pathFile} not found`);
-  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
-  process.exit(1);
+  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m not Installed... load Installer`);
+}
+//Installed = false; //(Testing)
+
+require('./app/main/sqlLoader.js');
+
+// lese Changelog
+if(Installed) {
+  let pathFile    = pathMod.join(mainDir, '/app/json/panel/', 'changelog.json');
+  try {
+    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m Load: ${pathFile}`)
+    global.changelog                    = globalUtil.safeFileReadSync([pathFile], true);
+    changelog.reverse();
+  }
+  catch (e) {
+    if(debug) console.log(e);
+    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ${pathFile} not found`);
+    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
+    process.exit(1);
+  }
 }
 
 let app         = express();
@@ -113,7 +118,7 @@ app.use(function(err, req, res, next) {
 });
 
 app.listen(PANEL_CONFIG.port, "0.0.0.0", ()=>{
-  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m http://${ip.address()}:${PANEL_CONFIG.port}/`);
+  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m${Installed ? "" : " follow Installer here:"} http://${ip.address()}:${PANEL_CONFIG.port}/`);
 });
 module.exports = app;
 

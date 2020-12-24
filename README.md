@@ -80,13 +80,14 @@ Webbasiertes Admin Panel für Ark-Gameserver
 | Eigenschaften                       | Wert | 
 | :---                                | :--- |
 | `useDebug`                          | Aktiviert den Debug-Modus in der Konsole |
-| `interval > getAvailableVersion`    | ... |
-| `interval > getStateFromServers`    | ... |
-| `interval > getModsFromAPI`         | ... |
-| `interval > getTraffic`             | ... |
-| `interval > doReReadConfig`         | ... |
-| `interval > doServerBackgrounder`   | ... |
-| `interval > backgroundUpdater`      | ... |
+| `interval > getAvailableVersion`    | Intervall wobei die letzte Versionsnummer von der Server Software abgerufen wird |
+| `interval > getStateFromServers`    | Invervall wobei die Informationen von Server erfasst werden (Online usw) |
+| `interval > getModsFromAPI`         | Invervall wobei die Mod IS's von der API geladen werden |
+| `interval > getTraffic`             | Invervall wobei der Traffic erfasst wird |
+| `interval > doReReadConfig`         | Invervall wobei die Konfigurationen neu geladen werden |
+| `interval > doServerBackgrounder`   | Invervall wobei wobei die Server geprüft werden (alwaysstarter usw) |
+| `interval > backgroundUpdater`      | Invervall wobei das Panel auf eine neue Version geprüft wird |
+| `interval > doJob`                  | WIP |
 
 # Sprache Installieren
 

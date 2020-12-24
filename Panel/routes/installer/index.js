@@ -11,7 +11,9 @@ var express = require('express');
 var router = express.Router();
 
 // Login/Reg
-router.use('/step/1',           require('./step_1'));                    // RegisterPage                         | Darf nicht eingeloggt sein
+router.use('/step/1',           require('./step1'));                    // RegisterPage                         | Darf nicht eingeloggt sein
+router.use('/step/2',           require('./step2'));                    // RegisterPage                         | Darf nicht eingeloggt sein
+router.use('/step/3',           require('./step3'));                    // RegisterPage                         | Darf nicht eingeloggt sein
 
 router.all('*',            (req, res, next) => {
     res.redirect('/step/1');

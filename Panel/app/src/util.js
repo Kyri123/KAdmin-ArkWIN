@@ -219,6 +219,27 @@ module.exports = {
     },
 
     /**
+     * Speichert sicher eine Datei
+     * @param {string[]} paths Pfade zur Datei
+     * @param {string} data Daten die Gespeichert werden sollen
+     * @param {string} codierung File Codierung (Standart: utf-8)
+     * @return {boolean}
+     */
+    safeFileCreateSync(paths, data = "", codierung = 'utf8') {
+        // Prüfe Pfad
+        if(module.exports.poisonNull(paths)) {
+            // Lege Pfad fest
+            let filePath        = pathMod.join(...paths);
+
+            // Datei Speichern und Prüfen;
+            if(module.exports.checkValidatePath(filePath) === true)
+                if(!module.exports.safeFileExsistsSync([filePath]))
+                    return module.exports.safeFileSaveSync([filePath], data, codierung);
+        }
+        return false;
+    },
+
+    /**
      * Gibt aus ob eine Datei exsistiert
      * @param {string[]} paths Pfade zur Datei
      * @param {boolean} json JSON.parse(this)
