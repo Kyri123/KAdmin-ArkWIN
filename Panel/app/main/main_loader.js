@@ -27,7 +27,6 @@ let   pathFile  = ``;
 let pathConfigDir    = pathMod.join(mainDir, '/app/config/');
 global.PANEL_CONFIG_OTHER = [];
 fs.readdirSync(pathConfigDir).forEach(item => {
-    console.log(item);
     if(item.includes(".json")) {
         console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m Load: ${pathConfigDir + item}`);
         try {
@@ -38,7 +37,7 @@ fs.readdirSync(pathConfigDir).forEach(item => {
                 global.PANEL_MAIN                                   = JSON.parse(fs.readFileSync(pathMod.join(pathConfigDir, item), 'utf8'));
             }
             else {
-                PANEL_CONFIG_OTHER[item.replaceAll(".json")]        = JSON.parse(fs.readFileSync(pathMod.join(pathConfigDir, item), 'utf8'));
+                PANEL_CONFIG_OTHER[item.replace(".json", "")]        = JSON.parse(fs.readFileSync(pathMod.join(pathConfigDir, item), 'utf8'));
             }
         }
         catch (e) {
@@ -63,7 +62,7 @@ fs.readdirSync(pathLangDir).forEach(item => {
                 global.PANEL_LANG_ALERT                             = JSON.parse(fs.readFileSync(pathMod.join(pathLangDir, item), 'utf8'));
             }
             else {
-                PANEL_LANG_OTHER[item.replaceAll(".json")]          = JSON.parse(fs.readFileSync(pathMod.join(pathLangDir, item), 'utf8'));
+                PANEL_LANG_OTHER[item.replaceAll(".json", "")]          = JSON.parse(fs.readFileSync(pathMod.join(pathLangDir, item), 'utf8'));
             }
         }
         catch (e) {
@@ -75,37 +74,37 @@ fs.readdirSync(pathLangDir).forEach(item => {
 })
 
 // Lade MySQL
-pathFile    = pathMod.join(mainDir, '/app/config/', 'mysql.json');
-console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m Load: ${pathFile}`);
-if(pathFile) {
-    let mysql_config = JSON.parse(fs.readFileSync(pathFile, "utf8"));
+if(Installed) {
+    if(PANEL_CONFIG_OTHER.mysql !== undefined) {
+        let mysql_config = PANEL_CONFIG_OTHER.mysql;
 
-    global.con = mysql.createConnection({
-        host: mysql_config.dbhost,
-        user: mysql_config.dbuser,
-        password: mysql_config.dbpass,
-        database: mysql_config.dbbase
-    });
+        global.con = mysql.createConnection({
+            host:       mysql_config.dbhost,
+            user:       mysql_config.dbuser,
+            password:   mysql_config.dbpass,
+            database:   mysql_config.dbbase
+        });
 
-    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m MySQL connecting...`);
-    con.connect((err) => {
-        if (err) {
-            if(debug) console.log(err);
-            console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m cannot connect to MariaDB`);
-            console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
-            process.exit(1)
-        }
-    });
+        console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m MySQL connecting...`);
+        con.connect((err) => {
+            if (err) {
+                if(debug) console.log(err);
+                console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m cannot connect to MariaDB`);
+                console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
+                process.exit(1)
+            }
+        });
 
-    global.synccon = new MySql({
-        host: mysql_config.dbhost,
-        user: mysql_config.dbuser,
-        password: mysql_config.dbpass,
-        database: mysql_config.dbbase
-    });
-}
-else {
-    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ${pathFile} not found`);
-    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
-    process.exit(1)
+        global.synccon = new MySql({
+            host:       mysql_config.dbhost,
+            user:       mysql_config.dbuser,
+            password:   mysql_config.dbpass,
+            database:   mysql_config.dbbase
+        });
+    }
+    else {
+        console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ${pathFile} not found or loaded`);
+        console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
+        process.exit(1)
+    }
 }
