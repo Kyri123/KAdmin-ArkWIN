@@ -31,8 +31,20 @@ global.panelVersion                   = "0.0.4";
 global.buildID                        = "004.000";
 global.isUpdate                       = false;
 global.globalUtil                     = require('./app/src/util');
-global.Installed                      = fs.existsSync(pathMod.join(mainDir, "app/is_installed.check")) ? fs.existsSync(pathMod.join(mainDir, "app/config/mysql.json")) : false;
-//Installed = false;
+global.Installed                      = false;
+
+// Checking Installed
+let pathToInstallerJSON    = pathMod.join(mainDir, '/app/json/panel/', 'installer.json');
+console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m checking Panel is installed`);
+try {
+  let installer       = globalUtil.safeFileReadSync([pathToInstallerJSON], true);
+  global.Installed    = installer.installed !== undefined;
+  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m ${Installed ? "is Installed... load Panel" : "not Installed... load Installer"}`);
+}
+catch (e) {
+  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m not Installed... load Installer`);
+}
+//Installed = false; //(Testing)
 
 // Modulealerter
 require('./app/main/main_loader.js');

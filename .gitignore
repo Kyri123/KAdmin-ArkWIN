@@ -13,4 +13,6 @@ Panel/.snyk
 Panel/app/cmd/5c68f48w.cmd
 Panel/app/cmd/5g28f48x.cmd
 Panel/app/config/mysql.json
+Panel/app/config/mysql_old.json
 Panel/app/data/sha.txt
+Panel/app/json/panel/installer.json
