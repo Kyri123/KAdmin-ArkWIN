@@ -23,9 +23,11 @@ Webbasiertes Admin Panel für Ark-Gameserver
 
 - **[Dev-Tree]** Benutzten auf eigene GEFAHR (Debugs, Tests usw.)
 - Derzeitiger Status: **Alpha**
-- Discord: https://discord.gg/ykGnw49
-- Trello: https://trello.com/b/HZFtQ2DZ/arkadminwin
-   
+- `Links`
+  - Spenden? https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=68PT9KPRABVCU&source=url
+  - Discord: https://discord.gg/ykGnw49
+  - Trello: https://trello.com/b/HZFtQ2DZ/arkadminwin
+
 # Installation
 
 - Downloade den letzten Release
@@ -110,3 +112,8 @@ Webbasiertes Admin Panel für Ark-Gameserver
 | :---                        | :---            | :--- |
 | ArkAdmin2 für Linux         | Release         | https://github.com/Kyri123/ArkAdmin |
 | Kleines Minecraft Plugin    | Beta            | https://github.com/Kyri123/KPlugins-1.12.2 |
+
+# Danke
+- Danke an **JetBrains** für die bereitstellung der IDE's für die Entwicklung dieser Open-Source-Software
+  - Link: https://www.jetbrains.com
+- Sowie allen Testern und jeden gemeldeten BUG!
