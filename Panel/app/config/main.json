@@ -1,5 +1,4 @@
 {
-  "panelBranch"       : "master",
   "useDebug"          : false,
   "interval": {
     "getAvailableVersion"   : 300000,

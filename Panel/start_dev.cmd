@@ -38,4 +38,4 @@ echo Done!
 echo -----------------------------------------
 echo        Update Module + Start
 echo -----------------------------------------
-npm i & npm update & npm fund & start "ArkAdminWIN" cmd /k "node app.js startedWithUpdater & start "ArkAdminWIN Starter" start_dev.cmd & exit" & exit
+npm i & npm update & npm fund & start "ArkAdminWIN" cmd /k "node app.js startedWithUpdater dev & start "ArkAdminWIN Starter" start_dev.cmd & exit" & exit

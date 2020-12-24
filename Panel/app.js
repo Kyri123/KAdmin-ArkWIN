@@ -6,6 +6,14 @@
  * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
+global.dateFormat                     = require('dateformat');
+global.panelBranch                    = process.argv.includes("dev") ? "dev" : "master";
+if(process.platform !== "win32") {
+  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m OS is not Windows or supported`);
+  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
+  process.exit(1);
+}
+
 const createError                     = require('http-errors');
 const express                         = require('express');
 const session                         = require('express-session');
@@ -20,7 +28,6 @@ global.mainDir                        = __dirname;
 global.ip                             = require('ip');
 global.md5                            = require('md5');
 global.htmlspecialchars               = require('htmlspecialchars');
-global.dateFormat                     = require('dateformat');
 global.mysql                          = require('mysql');
 global.pathMod                        = require('path');
 global.fs                             = require('fs');

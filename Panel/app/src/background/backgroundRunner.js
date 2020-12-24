@@ -199,7 +199,7 @@ module.exports = {
     backgroundUpdater: async () => {
         global.checkIsRunning = undefined;
         var options = {
-            url: `https://api.github.com/repos/Kyri123/ArkAdminWin/branches/${PANEL_MAIN.panelBranch}`,
+            url: `https://api.github.com/repos/Kyri123/ArkAdminWin/branches/${panelBranch}`,
             headers: {
                 'User-Agent': `ArkAdminWIN-Server AutoUpdater :: FROM: ${ip.address()}`
             },
@@ -221,10 +221,9 @@ module.exports = {
                             // Update verfügbar
                             if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")}] Auto-Updater: \x1b[36m${PANEL_LANG.updaterLOG.isUpdate}`);
                             global.isUpdate = true;
-                            let args = process.argv.slice(2);
-                            if(args[0] !== undefined && checkIsRunning === undefined) {
+                            if(checkIsRunning === undefined) {
                                 // Prüfe ob alle Aufgaben abgeschlossen sind && ob der Server mit startedWithUpdater gestartet wurde
-                                if(args[0] === "startedWithUpdater") checkIsRunning = setInterval(() => {
+                                if(process.argv.includes("startedWithUpdater")) checkIsRunning = setInterval(() => {
                                     let ServerInfos = globalInfos.get();
                                     let isFree      = true;
 
