@@ -104,3 +104,9 @@ Webbasiertes Admin Panel für Ark-Gameserver
   - NVM                 > https://github.com/coreybutler/nvm-windows/releases/tag/1.1.7
 - `MariaDB` 
   - Server              > z.B. https://www.apachefriends.org/de/index.html
+
+# Andere Projekte:
+| Projekt                     | Status          | URL | 
+| :---                        | :---            | :--- |
+| ArkAdmin2 für Linux         | Release         | https://github.com/Kyri123/ArkAdmin |
+| Kleines Minecraft Plugin    | Beta            | https://github.com/Kyri123/KPlugins-1.12.2 |
