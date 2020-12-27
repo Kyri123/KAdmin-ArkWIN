@@ -13,7 +13,7 @@ const router    = express.Router()
 router.route('/')
 
     .all((req,res)=>{
-        globalUtil.safeFileCreateSync([pathToInstallerJSON], '{"step1":1,"installed":"false"}')
+        globalUtil.safeFileCreateSync([pathToInstallerJSON], '{"step":1,"installed":"false"}')
         try {
             global.installerJson   = globalUtil.safeFileReadSync([pathToInstallerJSON], true);
         }
@@ -29,37 +29,32 @@ router.route('/')
 
         // Leite zum Schritt wenn dieser nicht 1 entspricht
         if(installerJson.step !== undefined) {
-            if(parseInt(installerJson.step) <= 1) {
+            if(parseInt(installerJson.step) !== 1) {
                 res.redirect(`/step/${installerJson.step}`);
                 return false;
             }
         }
 
+        // verarbeite input
+        if(POST.send !== undefined) {
+            let success     = false;
 
 
+            if(success) {
+                res.redirect(`/step/${installerJson.step + 1}`);
+                return false;
+            }
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        console.log(installerJson)
 
         // Lade Standartseite
-        if(POST !== undefined)
-            res.render('pages/login', {
-                pagename    : lang.pagename,
-                lang        : lang,
-                langAll     : langAll,
-                resp        : resp
-            });
+        res.render(`pages/installer/step${installerJson.step}`, {
+            pagename    : lang.pagename,
+            lang        : lang,
+            langAll     : langAll,
+            resp        : resp
+        });
     })
 
 module.exports = router;

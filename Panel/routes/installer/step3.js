@@ -21,7 +21,7 @@ router.route('/')
 
         // Leite zum letzten oder 1. Schritt wenn der Schritt nicht freigegeben wurde
         if(installerJson.step !== undefined) {
-            if(parseInt(installerJson.step) <= 3) {
+            if(parseInt(installerJson.step) !== 3) {
                 res.redirect(`/step/${installerJson.step}`);
                 return false;
             }
@@ -32,25 +32,19 @@ router.route('/')
             return false;
         }
 
+        // verarbeite input
+        if(POST.send !== undefined) {
+            let success     = false;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            if(success) {
+                res.redirect(`/step/${installerJson.step + 1}`);
+                return false;
+            }
+        }
 
         // Lade Standartseite
-        res.render('pages/login', {
+        res.render(`pages/installer/step${installerJson.step}`, {
             pagename    : lang.pagename,
             lang        : lang,
             langAll     : langAll,
