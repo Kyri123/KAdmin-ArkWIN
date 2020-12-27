@@ -44,7 +44,7 @@ router.route('/')
         }
 
         // Lade Standartseite
-        res.render(`pages/installer/step${installerJson.step}`, {
+        res.render(`installer/step${installerJson.step}`, {
             pagename    : lang.pagename,
             lang        : lang,
             langAll     : langAll,
