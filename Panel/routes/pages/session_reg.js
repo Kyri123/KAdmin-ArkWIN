@@ -33,8 +33,8 @@ router.route('/')
             post.email      = htmlspecialchars(post.email);
             post.code       = htmlspecialchars(post.code);
 
-            sql             = 'SELECT * FROM ArkAdmin_users WHERE `username`=? AND `email`=?'
-            let result      = globalUtil.safeSendSQLSync(sql, post.logger, post.logger);
+            sql             = 'SELECT * FROM ArkAdmin_users WHERE `username`=? OR `email`=?'
+            let result      = globalUtil.safeSendSQLSync(sql, post.username, post.email);
 
             // Prüfe ob Benutzer in Kombination der Email bereits exsistiert
             if(result.length === 0) {
@@ -54,7 +54,7 @@ router.route('/')
                         let code_result = globalUtil.safeSendSQLSync(sql, post.code);
                         if(code_result.length > 0) {
                             sql             = `INSERT INTO ArkAdmin_users (\`username\`, \`email\`, \`password\`, \`ban\`, \`registerdate\` ,\`rang\`) VALUES (?, ?, ?, '0', '${Date.now()}', '${code_result[0].rang === "0" ? "[]" : "[1]"}')`
-                            if(globalUtil.safeSendSQLSync(sql, post.username, post.email, post.username) !== false) {
+                            if(globalUtil.safeSendSQLSync(sql, post.username, post.email, post.pw1) !== false) {
                                 sql         = 'UPDATE ArkAdmin_reg_code SET `used`=1 WHERE `code`=?';
                                 result      = globalUtil.safeSendSQLSync(sql, post.code);
                                 response    += alerter.rd(result !== false ? 1000 : 2);
