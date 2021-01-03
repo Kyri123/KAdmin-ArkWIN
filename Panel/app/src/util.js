@@ -31,23 +31,24 @@ module.exports = {
             let file     = module.exports.safeFileReadSync([logPath]);
             if(file !== false) {
                 let rawFile  = file.toString();
-                rawFile      = rawFile.replace(/\n/g, '-n-');
-                rawFile      = rawFile.replace(/\r/g, '');
-                rawFile      = rawFile.replace(/\t/g, '-t-');
-                rawFile      = rawFile.replace(/(.*)"376030"-n-{(.*)/, `"376030"-n-{$2`); // Ark:SE DedServer
-                rawFile      = rawFile.replace(/"-t--t-"/g, '":"');
-                rawFile      = rawFile.replace(/-n-/g, '');
-                rawFile      = rawFile.replace(/(.*)-t--t-}-t-}}(.*)/, '$1-t--t-}-t-}}');
-                rawFile      = rawFile.replace(/}"/g, '},"');
-                rawFile      = rawFile.replace(/"{/g, '":{');
-                rawFile      = rawFile.replace(/-t-/g, '');
-                rawFile      = rawFile.replace(/""/g, '","');
-                rawFile      = rawFile.replace(/}"/g, '},"');
-                rawFile      = rawFile.replace(/"{/g, '":{');
-                rawFile      = rawFile.replace(/"description":",""pwdrequired"/g, '"pwdrequired"');
-                rawFile      = rawFile.replace(/"description":",""timeupdated"/g, '"timeupdated"');
-                rawFile      = rawFile.replace(/(.*)"346110":(.*)/, `"346110":$2`); // Ark:SE DedServer
-                rawFile      = rawFile.replace(/(.*)"maxnumfiles":"100"}}(.*)/, `$1"maxnumfiles":"100"}}`);
+                rawFile      = rawFile
+                   .replace(/\n/g, '-n-')
+                   .replace(/\r/g, '')
+                   .replace(/\t/g, '-t-')
+                   .replace(/(.*)"376030"-n-{(.*)/, `"376030"-n-{$2`) // Ark:SE DedServer
+                   .replace(/"-t--t-"/g, '":"')
+                   .replace(/-n-/g, '')
+                   .replace(/(.*)-t--t-}-t-}}(.*)/, '$1-t--t-}-t-}}')
+                   .replace(/}"/g, '},"')
+                   .replace(/"{/g, '":{')
+                   .replace(/-t-/g, '')
+                   .replace(/""/g, '","')
+                   .replace(/}"/g, '},"')
+                   .replace(/"{/g, '":{')
+                   .replace(/"description":",""pwdrequired"/g, '"pwdrequired"')
+                   .replace(/"description":",""timeupdated"/g, '"timeupdated"')
+                   .replace(/(.*)"346110":(.*)/, `"346110":$2`) // Ark:SE DedServer
+                   .replace(/(.*)"maxnumfiles":"100"}}(.*)/, `$1"maxnumfiles":"100"}}`);
                 try {
                     return JSON.parse(`{${rawFile}}`);
                 }
@@ -70,23 +71,24 @@ module.exports = {
                 let file     = module.exports.safeFileReadSync([logPath]);
                 if(file !== false) {
                     let rawFile  = file.toString();
-                    rawFile      = rawFile.replace(/\n/g, '-n-');
-                    rawFile      = rawFile.replace(/\r/g, '');
-                    rawFile      = rawFile.replace(/\t/g, '-t-');
-                    rawFile      = rawFile.replace(/(.*)"376030"-n-{(.*)/, `"376030"-n-{$2`); // Ark:SE DedServer
-                    rawFile      = rawFile.replace(/"-t--t-"/g, '":"');
-                    rawFile      = rawFile.replace(/-n-/g, '');
-                    rawFile      = rawFile.replace(/(.*)-t--t-}-t-}}(.*)/, '$1-t--t-}-t-}}');
-                    rawFile      = rawFile.replace(/}"/g, '},"');
-                    rawFile      = rawFile.replace(/"{/g, '":{');
-                    rawFile      = rawFile.replace(/-t-/g, '');
-                    rawFile      = rawFile.replace(/""/g, '","');
-                    rawFile      = rawFile.replace(/}"/g, '},"');
-                    rawFile      = rawFile.replace(/"{/g, '":{');
-                    rawFile      = rawFile.replace(/"description":",""pwdrequired"/g, '"pwdrequired"');
-                    rawFile      = rawFile.replace(/"description":",""timeupdated"/g, '"timeupdated"');
-                    rawFile      = rawFile.replace(/(.*)"346110":(.*)/, `"346110":$2`); // Ark:SE DedServer
-                    rawFile      = rawFile.replace(/(.*)"maxnumfiles":"100"}}(.*)/, `$1"maxnumfiles":"100"}}`);
+                    rawFile      = rawFile
+                       .replace(/\n/g, '-n-')
+                       .replace(/\r/g, '')
+                       .replace(/\t/g, '-t-')
+                       .replace(/(.*)"376030"-n-{(.*)/, `"376030"-n-{$2`) // Ark:SE DedServer
+                       .replace(/"-t--t-"/g, '":"')
+                       .replace(/-n-/g, '')
+                       .replace(/(.*)-t--t-}-t-}}(.*)/, '$1-t--t-}-t-}}')
+                       .replace(/}"/g, '},"')
+                       .replace(/"{/g, '":{')
+                       .replace(/-t-/g, '')
+                       .replace(/""/g, '","')
+                       .replace(/}"/g, '},"')
+                       .replace(/"{/g, '":{')
+                       .replace(/"description":",""pwdrequired"/g, '"pwdrequired"')
+                       .replace(/"description":",""timeupdated"/g, '"timeupdated"')
+                       .replace(/(.*)"346110":(.*)/, `"346110":$2`) // Ark:SE DedServer
+                       .replace(/(.*)"maxnumfiles":"100"}}(.*)/, `$1"maxnumfiles":"100"}}`);
                     try {
                         resolve(JSON.parse(`{${rawFile}}`));
                     }

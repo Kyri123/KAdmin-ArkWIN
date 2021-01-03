@@ -29,9 +29,9 @@ router.route('/')
             post.pw2      !== undefined   &&
             post.code     !== undefined
         ) {
-            post.username   = htmlspecialchars(post.username);
-            post.email      = htmlspecialchars(post.email);
-            post.code       = htmlspecialchars(post.code);
+            post.username   = htmlspecialchars(post.username.trim());
+            post.email      = htmlspecialchars(post.email.trim());
+            post.code       = htmlspecialchars(post.code.trim());
 
             sql             = 'SELECT * FROM ArkAdmin_users WHERE `username`=? OR `email`=?'
             let result      = globalUtil.safeSendSQLSync(sql, post.username, post.email);
@@ -47,8 +47,8 @@ router.route('/')
                         post.pw1.length > 6
                     ) {
                         // Wandel Passwört um
-                        post.pw1        = md5(htmlspecialchars(post.pw1));
-                        post.pw2        = md5(htmlspecialchars(post.pw2));
+                        post.pw1        = md5(htmlspecialchars(post.pw1.trim()));
+                        post.pw2        = md5(htmlspecialchars(post.pw2.trim()));
 
                         sql             = 'SELECT * FROM ArkAdmin_reg_code WHERE `used`=0 AND `code`=?';
                         let code_result = globalUtil.safeSendSQLSync(sql, post.code);

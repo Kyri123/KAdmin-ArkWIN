@@ -6,6 +6,8 @@
  * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
+"use strict"
+
 global.dateFormat                     = require('dateformat');
 global.panelBranch                    = process.argv.includes("dev") ? "dev" : "master";
 if(process.platform !== "win32") {

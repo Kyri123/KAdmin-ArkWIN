@@ -25,8 +25,8 @@ router.route('/')
             post.logger !== undefined &&
             post.pw     !== undefined
         ) {
-            post.logger = htmlspecialchars(post.logger);
-            post.pw     = htmlspecialchars(post.pw);
+            post.logger = htmlspecialchars(post.logger.trim());
+            post.pw     = htmlspecialchars(post.pw.trim());
 
             sql             = 'SELECT * FROM ArkAdmin_users WHERE `username`=? OR (`email`=? AND `password`=?)';
             let result      = globalUtil.safeSendSQLSync(sql, post.logger, post.logger, md5(post.pw));
