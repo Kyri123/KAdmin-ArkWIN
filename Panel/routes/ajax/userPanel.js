@@ -31,6 +31,7 @@ router.route('/')
                     alert: alerter.rd(userInfos.ban === 1 ? 1004 : 1005).replace("{user}", userInfos.username)
                 })
             });
+            return true;
         }
 
         // Benutzer Löschen
@@ -45,6 +46,7 @@ router.route('/')
                     alert: alerter.rd(1006).replace("{user}", userInfos.username)
                 })
             });
+            return true;
         }
 
         // Code Löschen
@@ -57,6 +59,7 @@ router.route('/')
                     alert: alerter.rd(1007)
                 })
             });
+            return true;
         }
 
         // Code Erzeugen
@@ -69,6 +72,7 @@ router.route('/')
                     alert: alerter.rd(1008).replace("{code}", code)
                 })
             });
+            return true;
         }
 
         // Gruppen zuweisen
@@ -88,6 +92,7 @@ router.route('/')
                     success: true
                 })
             });
+            return true;
         }
     })
 
@@ -99,18 +104,24 @@ router.route('/')
         if(!userHelper.hasPermissions(req.session.uid, "userpanel/show")) return true;
 
         // Userlist
-        if(GET.getuserlist) res.render('ajax/json', {
-            data: JSON.stringify({
-                userlist: globalUtil.safeSendSQLSync('SELECT `id`, `username`, `email`, `lastlogin`, `registerdate`, `rang`, `ban` FROM ArkAdmin_users')
-            })
-        });
+        if(GET.getuserlist) {
+            res.render('ajax/json', {
+                data: JSON.stringify({
+                    userlist: globalUtil.safeSendSQLSync('SELECT `id`, `username`, `email`, `lastlogin`, `registerdate`, `rang`, `ban` FROM ArkAdmin_users')
+                })
+            });
+            return true;
+        }
 
         // Codelist
-        if(GET.getcodelist) res.render('ajax/json', {
-            data: JSON.stringify({
-                codelist: globalUtil.safeSendSQLSync(`SELECT * FROM \`ArkAdmin_reg_code\` WHERE \`used\`=0${!userHelper.hasPermissions(req.session.uid, "all/is_admin") ? ' AND `rang`=0' : ''}`)
-            })
-        });
+        if(GET.getcodelist) {
+            res.render('ajax/json', {
+                data: JSON.stringify({
+                    codelist: globalUtil.safeSendSQLSync(`SELECT * FROM \`ArkAdmin_reg_code\` WHERE \`used\`=0${!userHelper.hasPermissions(req.session.uid, "all/is_admin") ? ' AND `rang`=0' : ''}`)
+                })
+            });
+            return true;
+        }
     })
 
 module.exports = router;

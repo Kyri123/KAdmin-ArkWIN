@@ -116,6 +116,7 @@ router.route('/')
                 grouplist: globalUtil.safeSendSQLSync('SELECT * FROM ArkAdmin_user_group')
             })
         });
+        return true;
     })
 
 module.exports = router;

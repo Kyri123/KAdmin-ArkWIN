@@ -60,6 +60,7 @@ router.route('/')
                         alert: alerter.rd(1001).replace("{what}", whatChanged)
                     })
                 });
+                return true;
             }
             else {
                 res.render('ajax/json', {
@@ -68,6 +69,7 @@ router.route('/')
                         alert: alerter.rd(3000)
                     })
                 });
+                return true;
             }
         }
     })
@@ -80,6 +82,7 @@ router.route('/')
                 done: false
             })
         });
+        return true;
     })
 
 module.exports = router;

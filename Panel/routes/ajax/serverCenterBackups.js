@@ -59,6 +59,7 @@ router.route('/')
                     alert: alerter.rd(success ? 1013 : 3).replace("{file}", POST.file)
                 })
             });
+            return true;
         }
 
 
@@ -73,9 +74,12 @@ router.route('/')
 
         // GET serverInfos
         if(GET.getDir !== undefined && GET.server !== undefined) {
-            if(globalUtil.safeFileExsistsSync([serverUtilInfos.getConfig(GET.server).pathBackup])) res.render('ajax/json', {
-                data: JSON.stringify(fs.readdirSync(pathMod.join(serverUtilInfos.getConfig(GET.server).pathBackup)))
-            });
+            if(globalUtil.safeFileExsistsSync([serverUtilInfos.getConfig(GET.server).pathBackup])) {
+                res.render('ajax/json', {
+                    data: JSON.stringify(fs.readdirSync(pathMod.join(serverUtilInfos.getConfig(GET.server).pathBackup)))
+                });
+                return true;
+            }
         }
     })
 

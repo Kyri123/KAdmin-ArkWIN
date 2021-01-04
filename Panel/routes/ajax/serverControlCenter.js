@@ -51,6 +51,7 @@ router.route('/')
                             alert: alerter.rd(bool ? 1002 : 3)
                         })
                     });
+                    return true;
                 }
                 catch (e) {
                     if(debug) console.log(e);
@@ -60,6 +61,7 @@ router.route('/')
                             alert: alerter.rd(3)
                         })
                     });
+                    return true;
                 }
             }
             else {
@@ -70,6 +72,7 @@ router.route('/')
                         alert: alerter.rd(3)
                     })
                 });
+                return true;
             }
         }
 
@@ -96,6 +99,7 @@ router.route('/')
                         alert: alerter.rd(1003)
                     })
                 });
+                return true;
             }
             catch (e) {
                 if(debug) console.log(e);
@@ -105,6 +109,7 @@ router.route('/')
                         alert: alerter.rd(4)
                     })
                 });
+                return true;
             }
         }
     })
@@ -121,6 +126,7 @@ router.route('/')
                 done: false
             })
         });
+        return true;
     })
 
 module.exports = router;

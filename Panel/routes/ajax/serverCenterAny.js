@@ -33,6 +33,7 @@ router.route('/')
                     res.render('ajax/json', {
                         data: `{"code":"1", "txt": "Install running"}`
                     });
+                    return true;
                 }
 
                 // Server Updaten
@@ -47,6 +48,7 @@ router.route('/')
                     res.render('ajax/json', {
                         data: `{"code":"1", "txt": "${update !== false ? "update running": "already up to date"}"}`
                     });
+                    return true;
                 }
 
                 // Alle mods Installieren
@@ -66,6 +68,7 @@ router.route('/')
                     res.render('ajax/json', {
                         data: `{"code":"1", "txt": "installallmods running"}`
                     });
+                    return true;
                 }
 
                 // Starten
@@ -81,6 +84,7 @@ router.route('/')
                     res.render('ajax/json', {
                         data: `{"code":"1", "txt": "Start running"}`
                     });
+                    return true;
                 }
 
                 // Stoppen
@@ -95,6 +99,7 @@ router.route('/')
                     res.render('ajax/json', {
                         data: `{"code":"1", "txt": "Stop running"}`
                     });
+                    return true;
                 }
 
                 // Restarten
@@ -112,6 +117,7 @@ router.route('/')
                     res.render('ajax/json', {
                         data: `{"code":"1", "txt": "Stop running"}`
                     });
+                    return true;
                 }
 
                 // Backup
@@ -124,6 +130,7 @@ router.route('/')
                     res.render('ajax/json', {
                         data: `{"code":"1", "txt": "installallmods running"}`
                     });
+                    return true;
                 }
 
                 if(!stop) res.render('ajax/json', {
@@ -145,6 +152,7 @@ router.route('/')
             res.render('ajax/json', {
                 data: JSON.stringify(serverUtilInfos.getServerInfos(GET.server))
             });
+            return true;
         }
 
         // GET Globale Infos
@@ -152,6 +160,7 @@ router.route('/')
             res.render('ajax/json', {
                 data: JSON.stringify(globalinfos.get())
             });
+            return true;
         }
 
         // GET ActionJson
@@ -166,12 +175,14 @@ router.route('/')
                 res.render('ajax/json', {
                     data: JSON.stringify(array)
                 });
+                return true;
             }
             catch (e) {
                 if(debug) console.log(e);
                 res.render('ajax/json', {
                     data: '{"state": false}'
                 });
+                return true;
             }
         }
     })

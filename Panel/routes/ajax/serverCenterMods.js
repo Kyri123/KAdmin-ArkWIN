@@ -15,6 +15,7 @@ router.route('/')
 
     .post((req,res)=>{
         let POST        = req.body;
+        if(POST.cfg !== undefined) POST.cfg = htmlspecialchars(POST.cfg);
 
         // Installierte Mod entfernen
         if(POST.removeIstalled !== undefined && userHelper.hasPermissions(req.session.uid, "mods/remove", POST.cfg)) {
@@ -38,22 +39,24 @@ router.route('/')
                         success: success
                     })
                 });
+                return true;
             }
         }
 
         // Mod entfernen
         if(POST.remove !== undefined && userHelper.hasPermissions(req.session.uid, "mods/remove", POST.cfg)) {
+            let modKey      = parseInt(POST.key).toString();
             let serverCfg   = serverUtilInfos.getConfig(POST.cfg);
             if(serverCfg.server === undefined) {
-                let modID   = serverCfg.mods[POST.key];
-                serverCfg.mods.splice(POST.key, 1);
+                serverCfg.mods.splice(modKey, 1);
                 let success = serverUtilInfos.saveConfig(POST.cfg ,serverCfg);
                 res.render('ajax/json', {
                     data: JSON.stringify({
-                        alert: alerter.rd(success ? 1010 : 3).replace("{modid}", modID),
+                        alert: alerter.rd(success ? 1010 : 3).replace("{modid}", serverCfg.mods[modKey]),
                         success: success
                     })
                 });
+                return true;
             }
         }
 
@@ -84,6 +87,7 @@ router.route('/')
                         success : alertCode === 1011
                     })
                 });
+                return true;
             }
         }
 
@@ -116,6 +120,7 @@ router.route('/')
                     alert   : serverUtilInfos.writeConfig(POST.cfg, "mods", mods) ? "" : alerter.rd(3)
                 })
             });
+            return true;
         }
     })
 
@@ -134,6 +139,7 @@ router.route('/')
             res.render('ajax/json', {
                 data: JSON.stringify({serverInfos:serverInfos, serverCFG:serverCFG})
             });
+            return true;
         }
     })
 

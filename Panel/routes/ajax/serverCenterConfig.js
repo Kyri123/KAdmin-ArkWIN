@@ -44,6 +44,7 @@ router.route('/')
                     alert: alerter.rd(serverUtilInfos.saveConfig(cfg ,POST) ? 1009 : 3).replace("{ini}", "ArkAdminWIN")
                 })
             });
+            return true;
         }
 
         // Speicher Inis
@@ -58,6 +59,7 @@ router.route('/')
                     alert: alerter.rd(serverUtilInfos.saveIni(cfg ,POST.iniText , POST.iniSend) ? 1009 : 3).replace("{ini}", POST.iniSend + ".ini")
                 })
             });
+            return true;
         }
     })
 
@@ -77,6 +79,7 @@ router.route('/')
             res.render('ajax/json', {
                 data: file !== false ? file : default_file !== false ? default_file : 'failed'
             });
+            return true;
         }
     })
 
