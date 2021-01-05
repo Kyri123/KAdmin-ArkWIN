@@ -28,6 +28,7 @@ router.route('/')
         res.render('ajax/json', {
                data : JSON.stringify(data),
         });
+        return true;
     })
 
 module.exports = router;

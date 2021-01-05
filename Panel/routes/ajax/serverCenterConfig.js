@@ -70,7 +70,7 @@ router.route('/')
         // Wenn keine Rechte zum abruf
         if(!userHelper.hasPermissions(req.session.uid, "show", GET.server) || !userHelper.hasPermissions(req.session.uid, "config/show", GET.server)) return true;
 
-        // GET serverInfos
+        // GET serverInis
         if(GET.serverInis !== undefined) {
             let serverInfos     = serverUtilInfos.getConfig(GET.server);
             let file            = globalUtil.safeFileReadSync([serverInfos.path, '\\ShooterGame\\Saved\\Config\\WindowsServer\\', `${GET.ini}.ini`]);
