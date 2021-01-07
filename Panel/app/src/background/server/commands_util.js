@@ -6,6 +6,7 @@
  * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
+"use strict"
 
 const serverClass           = require('./../../util_server/class');
 //const rcon                  = require('rcon');

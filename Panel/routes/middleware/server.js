@@ -6,6 +6,7 @@
  * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
+"use strict"
 
 const serverClass    = require('./../../app/src/util_server/class')
 

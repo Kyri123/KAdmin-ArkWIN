@@ -6,6 +6,7 @@
  * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
+"use strict"
 
 var express = require('express');
 var router = express.Router();

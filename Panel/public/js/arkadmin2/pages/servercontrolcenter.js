@@ -6,6 +6,7 @@
  * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
+"use strict"
 
 const toEnd = `    <a class="col-lg-6 col-xl-6" data-toggle="modal" data-target="#addserver" href="#">
                         <div class="border border-success text-success align-content-center justify-content-center align-items-center d-flex card" style="font-size: 75px; width:100%; height:278px; border: 2px solid!important; cursor: pointer">

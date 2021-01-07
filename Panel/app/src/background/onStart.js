@@ -6,6 +6,7 @@
  * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
+"use strict"
 
 const server_util           = require('./server/util');
 const server_state          = require('./server/state');

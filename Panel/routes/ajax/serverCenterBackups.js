@@ -6,6 +6,7 @@
  * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
+"use strict"
 
 const serverCmd         = require('./../../app/src/background/server/cmd');
 const express           = require('express')

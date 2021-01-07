@@ -6,6 +6,7 @@
  * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
+"use strict"
 // Header
 console.log('\x1b[36m%s\x1b[0m', `-----------------------------------------------------------`);
 console.log('\x1b[33m%s\x1b[0m', `       ${Installed ? "       " : " "}      [ ArkAdminWIN${Installed ? "" : " - Installer"} ] `);

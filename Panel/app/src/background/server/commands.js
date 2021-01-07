@@ -6,6 +6,7 @@
  * Github: https://github.com/Kyri123/ArkadminWIN
  * *******************************************************************************************
  */
+"use strict"
 
 const CommandUtil           = require('./commands_util');
 const serverUtil            = require('./util');
