@@ -7,7 +7,7 @@
  * *******************************************************************************************
  */
 
-const serverUtilInfos       = require('./../../util_server/infos');
+const serverClass           = require('./../../util_server/class');
 //const rcon                  = require('rcon');
 
 module.exports = {
@@ -18,10 +18,11 @@ module.exports = {
      * @return {string|boolean}
      */
     getStartLine: (server) => {
-        let servConfig  = serverUtilInfos.getConfig(server);
-        if(servConfig.server === undefined) {
-            let serverPath          = servConfig.path;
-            let logPath          = servConfig.pathLogs + '\\latest.log';
+        let serverData  = new serverClass(server);
+        if(serverData.serverExsists()) {
+            let servConfig      = serverData.getConfig();
+            let serverPath      = servConfig.path;
+            let logPath         = servConfig.pathLogs + '\\latest.log';
             if(!globalUtil.safeFileExsistsSync([logPath])) globalUtil.safeFileSaveSync([logPath], '');
 
             // baue Mod optionen
@@ -39,7 +40,7 @@ module.exports = {
             // baue Flaggen
             let flags    = ''
             if(servConfig.flags.length > 0) servConfig.flags.forEach((val) => {
-                mods += ` -${val}`;
+                flags += ` -${val}`;
             });
 
             return `start ${serverPath}\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe ${servConfig.serverMap}?listen?SessionName=${servConfig.sessionName}?AltSaveDirectoryName=${servConfig.AltSaveDirectoryName}?ServerAdminPassword=${servConfig.ServerAdminPassword}?Port=${servConfig.game}?QueryPort=${servConfig.query}?MaxPlayers=${servConfig.maxPlayers}?RCONEnabled=True?RCONPort${servConfig.rcon}${opt}${flags}\n`;
@@ -50,12 +51,19 @@ module.exports = {
     /**
      * CMD Util um Countdown script zu erzeugen
      * @param {string} server Server Name
+     * @param {boolean} saveworld Soll Saveworld per RCON gesendet werden
      * @return {string|boolean}
      */
     stopCountDown: (server, saveworld = true) => {
-        let servConfig  = serverUtilInfos.getConfig(server);
-        let servInfos   = serverUtilInfos.getServerInfos(server);
-        if(servConfig.server === undefined && servInfos.online) {
+        let serverData  = new serverClass(server);
+        let servConfig  = serverData.getConfig();
+        let servInfos   = serverData.getServerInfos();
+
+        if(
+           serverData.online() &&
+           servConfig !== false &&
+           servInfos !== false
+        ) {
             let re = `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "broadcast [ArkAdminWIN] ${PANEL_LANG.timers.stopCountDown['30']}"\n`;
             re += `timeout /T 900\n`;
             re += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "broadcast [ArkAdminWIN] ${PANEL_LANG.timers.stopCountDown['15']}"\n`;

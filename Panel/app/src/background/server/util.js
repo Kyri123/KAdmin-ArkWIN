@@ -8,25 +8,8 @@
  */
 
 const steamCMD              = require('./../steam/steamCMD');
-const serverUtilInfos       = require('./../../util_server/infos');
 
 module.exports = {
-    /**
-     * Gibt die Versionsnummer aus (Vom Server)
-     * @param {int|string} uid Benutzer ID
-     * @returns {boolean}
-     */
-    getCurrentVersion: (server) => {
-        let servConfig = serverUtilInfos.getConfig(server);
-        if(servConfig.server === undefined) {
-            let serverPath          = servConfig.path;
-            let manifestFile        = `${serverPath}\\steamapps\\appmanifest_${PANEL_CONFIG.appID_server}.acf`;
-            let manifestArray       = globalUtil.toAcfToArraySync(manifestFile);
-            return manifestArray    !== false ? manifestArray.AppState.buildid : false;
-        }
-        return false;
-    },
-
     /**
      * Schreib Global die verfügbaren Versionen
      * @param {string} branch Ark Brach
@@ -48,70 +31,4 @@ module.exports = {
                 globalUtil.safeFileSaveSync([mainDir, '/public/json/steamAPI/', 'version.json'], JSON.stringify({availableVersion_public:availableVersion_public,availableVersion_activeevent:availableVersion_activeevent}));
             })
     },
-
-    /**
-     * Prüft ob der Server ein Update braucht (true = brauch Update)
-     * @param {string} server Server Name
-     * @returns {boolean}
-     */
-    checkSeverUpdate: (server) => {
-        let servConfig = serverUtilInfos.getConfig(server);
-        if(servConfig.server === undefined && availableVersion_activeevent !== 0 && availableVersion_public !== 0) {
-            return module.exports.getCurrentVersion(server) < (servConfig.branch === "activeevent" ? availableVersion_activeevent : availableVersion_public);
-        }
-        return false;
-    },
-
-    /**
-     * Prüfe alle Mods ob diese ein Update brauchen
-     * @param {string} server Server Name
-     * @returns {array|boolean} mods die ein Update brauchen
-     */
-    checkModUpdates: (server) => {
-        let servConfig = serverUtilInfos.getConfig(server);
-
-        if(servConfig.server === undefined) {
-            let modsNeedUpdate      = [];
-            let API                 = false;
-            try {
-                let json             = globalUtil.safeFileReadSync([mainDir, '/public/json/steamAPI/', 'mods.json'], true);
-                API                  = json !== false ? json.response.publishedfiledetails : false;
-            }
-            catch (e) {
-                if(debug) console.log(e);
-            }
-
-            if(servConfig.MapModID !== 0) servConfig.mods.push(servConfig.MapModID);
-            if(parseInt(servConfig.TotalConversionMod) !== 0 && parseInt(servConfig.TotalConversionMod) !== 111111111) servConfig.mods.push(servConfig.TotalConversionMod);
-
-            if(servConfig.mods.length > 0) {
-                servConfig.mods.forEach((modid) => {
-                    let KEY = false;
-                    if(API !== false) API.forEach((val, key) => {
-                        if(parseInt(val.publishedfileid) === parseInt(modid)) KEY = key;
-                    });
-
-                    if(
-                        KEY !== false &&
-                        globalUtil.safeFileExsistsSync([servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.modtime`])
-                    ) {
-                        let modtime     = parseInt(globalUtil.safeFileReadSync([servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.modtime`]));
-                        let API_UPDATE  = API[KEY].time_updated;
-                        if(API_UPDATE > modtime) modsNeedUpdate.push(modid);
-                    }
-                    else if(
-                        !globalUtil.safeFileExsistsSync([servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.mod`])      ||
-                        !globalUtil.safeFileExsistsSync([servConfig.path, '\\ShooterGame\\Content\\Mods\\', `${modid}.modtime`])  ||
-                        !globalUtil.safeFileExsistsSync([servConfig.path, '\\ShooterGame\\Content\\Mods\\', modid])
-                    ) {
-                        modsNeedUpdate.push(modid);
-                    }
-                });
-
-                return modsNeedUpdate.length > 0 ? modsNeedUpdate : false;
-            }
-        }
-
-        return false;
-    }
 }

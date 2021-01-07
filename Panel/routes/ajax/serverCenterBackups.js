@@ -10,9 +10,7 @@
 const serverCmd         = require('./../../app/src/background/server/cmd');
 const express           = require('express')
 const router            = express.Router()
-const globalinfos       = require('./../../app/src/global_infos');
-const serverUtilInfos   = require('./../../app/src/util_server/infos');
-const serverCommands    = require('./../../app/src/background/server/commands');
+const serverClass       = require('./../../app/src/util_server/class');
 
 router.route('/')
 
@@ -20,7 +18,8 @@ router.route('/')
         let POST            = req.body;
 
         if(POST.remove !== undefined && userHelper.hasPermissions(req.session.uid, "backups/remove", POST.server)) {
-            let serverCFG   = serverUtilInfos.getConfig(POST.server);
+            let serverData  = new serverClass(POST.server);
+            let serverCFG   = serverData.getConfig();
             let success     = false;
             try {
                 if(globalUtil.poisonNull(POST.file)) {
@@ -41,10 +40,11 @@ router.route('/')
 
         if(POST.playin !== undefined && userHelper.hasPermissions(req.session.uid, "backups/playin", POST.server)) {
             let success     = false;
-            let serverCFG   = serverUtilInfos.getConfig(POST.server);
-            let serverINFO  = serverUtilInfos.getServerInfos(POST.server);
+            let serverData  = new serverClass(POST.server);
+            let serverCFG   = serverData.getConfig();
+            let serverINFO  = serverData.getServerInfos();
 
-            if(serverCFG.server === undefined) {
+            if(serverData.serverExsists()) {
                 let savePath    = pathMod.join(serverCFG.path, '\\ShooterGame\\Saved');
                 if(globalUtil.safeFileExsistsSync([savePath]))  globalUtil.safeFileRmSync([savePath]);
                 if(!globalUtil.safeFileExsistsSync([savePath])) globalUtil.safeFileMkdirSync([savePath]);
@@ -68,15 +68,18 @@ router.route('/')
     .get((req,res)=>{
         // DEFAULT AJAX
         let GET         = req.query;
+        GET.server      = htmlspecialchars(GET.server);
 
         // Wenn keine Rechte zum abruf
         if(!userHelper.hasPermissions(req.session.uid, "show", GET.server) || !userHelper.hasPermissions(req.session.uid, "backups/show", GET.server)) return true;
 
         // GET serverInfos
         if(GET.getDir !== undefined && GET.server !== undefined) {
-            if(globalUtil.safeFileExsistsSync([serverUtilInfos.getConfig(GET.server).pathBackup])) {
+            let serverData  = new serverClass(GET.server);
+            let CFG         = serverData.getConfig();
+            if(globalUtil.safeFileExsistsSync([CFG.pathBackup]) && serverData.serverExsists()) {
                 res.render('ajax/json', {
-                    data: JSON.stringify(fs.readdirSync(pathMod.join(serverUtilInfos.getConfig(GET.server).pathBackup)))
+                    data: JSON.stringify(fs.readdirSync(pathMod.join(CFG.pathBackup)))
                 });
                 return true;
             }

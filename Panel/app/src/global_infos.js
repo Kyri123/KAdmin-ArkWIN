@@ -7,7 +7,7 @@
  * *******************************************************************************************
  */
 
-const serverInfos   = require('./util_server/infos');
+const serverClass                   = require('./util_server/class');
 const { array_replace_recursive }   = require('locutus/php/array');
 
 module.exports = {
@@ -26,9 +26,10 @@ module.exports = {
                 if(globalUtil.safeFileExsistsSync([serverLocalPath, ITEM])) {
                     let array   = globalUtil.safeFileReadSync([serverLocalPath, ITEM], true);
                     if(array !== false) {
-                        ITEM    = ITEM.replace(".json", '');
-                        array   = array_replace_recursive(array, serverInfos.getServerInfos(ITEM), serverInfos.getConfig(ITEM));
-                        servers[ITEM] = array;
+                        let serverData  = new serverClass(ITEM)
+                        ITEM            = ITEM.replace(".json", '');
+                        array           = array_replace_recursive(array, serverData.getServerInfos(), serverData.getConfig());
+                        servers[ITEM]   = array;
                     }
                 }
                 else {

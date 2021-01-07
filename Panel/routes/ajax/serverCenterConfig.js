@@ -9,7 +9,7 @@
 
 const express           = require('express')
 const router            = express.Router()
-const serverUtilInfos   = require('./../../app/src/util_server/infos');
+const serverClass       = require('./../../app/src/util_server/class');
 
 router.route('/')
 
@@ -18,7 +18,7 @@ router.route('/')
 
         // Speicher Server
         if(POST.saveServer !== undefined && userHelper.hasPermissions(req.session.uid, "config/arkadmin", POST.cfg)) {
-            let cfg = POST.cfg
+            let serverData  = new serverClass(POST.cfg);
 
             delete POST.saveServer;
             delete POST.cfg;
@@ -41,7 +41,7 @@ router.route('/')
 
             res.render('ajax/json', {
                 data: JSON.stringify({
-                    alert: alerter.rd(serverUtilInfos.saveConfig(cfg ,POST) ? 1009 : 3).replace("{ini}", "ArkAdminWIN")
+                    alert: alerter.rd(serverData.saveConfig(POST) ? 1009 : 3).replace("{ini}", "ArkAdminWIN")
                 })
             });
             return true;
@@ -49,14 +49,14 @@ router.route('/')
 
         // Speicher Inis
         if(POST.sendini !== undefined) {
-            let cfg = POST.cfg
+            let serverData  = new serverClass(POST.cfg);
             POST.iniSend = escape(POST.iniSend).replaceAll("/", "");
 
             if(!userHelper.hasPermissions(req.session.uid, `config/${POST.iniSend}`, cfg)) return true;
 
             res.render('ajax/json', {
                 data: JSON.stringify({
-                    alert: alerter.rd(serverUtilInfos.saveIni(cfg ,POST.iniText , POST.iniSend) ? 1009 : 3).replace("{ini}", POST.iniSend + ".ini")
+                    alert: alerter.rd(serverData.saveINI(POST.iniText , POST.iniSend) ? 1009 : 3).replace("{ini}", POST.iniSend + ".ini")
                 })
             });
             return true;
@@ -72,7 +72,8 @@ router.route('/')
 
         // GET serverInis
         if(GET.serverInis !== undefined) {
-            let serverInfos     = serverUtilInfos.getConfig(GET.server);
+            let serverData  = new serverClass(GET.cfg);
+            let serverInfos     = serverData.getConfig();
             let file            = globalUtil.safeFileReadSync([serverInfos.path, '\\ShooterGame\\Saved\\Config\\WindowsServer\\', `${GET.ini}.ini`]);
             let default_file    = globalUtil.safeFileReadSync([serverInfos.path, '/app/data/ini/', `${GET.ini}.ini`]);
 

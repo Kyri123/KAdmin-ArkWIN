@@ -21,6 +21,7 @@ function getSCState() {
         "server": varser.cfg
     }, (data) => {
         let serverInfos = JSON.parse(data);
+        console.log(serverInfos)
         let state_id = $('#state');
         let player_id = $('#player');
         let inhalt;
@@ -57,7 +58,7 @@ function getSCState() {
             inhalt = varser.lang_arr.serverCenterAny.actionClose
         }
         else {
-            inhalt = !hasPermissions(globalvars.perm, "actions", varser.cfg)
+            inhalt = hasPermissions(globalvars.perm, "actions", varser.cfg)
                 ? `<a href="javascript:void()" class="small-box-footer btn btn-sm btn-success" data-toggle="modal" data-target="#action">${varser.lang_arr.serverCenterAny.actionFree}</a>`
                 : varser.lang_arr.serverCenterAny.actionClose;
         }

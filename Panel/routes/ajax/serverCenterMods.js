@@ -9,18 +9,19 @@
 
 const express           = require('express')
 const router            = express.Router()
-const serverUtilInfos   = require('./../../app/src/util_server/infos');
+const serverClass       = require('./../../app/src/util_server/class');
 
 router.route('/')
 
     .post((req,res)=>{
         let POST        = req.body;
         if(POST.cfg !== undefined) POST.cfg = htmlspecialchars(POST.cfg);
+        let serverData  = new serverClass(POST.cfg);
 
         // Installierte Mod entfernen
         if(POST.removeIstalled !== undefined && userHelper.hasPermissions(req.session.uid, "mods/remove", POST.cfg)) {
             let modID       = POST.modID;
-            let serverCfg   = serverUtilInfos.getConfig(POST.cfg);
+            let serverCfg   = serverData.getConfig();
             if(serverCfg.server === undefined) {
                 let success = false;
                 try {
@@ -46,10 +47,10 @@ router.route('/')
         // Mod entfernen
         if(POST.remove !== undefined && userHelper.hasPermissions(req.session.uid, "mods/remove", POST.cfg)) {
             let modKey      = parseInt(POST.key).toString();
-            let serverCfg   = serverUtilInfos.getConfig(POST.cfg);
+            let serverCfg   = serverData.getConfig();
             if(serverCfg.server === undefined) {
                 serverCfg.mods.splice(modKey, 1);
-                let success = serverUtilInfos.saveConfig(POST.cfg ,serverCfg);
+                let success = serverData.saveConfig(serverCfg);
                 res.render('ajax/json', {
                     data: JSON.stringify({
                         alert: alerter.rd(success ? 1010 : 3).replace("{modid}", serverCfg.mods[modKey]),
@@ -62,7 +63,7 @@ router.route('/')
 
         // Mod Hinzufügen
         if(POST.addmod !== undefined && userHelper.hasPermissions(req.session.uid, "mods/add", POST.cfg)) {
-            let mods        = serverUtilInfos.getConfig(POST.cfg).mods;
+            let mods        = serverData.getConfig().mods;
             let modid       = 0;
             if(POST.data !== '' && isNaN(POST.data)) {
                 let myURL   = new URL(POST.data);
@@ -80,7 +81,7 @@ router.route('/')
                     mods[key] = parseInt(mods[key]);
                 });
 
-                let alertCode   = !serverUtilInfos.getConfig(POST.cfg).mods.includes(modid) ? (serverUtilInfos.writeConfig(POST.cfg, "mods", mods) ? 1011 : 3) : 5;
+                let alertCode   = !serverData.getConfig().mods.includes(modid) ? (serverData.writeConfig("mods", mods) ? 1011 : 3) : 5;
                 res.render('ajax/json', {
                     data: JSON.stringify({
                         alert   : alerter.rd(alertCode, "", 0).replace("{modid}", modid),
@@ -93,7 +94,7 @@ router.route('/')
 
         // Mod schieben
         if(POST.push !== undefined && userHelper.hasPermissions(req.session.uid, "mods/changeplace", POST.cfg)) {
-            let mods        = serverUtilInfos.getConfig(POST.cfg).mods;
+            let mods        = serverData.getConfig().mods;
             let k           = parseInt(POST.key);
             let k1          = k + 1;
             let k_1         = k - 1;
@@ -117,7 +118,7 @@ router.route('/')
 
             res.render('ajax/json', {
                 data: JSON.stringify({
-                    alert   : serverUtilInfos.writeConfig(POST.cfg, "mods", mods) ? "" : alerter.rd(3)
+                    alert   : serverData.writeConfig("mods", mods) ? "" : alerter.rd(3)
                 })
             });
             return true;
@@ -127,14 +128,15 @@ router.route('/')
     .get((req,res)=>{
         // DEFAULT AJAX
         let GET         = req.query;
+        let serverData  = new serverClass(GET.cfg);
 
         // Wenn keine Rechte zum abruf
         if(!userHelper.hasPermissions(req.session.uid, "show", GET.server) || !userHelper.hasPermissions(req.session.uid, "mods/show", GET.server)) return true;
 
         // GET serverInfos
         if(GET.serverInfos !== undefined) {
-            let serverCFG = serverUtilInfos.getConfig(GET.cfg);
-            let serverInfos = serverUtilInfos.getServerInfos(GET.cfg);
+            let serverCFG = serverData.getConfig();
+            let serverInfos = serverData.getServerInfos();
 
             res.render('ajax/json', {
                 data: JSON.stringify({serverInfos:serverInfos, serverCFG:serverCFG})

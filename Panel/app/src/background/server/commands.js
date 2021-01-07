@@ -7,11 +7,10 @@
  * *******************************************************************************************
  */
 
-const steamCMD              = require('./../steam/steamCMD');
 const CommandUtil           = require('./commands_util');
 const serverUtil            = require('./util');
-const serverUtilInfos       = require('./../../util_server/infos');
 const serverCmd             = require('./cmd');
+const serverClass           = require('./../../util_server/class');
 
 module.exports = {
     /**
@@ -24,11 +23,15 @@ module.exports = {
      * @returns {boolean}
      */
     doStart: (server, noAutoUpdate = false, validate = false, alwaysStart = false, isBackground = false) => {
-        let servConfig  = serverUtilInfos.getConfig(server);
-        let servInfos   = serverUtilInfos.getServerInfos(server);
-        if(servConfig.server === undefined && !servInfos.cmd) {
-            let steamCMDPath        = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
-            let serverPath          = servConfig.path;
+        let serverData  = new serverClass(server);
+
+
+        let servConfig  = serverData.getConfig();
+        let servInfos   = serverData.getServerInfos();
+
+        if(serverData.serverExsists() && !servInfos.cmd) {
+            let steamCMDPath        = pathMod.join(`${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`);
+            let serverPath          = pathMod.join(servConfig.path);
 
             // CMD Line
             let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
@@ -43,11 +46,12 @@ module.exports = {
             if(!servInfos.run) {
                 // Prüfe ob ein update verfügbar ist (nur wenn --no-autoupdate nicht gesetzt ist)
                 if(!noAutoUpdate || validate) {
-                    if(serverUtil.checkSeverUpdate(server) || validate) cmdCommand  += `${steamCMDPath} +login anonymous +force_install_dir "${serverPath}" +app_update ${PANEL_CONFIG.appID_server}${validate ? " Validate" : ""} +quit\n`;
-                    if(serverUtil.checkSeverUpdate(server)) actionResponse  += `${PANEL_LANG.logger.doUpdateBeforeStart}\n`;
-                    if(validate) actionResponse                             += `${PANEL_LANG.logger.validate}\n`;
+                    if(serverData.isUpdateServer() || validate)     cmdCommand      += `${steamCMDPath} +login anonymous +force_install_dir "${serverPath}" +app_update ${PANEL_CONFIG.appID_server}${validate ? " Validate" : ""} +quit\n`;
+                    if(serverData.isUpdateServer())                 actionResponse  += `${PANEL_LANG.logger.doUpdateBeforeStart}\n`;
+                    if(validate)                                    actionResponse  += `${PANEL_LANG.logger.validate}\n`;
+
                     if(!noAutoUpdate) {
-                        let modUpdates  = serverUtil.checkModUpdates(server);
+                        let modUpdates  = serverData.checkModUpdates();
                         if(modUpdates !== false) {
                             actionResponse      += `${PANEL_LANG.logger.doStartUpdateMods}\n`;
                             modUpdates.forEach((val) => {
@@ -72,7 +76,7 @@ module.exports = {
             }
             // Speichern und ausführen
             try {
-                if (alwaysStart) serverUtilInfos.writeConfig(server, "shouldRun", true);
+                if (alwaysStart) serverData.writeConfig("shouldRun", true);
                 if(!servInfos.cmd && !servInfos.run) {
                     globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
                     serverCmd.runCMD(`start "[ArkAdminWIN] doStart ${server}" ${cmdFile}`);
@@ -93,16 +97,18 @@ module.exports = {
      * @returns {boolean}
      */
     doInstallServer: (server, isBackground = false) => {
-        let servConfig  = serverUtilInfos.getConfig(server);
-        let servInfos   = serverUtilInfos.getServerInfos(server);
-        if(servConfig.server === undefined && !servInfos.cmd) {
-            let steamCMDPath        = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
-            let serverPath          = servConfig.path;
+        let serverData  = new serverClass(server);
 
+        let servConfig  = serverData.getConfig();
+        let servInfos   = serverData.getServerInfos();
+        if(serverData.serverExsists() && !servInfos.cmd) {
+            let steamCMDPath        = pathMod.join(`${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`);
+            let serverPath          = pathMod.join(servConfig.path);
+            
             // Logmeldungen
             let actionResponse      = `[ ${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")} ]\n`;
-            actionResponse += `${PANEL_LANG.logger.infoDoInstall}\n`;
-            actionResponse += `${PANEL_LANG.logger.doInstallServer}: ${server}\n`;
+            actionResponse          += `${PANEL_LANG.logger.infoDoInstall}\n`;
+            actionResponse          += `${PANEL_LANG.logger.doInstallServer}: ${server}\n`;
             let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
             let cmdCommand          = `@echo off\n`;
 
@@ -142,22 +148,24 @@ module.exports = {
      * @returns {boolean}
      */
     doUpdateServer: (server, validate = false, warn = false, isBackground = false) => {
-        let servConfig = serverUtilInfos.getConfig(server);
-        let servInfos  = serverUtilInfos.getServerInfos(server);
-        if(servConfig.server === undefined && !servInfos.cmd) {
-            let steamCMDPath        = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
-            let serverPath          = servConfig.path;
-            let updateNeed  = serverUtil.checkSeverUpdate(server);
+        let serverData  = new serverClass(server);
+
+        let servConfig  = serverData.getConfig();
+        let servInfos   = serverData.getServerInfos();
+        if(serverData.serverExsists() && !servInfos.cmd) {
+            let steamCMDPath        = pathMod.join(`${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`);
+            let serverPath          = pathMod.join(servConfig.path);
+            let updateNeed          = serverData.isUpdateServer();
 
             // CMD Line
             let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
             let cmdCommand          = `@echo off\n`;
 
             // Countdown
-            if(servInfos.online && warn) {
+            if(serverData.online() && warn) {
                 cmdCommand      += CommandUtil.stopCountDown(server);
             }
-            else if(servInfos.online || servInfos.run) {
+            else if(serverData.online() || servInfos.run) {
                 if(servInfos.online) cmdCommand      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "broadcast [ArkAdminWIN] ${PANEL_LANG.timers.stopCountDown['now']}"\n`;
                 if(servInfos.online) cmdCommand      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "saveworld"\n`;
                 if(servInfos.online) cmdCommand      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "doexit"\n`;
@@ -179,7 +187,7 @@ module.exports = {
             if(updateNeed || validate)  cmdCommand  += `${steamCMDPath} +login anonymous +force_install_dir "${serverPath}" +app_update ${PANEL_CONFIG.appID_server}${validate ? " validate" : ""} +quit\n`;
 
             // Prüfe Modupdates
-            let modUpdates  = serverUtil.checkModUpdates(server);
+            let modUpdates  = serverData.checkModUpdates();
             if(modUpdates !== false) {
                 actionResponse      += `${PANEL_LANG.logger.doStartUpdateMods}\n`;
                 modUpdates.forEach((val) => {
@@ -191,7 +199,7 @@ module.exports = {
                 updateNeed = true;
             }
             // Starte server wieder
-            if(servInfos.online) {
+            if(serverData.online()) {
                 let startLine   = CommandUtil.getStartLine(server);
                 actionResponse  += startLine;
                 cmdCommand      += startLine;
@@ -226,12 +234,18 @@ module.exports = {
      * @returns {boolean}
      */
     doInstallMods: (server, modID, validate = false, backAsString = false, isBackground = false) => {
-        let servConfig = serverUtilInfos.getConfig(server);
-        let servInfos  = serverUtilInfos.getServerInfos(server);
-        if(servConfig.server === undefined && servInfos.is_installed) {
-            let steamCMDPath            = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
-            let serverPath              = servConfig.path;
-            let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
+        let serverData  = new serverClass(server);
+
+        let servConfig = serverData.getConfig(server);
+        let servInfos  = serverData.getServerInfos(server);
+        if(
+           serverData.serverExsists() &&
+           !servInfos.cmd &&
+           servInfos.is_installed)
+        {
+            let steamCMDPath            = pathMod.join(`${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`);
+            let serverPath              = pathMod.join(servConfig.path);
+            let cmdFile                 = globalUtil.checkValidatePath(pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`));
             let cmdCommand              = backAsString ? '' :`@echo off\n`;
             let workshop_download_item  = ``;
             let copys                   = ``;
@@ -303,10 +317,12 @@ module.exports = {
      * @return {boolean}
      */
     doStop: (server, saveworld = false, warn = false, isBackground = false) => {
-        let servConfig = serverUtilInfos.getConfig(server);
-        let servInfos  = serverUtilInfos.getServerInfos(server);
+        let serverData  = new serverClass(server);
 
-        if(servConfig.server === undefined && !servInfos.cmd) {
+        let servConfig = serverData.getConfig();
+        let servInfos  = serverData.getServerInfos();
+
+        if(serverData.serverExsists() && !servInfos.cmd) {
             // CMD Line
             let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
             let cmdCommand          = `@echo off\n`;
@@ -360,12 +376,14 @@ module.exports = {
      * @return {boolean}
      */
     doRestart: (server, saveworld = false, warn = false, validate = false, noAutoUpdate = false, alwaysStart = false, isBackground = false) => {
-        let servConfig = serverUtilInfos.getConfig(server);
-        let servInfos  = serverUtilInfos.getServerInfos(server);
+        let serverData  = new serverClass(server);
 
-        if(servConfig.server === undefined && !servInfos.cmd) {
-            let steamCMDPath            = `${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`;
-            let serverPath              = servConfig.path;
+        let servConfig = serverData.getConfig();
+        let servInfos  = serverData.getServerInfos();
+
+        if(serverData.serverExsists() && !servInfos.cmd) {
+            let steamCMDPath        = pathMod.join(`${PANEL_CONFIG.steamCMDRoot}\\steamcmd.exe`);
+            let serverPath          = pathMod.join(servConfig.path);
 
             // CMD Line
             let cmdFile             = pathMod.join(mainDir, '\\app\\cmd\\', `${isBackground ? md5(servConfig.pathLogs + "doUpdate") : server}.cmd`);
@@ -392,11 +410,11 @@ module.exports = {
 
             // Prüfe ob ein update verfügbar ist (nur wenn --no-autoupdate nicht gesetzt ist)
             if(!noAutoUpdate || validate) {
-                if(serverUtil.checkSeverUpdate(server) || validate) cmdCommand  += `${steamCMDPath} +login anonymous +force_install_dir "${serverPath}" +app_update ${PANEL_CONFIG.appID_server}${validate ? " Validate" : ""} +quit\n`;
-                if(serverUtil.checkSeverUpdate(server)) actionResponse          += `${PANEL_LANG.logger.doUpdateBeforeStart}\n`;
-                if(validate) actionResponse                                     += `${PANEL_LANG.logger.validate}\n`;
+                if(serverData.isUpdateServer() || validate)     cmdCommand      += `${steamCMDPath} +login anonymous +force_install_dir "${serverPath}" +app_update ${PANEL_CONFIG.appID_server}${validate ? " Validate" : ""} +quit\n`;
+                if(serverData.isUpdateServer())                 actionResponse  += `${PANEL_LANG.logger.doUpdateBeforeStart}\n`;
+                if(validate)                                    actionResponse  += `${PANEL_LANG.logger.validate}\n`;
                 if(!noAutoUpdate) {
-                    let modUpdates  = serverUtil.checkModUpdates(server);
+                    let modUpdates  = serverData.checkModUpdates(server);
                     if(modUpdates !== false) {
                         actionResponse      += `${PANEL_LANG.logger.doStartUpdateMods}\n`;
                         modUpdates.forEach((val) => {
@@ -439,10 +457,12 @@ module.exports = {
      * @return {boolean}
      */
     doBackup: (server, isBackground = false) => {
-        let servConfig = serverUtilInfos.getConfig(server);
-        let servInfos  = serverUtilInfos.getServerInfos(server);
+        let serverData  = new serverClass(server);
 
-        if(servConfig.server === undefined && !servInfos.cmd) {
+        let servConfig = serverData.getConfig();
+        let servInfos  = serverData.getServerInfos();
+
+        if(serverData.serverExsists() && !servInfos.cmd) {
             // vars
             let pathToZip           = pathMod.join(servConfig.path, '\\ShooterGame\\Saved');
             let backupPath          = pathMod.join(servConfig.pathBackup);

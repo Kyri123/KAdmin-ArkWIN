@@ -10,7 +10,7 @@
 const express           = require('express')
 const router            = express.Router()
 const globalinfos       = require('./../../app/src/global_infos');
-const serverUtilInfos   = require('./../../app/src/util_server/infos');
+const serverClass       = require('./../../app/src/util_server/class');
 
 
 router.route('/')
@@ -31,7 +31,8 @@ router.route('/')
         // Die eigentl. Seite
         else {
             let resp    = "";
-            let servCfg = serverUtilInfos.getConfig(serverName);
+           let serverData    = new serverClass(GET.cfg);
+           let servCfg       = serverData.getConfig(serverName);
 
             // Render Seite
             res.render('pages/servercenter/serverCenter_backups', {
@@ -42,9 +43,10 @@ router.route('/')
                 resp                    : resp,
                 perm                    : userPerm,
                 scfg                    : servCfg,
-                servinfos               : serverUtilInfos.getServerInfos(serverName),
+                servinfos               : serverData.getServerInfos(),
+                sconfig                 : serverData.getConfig(),
+                sclass                  : serverData,
                 sinfos                  : globalinfos.get(),
-                sconfig                 : serverUtilInfos.getConfig(serverName),
                 serverName              : serverName,
                 sercerCenterAny         : globalUtil.safeFileReadSync([mainDir, '/public/json/sites/', 'serverCenterAny.cfg.json'], true),
                 sercerCenterActions     : globalUtil.safeFileReadSync([mainDir, '/public/json/sites/', 'serverCenterActions.cfg.json'], true)

@@ -9,7 +9,7 @@
 
 const express           = require('express')
 const router            = express.Router()
-const serverInfos       = require('./../../app/src/util_server/infos');
+const serverClass       = require('./../../app/src/util_server/class');
 const serverCommands    = require('./../../app/src/background/server/commands');
 
 router.route('/')
@@ -81,7 +81,8 @@ router.route('/')
         if(POST.deleteserver !== undefined && userHelper.hasPermissions(req.session.uid, "servercontrolcenter/delete")) {
             // Erstelle default daten & Servername
             let serverName              = POST.cfg;
-            let serverInformationen     = serverInfos.getServerInfos(serverName);
+            let serverData              = new serverClass(serverName)
+            let serverInformationen     = serverData.getServerInfos(serverName);
 
             // fahre server runter wenn dieser noch online ist
             if(serverInformationen.pid !== 0) serverCommands.doStop(serverName, false,false);

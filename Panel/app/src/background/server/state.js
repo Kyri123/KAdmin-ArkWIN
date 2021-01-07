@@ -10,9 +10,8 @@
 // require Module
 const Gamedig       = require('gamedig');
 const ip            = require("ip");
-const serverInfos   = require('./../../util_server/infos');
+const serverClass   = require('./../../util_server/class');
 const findProcess   = require('find-process');
-const serverUtil    = require('./util');
 
 
 /**
@@ -56,8 +55,9 @@ module.exports = {
                 let file = pathMod.join(mainDir, '/public/json/server/');
                 if(!globalUtil.safeFileExsistsSync([file])) globalUtil.safeFileMkdirSync([file]);
                 let name            = ITEM.replace(".json", "");
-                let data            = serverInfos.getServerInfos(name);
-                let servCFG         = serverInfos.getConfig(name);
+                let serverData      = new serverClass(name);
+                let data            = serverData.getServerInfos();
+                let servCFG         = serverData.getConfig();
                 let serverPath      = servCFG.path;
 
                 // Lese installierte Mods
@@ -122,14 +122,14 @@ module.exports = {
                 data.aplayersarr    = [];
                 data.ping           = 0;
                 data.version        = data.version === undefined ? "" : data.version;
-                data.modNeedUpdates = serverUtil.checkModUpdates(name);
+                data.modNeedUpdates = serverData.checkModUpdates();
 
 
                 // Alerts
                 data.alerts = [];
                 if(data.is_installed) {
                     // Prüfe Server Update
-                    if(serverUtil.checkSeverUpdate(name)) data.alerts.push("3998");
+                    if(serverData.isUpdateServer(name)) data.alerts.push("3998");
 
                     // Prüfe Mod Updates
                     if(data.modNeedUpdates !== false) data.alerts.push("3997");

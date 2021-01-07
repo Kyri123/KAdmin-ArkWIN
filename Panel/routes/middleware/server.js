@@ -7,7 +7,7 @@
  * *******************************************************************************************
  */
 
-const serverInfos    = require('./../../app/src/util_server/infos')
+const serverClass    = require('./../../app/src/util_server/class')
 
 module.exports = {
     /**
@@ -18,7 +18,8 @@ module.exports = {
      */
     isServerExsits: (req, res, next) => {
         let servername  = req.params.name;
-        if(serverInfos.getConfig(servername).server !== undefined) {
+        let serverData  = new serverClass(servername);
+        if(serverData.serverExsists()) {
             res.redirect("/home");
         }
         else {

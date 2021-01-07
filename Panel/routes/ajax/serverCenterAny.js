@@ -10,7 +10,7 @@
 const express           = require('express')
 const router            = express.Router()
 const globalinfos       = require('./../../app/src/global_infos');
-const serverUtilInfos   = require('./../../app/src/util_server/infos');
+const serverClass       = require('./../../app/src/util_server/class');
 const serverCommands    = require('./../../app/src/background/server/commands');
 
 router.route('/')
@@ -55,7 +55,9 @@ router.route('/')
                 if(POST.action === "installallmods") {
                     if(debug) console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[36m sendCommand > ${POST.cfg} > installallmods`);
 
-                    let serverInfos     = serverUtilInfos.getConfig(POST.cfg);
+                    let serverData  = new serverClass(POST.cfg);
+
+                    let serverInfos     = serverData.getConfig();
                     let modlist         = serverInfos.mods;
                     if(serverInfos.MapModID !== 0) modlist.push(serverInfos.MapModID);
 
@@ -95,7 +97,7 @@ router.route('/')
                         POST.para === undefined ? false : POST.para.includes("--saveworld"),
                         POST.para === undefined ? false : POST.para.includes("--warn")
                     );
-                    stop = true;
+
                     res.render('ajax/json', {
                         data: `{"code":"1", "txt": "Stop running"}`
                     });
@@ -113,7 +115,7 @@ router.route('/')
                     POST.para === undefined ? false : POST.para.includes("--no-autoupdate"),
                         POST.para === undefined ? false : POST.para.includes("--alwaysstart")
                     );
-                    stop = true;
+
                     res.render('ajax/json', {
                         data: `{"code":"1", "txt": "Stop running"}`
                     });
@@ -149,8 +151,9 @@ router.route('/')
 
         // GET serverInfos
         if(GET.getserverinfos !== undefined && GET.server !== undefined) {
+            let serverData  = new serverClass(GET.server);
             res.render('ajax/json', {
-                data: JSON.stringify(serverUtilInfos.getServerInfos(GET.server))
+                data: JSON.stringify(serverData.getServerInfos())
             });
             return true;
         }
