@@ -60,7 +60,6 @@ catch (e) {
   console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m not Installed... load Installer`);
 }
 //Installed = false; //(Testing)
-Installed = true;
 
 require('./app/main/sqlLoader.js');
 
