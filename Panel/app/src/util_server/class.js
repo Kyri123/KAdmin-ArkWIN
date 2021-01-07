@@ -189,10 +189,10 @@ module.exports = class serverClass {
       let servConfig = this.getConfig();
       if(
          this.serverExsists() &&
-         availableVersion_activeevent !== 0 &&
-         availableVersion_public !== 0
+         availableVersionActiveevent !== 0 &&
+         availableVersionPublic !== 0
       ) {
-         return this.getCurrVersion() < (servConfig.branch === "activeevent" ? availableVersion_activeevent : availableVersion_public);
+         return this.getCurrVersion() < (servConfig.branch === "activeevent" ? availableVersionActiveevent : availableVersionPublic);
       }
       return false;
    }

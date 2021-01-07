@@ -27,9 +27,9 @@ module.exports = {
                 steamCMD.runCMD(`+app_info_update 1 +app_info_print ${PANEL_CONFIG.appID_server}`, true, logPath, false);
 
                 // schreibe Global
-                global.availableVersion_public          = acfArray !== false && acfArray[PANEL_CONFIG.appID_server] !== undefined ? acfArray[PANEL_CONFIG.appID_server].depots.branches["public"].buildid : false;
-                global.availableVersion_activeevent     = acfArray !== false && acfArray[PANEL_CONFIG.appID_server] !== undefined ? acfArray[PANEL_CONFIG.appID_server].depots.branches["activeevent"].buildid : false;
-                globalUtil.safeFileSaveSync([mainDir, '/public/json/steamAPI/', 'version.json'], JSON.stringify({availableVersion_public:availableVersion_public,availableVersion_activeevent:availableVersion_activeevent}));
+                global.availableVersionPublic          = acfArray !== false && acfArray[PANEL_CONFIG.appID_server] !== undefined ? acfArray[PANEL_CONFIG.appID_server].depots.branches["public"].buildid : false;
+                global.availableVersionActiveevent     = acfArray !== false && acfArray[PANEL_CONFIG.appID_server] !== undefined ? acfArray[PANEL_CONFIG.appID_server].depots.branches["activeevent"].buildid : false;
+                globalUtil.safeFileSaveSync([mainDir, '/public/json/steamAPI/', 'version.json'], JSON.stringify({availableVersionPublic:availableVersionPublic,availableVersionActiveevent:availableVersionActiveevent}));
             })
     },
 }
