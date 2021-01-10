@@ -1,6 +1,6 @@
 {
   "dbuser": "root",
   "dbpass": "",
-  "dbbase": "ArkAdminWIN",
+  "dbbase": "KAdmin-ArkWIN",
   "dbhost": "127.0.0.1"
 }

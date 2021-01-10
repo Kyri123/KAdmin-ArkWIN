@@ -2,8 +2,8 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/KAdmin-ArkWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/KAdmin-ArkWIN
  * *******************************************************************************************
  */
 
@@ -220,9 +220,9 @@ module.exports = {
         global.checkIsRunning = undefined;
         async function backgroundUpdater() {
             var options = {
-                url: `https://api.github.com/repos/Kyri123/ArkAdminWin/branches/${PANEL_MAIN.panelBranch}`,
+                url: `https://api.github.com/repos/Kyri123/KAdmin-ArkWIN/branches/${PANEL_MAIN.panelBranch}`,
                 headers: {
-                    'User-Agent': `ArkAdminWIN-Server AutoUpdater :: FROM: ${ip.address()}`
+                    'User-Agent': `KAdmin-ArkWIN-Server AutoUpdater :: FROM: ${ip.address()}`
                 },
                 json: true
             };

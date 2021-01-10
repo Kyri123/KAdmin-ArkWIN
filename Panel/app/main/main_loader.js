@@ -2,19 +2,19 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/KAdmin-ArkWIN/blob/main/LICENSE)
+ * Github: https://github.com/Kyri123/KAdmin-ArkWIN
  * *******************************************************************************************
  */
 // Header
 console.log('\x1b[36m%s\x1b[0m', `-----------------------------------------------------------`);
-console.log('\x1b[33m%s\x1b[0m', `                    [ ArkAdminWIN ] `);
+console.log('\x1b[33m%s\x1b[0m', `                    [ KAdmin-ArkWIN ] `);
 console.log('\x1b[33m%s\x1b[0m', `                    Version: \x1b[36m${panelVersion}`);
 console.log('\x1b[33m%s\x1b[0m', `                  Entwickler: \x1b[36mKyri123`);
 console.log('\x1b[36m%s\x1b[0m', `-----------------------------------------------------------`);
-console.log('\x1b[33m%s\x1b[0m', `    Github: \x1b[36mhttps://github.com/Kyri123/ArkadminWIN`);
+console.log('\x1b[33m%s\x1b[0m', `    Github: \x1b[36mhttps://github.com/Kyri123/KAdmin-ArkWIN`);
 console.log('\x1b[33m%s\x1b[0m', `    Discord: \x1b[36mhttps://discord.gg/uXxsqXD`);
-console.log('\x1b[33m%s\x1b[0m', `    Trello: \x1b[36mhttps://trello.com/b/HZFtQ2DZ/arkadminwin`);
+console.log('\x1b[33m%s\x1b[0m', `    Trello: \x1b[36mhttps://trello.com/b/HZFtQ2DZ/KAdmin-ArkWIN`);
 console.log('\x1b[36m%s\x1b[0m', `-----------------------------------------------------------`);
 
 // Module

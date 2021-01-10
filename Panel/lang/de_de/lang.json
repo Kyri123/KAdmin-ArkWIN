@@ -291,7 +291,7 @@
       "cancel"        : "Abbrechen",
       "pitile"        : "Einspielen:",
       "pitxt"         : "Möchtest du dieses Backup einspielen? <br />",
-      "pired"         : "<b>ACHTUNG:</b> Alle Karten, Konfigurationen (ausgenommen der von ArkAdminWIN) und Spieler Dateien werden gelöscht und mit dem Backup überschrieben",
+      "pired"         : "<b>ACHTUNG:</b> Alle Karten, Konfigurationen (ausgenommen der von KAdmin-ArkWIN) und Spieler Dateien werden gelöscht und mit dem Backup überschrieben",
       "playin"        : "Einspielen"
     }
   },
@@ -345,11 +345,11 @@
       "GameUserSettings"        : "Darf GameUserSettings sehen",
       "Game"                    : "Darf Game sehen",
       "Engine"                  : "Darf Engine sehen",
-      "arkadmin"                : "Darf ArkAdminWIN sehen",
+      "arkadmin"                : "Darf KAdmin-ArkWIN sehen",
       "show_GameUserSettings"   : "Darf GameUserSettings bearbeiten",
       "show_Game"               : "Darf Game bearbeiten",
       "show_Engine"             : "Darf GameUserSettings bearbeiten",
-      "show_arkadmin"           : "Darf ArkAdminWIN bearbeiten",
+      "show_arkadmin"           : "Darf KAdmin-ArkWIN bearbeiten",
       "playin"                  : "Darf Backup einspielen"
     }
   }
