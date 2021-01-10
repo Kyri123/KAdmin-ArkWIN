@@ -2,8 +2,8 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020-2021, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/KAdmin-ArkWIN/blob/master/LICENSE)
+ * Github: https://github.com/Kyri123/KAdmin-ArkWIN
  * *******************************************************************************************
  */
 "use strict"
@@ -29,7 +29,7 @@ if(Installed) {
             if (err) {
                 if(debug) console.log(err);
                 console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m cannot connect to MariaDB`);
-                console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
+                console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit KAdmin-ArkWIN`);
                 process.exit(1)
             }
         });
@@ -43,7 +43,7 @@ if(Installed) {
     }
     else {
         console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m mysql.json not found or loaded`);
-        console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
+        console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit KAdmin-ArkWIN`);
         process.exit(1)
     }
 }

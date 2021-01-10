@@ -2,8 +2,8 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020-2021, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/KAdmin-ArkWIN/blob/master/LICENSE)
+ * Github: https://github.com/Kyri123/KAdmin-ArkWIN
  * *******************************************************************************************
  */
 "use strict"
@@ -80,7 +80,7 @@ module.exports = {
                 if (alwaysStart) serverData.writeConfig("shouldRun", true);
                 if(!servInfos.cmd && !servInfos.run) {
                     globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
-                    serverCmd.runCMD(`start "[ArkAdminWIN] doStart ${server}" ${cmdFile}`);
+                    serverCmd.runCMD(`start "[KAdmin-ArkWIN] doStart ${server}" ${cmdFile}`);
                 }
                 globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
             }
@@ -129,7 +129,7 @@ module.exports = {
             try {
                 if(!servInfos.is_installed && !servInfos.cmd) {
                     globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
-                    serverCmd.runCMD(`start "[ArkAdminWIN] doInstallServer ${server}" ${cmdFile}`)
+                    serverCmd.runCMD(`start "[KAdmin-ArkWIN] doInstallServer ${server}" ${cmdFile}`)
                 }
                 globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
             }
@@ -167,7 +167,7 @@ module.exports = {
                 cmdCommand      += CommandUtil.stopCountDown(server);
             }
             else if(serverData.online() || servInfos.run) {
-                if(servInfos.online) cmdCommand      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "broadcast [ArkAdminWIN] ${PANEL_LANG.timers.stopCountDown['now']}"\n`;
+                if(servInfos.online) cmdCommand      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "broadcast [KAdmin-ArkWIN] ${PANEL_LANG.timers.stopCountDown['now']}"\n`;
                 if(servInfos.online) cmdCommand      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "saveworld"\n`;
                 if(servInfos.online) cmdCommand      += `node ${mainDir}\\rcon.js "rcon" "127.0.0.1" "${servConfig.rcon}" "${servConfig.ServerAdminPassword}" "doexit"\n`;
                 cmdCommand += `timeout /T 10 /nobreak\n`;
@@ -214,7 +214,7 @@ module.exports = {
             try {
                 if (updateNeed || validate) {
                     globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
-                    serverCmd.runCMD(`start "[ArkAdminWIN] doUpdateServer  ${isBackground ? "Server" : server}" ${cmdFile}`)
+                    serverCmd.runCMD(`start "[KAdmin-ArkWIN] doUpdateServer  ${isBackground ? "Server" : server}" ${cmdFile}`)
                 }
                 if(!isBackground) globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
             }
@@ -299,7 +299,7 @@ module.exports = {
             try {
                 globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
                 if(!backAsString) globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
-                return !backAsString ? serverCmd.runCMD(`start "[ArkAdminWIN] doInstallMods ${server}" ${cmdFile}`) :
+                return !backAsString ? serverCmd.runCMD(`start "[KAdmin-ArkWIN] doInstallMods ${server}" ${cmdFile}`) :
                     {workshop_download_item: workshop_download_item, copys: copys};
             }
             catch (e) {
@@ -354,7 +354,7 @@ module.exports = {
                 if (servConfig.shouldRun) serverUtilInfos.writeConfig(server, "shouldRun", false);
                 if (servInfos.run) {
                     globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
-                    serverCmd.runCMD(`start "[ArkAdminWIN] doStop ${server}" ${cmdFile}`);
+                    serverCmd.runCMD(`start "[KAdmin-ArkWIN] doStop ${server}" ${cmdFile}`);
                 }
                 globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
             }
@@ -442,7 +442,7 @@ module.exports = {
                 if (alwaysStart) serverUtilInfos.writeConfig(server, "shouldRun", true);
                 globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
                 globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
-                return serverCmd.runCMD(`start "[ArkAdminWIN] doRestart ${server}" ${cmdFile}`);
+                return serverCmd.runCMD(`start "[KAdmin-ArkWIN] doRestart ${server}" ${cmdFile}`);
             }
             catch (e) {
                 if(debug) console.log(e);
@@ -497,7 +497,7 @@ module.exports = {
                 if(!isBackground) globalUtil.safeFileSaveSync([mainDir, '/public/json/serveraction/', `action_${server}.log`], actionResponse);
                 if(canZIP) {
                     globalUtil.safeFileSaveSync([cmdFile], cmdCommand);
-                    serverCmd.runCMD(`start "[ArkAdminWIN] doBackup ${isBackground ? "Server" : server}" ${cmdFile}`);
+                    serverCmd.runCMD(`start "[KAdmin-ArkWIN] doBackup ${isBackground ? "Server" : server}" ${cmdFile}`);
                 }
             }
             catch (e) {

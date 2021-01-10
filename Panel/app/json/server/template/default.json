@@ -17,7 +17,7 @@
   "autoBackupNext"          : 0,
   "TotalConversionMod"      : 0,
   "MapModID"                : 0,
-  "sessionName"             : "[ArkAdminWIN]",
+  "sessionName"             : "[KAdmin-ArkWIN]",
   "maxPlayers"              : 70,
   "shouldRun"               : false,
   "serverMap"               : "TheIsland",

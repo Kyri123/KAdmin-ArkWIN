@@ -26,7 +26,7 @@ Webbasiertes Admin Panel für Ark-Gameserver
 - `Links`
   - Spenden? https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=68PT9KPRABVCU&source=url
   - Discord: https://discord.gg/ykGnw49
-  - Trello: https://trello.com/b/HZFtQ2DZ/arkadminwin
+  - Trello: https://trello.com/b/HZFtQ2DZ/KAdmin-ArkWIN
 
 # Installation
 

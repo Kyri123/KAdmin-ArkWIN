@@ -2,21 +2,21 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020-2021, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/KAdmin-ArkWIN/blob/master/LICENSE)
+ * Github: https://github.com/Kyri123/KAdmin-ArkWIN
  * *******************************************************************************************
  */
 "use strict"
 // Header
 console.log('\x1b[36m%s\x1b[0m', `-----------------------------------------------------------`);
-console.log('\x1b[33m%s\x1b[0m', `       ${Installed ? "       " : " "}      [ ArkAdminWIN${Installed ? "" : " - Installer"} ] `);
+console.log('\x1b[33m%s\x1b[0m', `       ${Installed ? "       " : " "}      [ KAdmin-ArkWIN${Installed ? "" : " - Installer"} ] `);
 console.log('\x1b[33m%s\x1b[0m', `                    Version: \x1b[36m${panelVersion}`);
 console.log('\x1b[33m%s\x1b[0m', `                 Entwickler: \x1b[36mKyri123`);
 console.log('\x1b[33m%s\x1b[0m', `                     Branch: \x1b[36m${panelBranch}`);
 console.log('\x1b[36m%s\x1b[0m', `-----------------------------------------------------------`);
-console.log('\x1b[33m%s\x1b[0m', `    Github:  \x1b[36mhttps://github.com/Kyri123/ArkadminWIN`);
+console.log('\x1b[33m%s\x1b[0m', `    Github:  \x1b[36mhttps://github.com/Kyri123/KAdmin-ArkWIN`);
 console.log('\x1b[33m%s\x1b[0m', `    Discord: \x1b[36mhttps://discord.gg/uXxsqXD`);
-console.log('\x1b[33m%s\x1b[0m', `    Trello:  \x1b[36mhttps://trello.com/b/HZFtQ2DZ/arkadminwin`);
+console.log('\x1b[33m%s\x1b[0m', `    Trello:  \x1b[36mhttps://trello.com/b/HZFtQ2DZ/KAdmin-ArkWIN`);
 console.log('\x1b[36m%s\x1b[0m', `-----------------------------------------------------------`);
 
 // Module
@@ -41,7 +41,7 @@ fs.readdirSync(pathConfigDir).forEach(item => {
         }
         catch (e) {
             console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ${pathConfigDir + item} cannot Loaded`);
-            console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
+            console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit KAdmin-ArkWIN`);
             process.exit(1)
         }
     }
@@ -65,7 +65,7 @@ fs.readdirSync(pathLangDir).forEach(item => {
             }
         }
         catch (e) {
-            console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
+            console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit KAdmin-ArkWIN`);
             console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ${pathLangDir}\\${item} cannot Loaded`);
             process.exit(1)
         }

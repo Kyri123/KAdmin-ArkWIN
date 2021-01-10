@@ -13,4 +13,4 @@ IF %ERRORLEVEL% NEQ 0 exit
 echo -----------------------------------------
 echo        Update Module + Start
 echo -----------------------------------------
-npm i & npm update & npm fund & start "ArkAdminWIN" cmd /k "node app.js & start "ArkAdminWIN Starter" start_noUpdater_master.cmd & exit" & exit
+npm i & npm update & npm fund & start "KAdmin-ArkWIN" cmd /k "node app.js & start "KAdmin-ArkWIN Starter" start_noUpdater_master.cmd & exit" & exit

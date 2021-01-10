@@ -2,8 +2,8 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020-2021, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/KAdmin-ArkWIN/blob/master/LICENSE)
+ * Github: https://github.com/Kyri123/KAdmin-ArkWIN
  * *******************************************************************************************
  */
 "use strict"
@@ -12,7 +12,7 @@ global.dateFormat                     = require('dateformat');
 global.panelBranch                    = process.argv.includes("dev") ? "dev" : "master";
 if(process.platform !== "win32") {
   console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m OS is not Windows or supported`);
-  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
+  console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit KAdmin-ArkWIN`);
   process.exit(1);
 }
 
@@ -74,7 +74,7 @@ if(Installed) {
   catch (e) {
     if(debug) console.log(e);
     console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ${pathFile} not found`);
-    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
+    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit KAdmin-ArkWIN`);
     process.exit(1);
   }
 }

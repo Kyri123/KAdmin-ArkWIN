@@ -1,7 +1,7 @@
 /*!
   * Bootstrap v5.0.0-alpha2 (https://getbootstrap.com/)
   * Copyright 2011-2020 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
-  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('popper.js')) :
@@ -56,7 +56,7 @@
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.0.0-alpha2): util/index.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
   var MAX_UID = 1000000;
@@ -231,7 +231,7 @@
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.0.0-alpha2): dom/data.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
 
@@ -370,7 +370,7 @@
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.0.0-alpha2): dom/event-helper.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
   /**
@@ -916,7 +916,7 @@
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.0.0-alpha2): dom/manipulator.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
   function normalizeData(val) {
@@ -996,7 +996,7 @@
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.0.0-alpha2): dom/selector-engine.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
   /**
@@ -3212,7 +3212,7 @@
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.0.0-alpha2): util/sanitizer.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
   var uriAttrs = ['background', 'cite', 'href', 'itemtype', 'longdesc', 'poster', 'src', 'xlink:href'];
@@ -5030,7 +5030,7 @@
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.0.0-alpha2): index.umd.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
   var index_umd = {

@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('arkadminwin:server');
+var debug = require('debug')('KAdmin-ArkWIN:server');
 var http = require('http');
 
 /**

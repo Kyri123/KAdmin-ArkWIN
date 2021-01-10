@@ -2,8 +2,8 @@
  * *******************************************************************************************
  * @author:  Oliver Kaufmann (Kyri123)
  * @copyright Copyright (c) 2020-2021, Oliver Kaufmann
- * @license MIT License (LICENSE or https://github.com/Kyri123/ArkadminWIN/blob/main/LICENSE)
- * Github: https://github.com/Kyri123/ArkadminWIN
+ * @license MIT License (LICENSE or https://github.com/Kyri123/KAdmin-ArkWIN/blob/master/LICENSE)
+ * Github: https://github.com/Kyri123/KAdmin-ArkWIN
  * *******************************************************************************************
  */
 "use strict"
@@ -163,7 +163,7 @@ module.exports = {
                 }
                 catch (e) {
                     console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ${pathConfigDir + item} cannot Loaded`);
-                    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
+                    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit KAdmin-ArkWIN`);
                     process.exit(1)
                 }
             }
@@ -186,7 +186,7 @@ module.exports = {
                     }
                 }
                 catch (e) {
-                    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit ArkAdminWIN`);
+                    console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m Exit KAdmin-ArkWIN`);
                     console.log('\x1b[33m%s\x1b[0m', `[${dateFormat(new Date(), "dd.mm.yyyy HH:MM:ss")}]\x1b[31m ${pathLangDir}\\${item} cannot Loaded`);
                     process.exit(1)
                 }
@@ -200,9 +200,9 @@ module.exports = {
     backgroundUpdater: async () => {
         global.checkIsRunning = undefined;
         var options = {
-            url: `https://api.github.com/repos/Kyri123/ArkAdminWin/branches/${panelBranch}`,
+            url: `https://api.github.com/repos/Kyri123/KAdmin-ArkWIN/branches/${panelBranch}`,
             headers: {
-                'User-Agent': `ArkAdminWIN-Server AutoUpdater :: FROM: ${ip.address()}`
+                'User-Agent': `KAdmin-ArkWIN-Server AutoUpdater :: FROM: ${ip.address()}`
             },
             json: true
         };
