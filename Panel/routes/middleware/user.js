@@ -19,8 +19,8 @@ module.exports = {
         let sess =  req.session;
         if(sess.uid !== undefined) {
             // Prüfe ob dieser gebannt ist
-            sql    = 'SELECT * FROM `ArkAdmin_users` WHERE `id`=?';
-            result = globalUtil.safeSendSQLSync(sql, sess.uid);
+            let sql    = 'SELECT * FROM `ArkAdmin_users` WHERE `id`=?';
+            let result = globalUtil.safeSendSQLSync(sql, sess.uid);
             if(result[0].ban === 0) {
                 next();
             }
@@ -29,10 +29,10 @@ module.exports = {
             }
         }
         else {
-            cookies = req.cookies;
+            let cookies = req.cookies;
             if(cookies.id !== undefined && cookies.validate !== undefined) {
-                sql    = 'SELECT * FROM `ArkAdmin_user_cookies` WHERE `md5id`=? AND `validate`=?';
-                result = globalUtil.safeSendSQLSync(sql, cookies.id, cookies.validate);
+                let sql    = 'SELECT * FROM `ArkAdmin_user_cookies` WHERE `md5id`=? AND `validate`=?';
+                let result = globalUtil.safeSendSQLSync(sql, cookies.id, cookies.validate);
                 if(result.length > 0) {
                     sess.uid = result[0].userid;
                     req.session.save((err) => {});

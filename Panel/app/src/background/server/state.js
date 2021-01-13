@@ -58,12 +58,13 @@ module.exports = {
                 let name            = ITEM.replace(".json", "");
                 let serverData      = new serverClass(name);
                 let data            = serverData.getServerInfos();
+                data                = data === false ? {} : data
                 let servCFG         = serverData.getConfig();
                 let serverPath      = servCFG.path;
 
                 // Lese installierte Mods
-                data.installedMods  = [];
-                data.notInstalledMods  = [];
+                data.installedMods      = [];
+                data.notInstalledMods   = [];
                 if(servCFG.server === undefined) {
                     let modPath         = pathMod.join(servCFG.path, '\\ShooterGame\\Content\\Mods');
                     let dirRead         = globalUtil.safeFileExsistsSync([modPath]) ? fs.readdirSync(modPath, { withFileTypes: true }) : [];
